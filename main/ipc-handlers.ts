@@ -64,28 +64,67 @@ export function registerMcpHandlers(ipcMain: IpcMain) {
 
   ipcMain.handle(IPC.GIT_STATUS, async (_e, cwd: string) => {
     const branch = git('git rev-parse --abbrev-ref HEAD', cwd)
-    const status = git('git status --porcelain', cwd)
-    const lines = status.out.split('\n').filter(Boolean)
+    let statusOut = ''
+    try {
+      statusOut = execSync('git status --porcelain', { cwd, encoding: 'utf-8' })
+    } catch {
+      statusOut = ''
+    }
+    const lines = statusOut.split('\n').filter(Boolean)
+
+    const modified: string[] = []
+    const untracked: string[] = []
+    const staged: string[] = []
+
+    for (const line of lines) {
+      if (line.length < 4) continue
+      const indexStatus = line[0]
+      const workTreeStatus = line[1]
+      const file = line.slice(3)
+
+      if (indexStatus === '?' && workTreeStatus === '?') {
+        untracked.push(file)
+      } else {
+        if (indexStatus !== ' ') {
+          staged.push(file)
+        }
+        if (workTreeStatus !== ' ') {
+          modified.push(file)
+        }
+      }
+    }
+
     return {
       branch: branch.out,
       clean: lines.length === 0,
-      modified: lines.filter(l => l.startsWith(' M') || l.startsWith('M ')).map(l => l.slice(3)),
-      untracked: lines.filter(l => l.startsWith('??')).map(l => l.slice(3)),
-      staged: lines.filter(l => l.match(/^[MADRCU]/)).map(l => l.slice(3)),
+      modified,
+      untracked,
+      staged,
     }
   })
 
-  ipcMain.handle(IPC.GIT_DIFF, async (_e, cwd: string) => {
-    const unstaged = git('git diff', cwd).out
-    const staged   = git('git diff --cached', cwd).out
+  ipcMain.handle(IPC.GIT_DIFF, async (_e, cwd: string, filePath?: string) => {
+    const fileArg = filePath ? ` -- ${JSON.stringify(filePath)}` : ''
+    const unstaged = git(`git diff${fileArg}`, cwd).out
+    const staged   = git(`git diff --cached${fileArg}`, cwd).out
 
     // Untracked files: build a synthetic diff showing full content as additions
-    const untrackedOut = git('git ls-files --others --exclude-standard', cwd).out
-    const untrackedDiffs = untrackedOut
-      .split('\n').filter(Boolean)
+    let untrackedFiles: string[] = []
+    if (filePath) {
+      const checkRes = git(`git ls-files --others --exclude-standard -- ${JSON.stringify(filePath)}`, cwd)
+      if (checkRes.ok && checkRes.out.trim()) {
+        untrackedFiles = [checkRes.out.trim()]
+      }
+    } else {
+      const untrackedOut = git('git ls-files --others --exclude-standard', cwd).out
+      untrackedFiles = untrackedOut.split('\n').filter(Boolean)
+    }
+
+    const untrackedDiffs = untrackedFiles
       .map(file => {
         try {
           const fullPath = `${cwd}/${file}`
+          if (!existsSync(fullPath)) return ''
           const content = readFileSync(fullPath, 'utf-8')
           const lines = content.split('\n')
           const added = lines.map(l => '+' + l).join('\n')

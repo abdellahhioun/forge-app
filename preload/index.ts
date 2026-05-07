@@ -23,7 +23,7 @@ contextBridge.exposeInMainWorld('forge', {
   // Git
   git: {
     status:       (cwd: string)                                            => ipcRenderer.invoke(IPC.GIT_STATUS, cwd),
-    diff:         (cwd: string)                                            => ipcRenderer.invoke(IPC.GIT_DIFF, cwd),
+    diff:         (cwd: string, filePath?: string)                         => ipcRenderer.invoke(IPC.GIT_DIFF, cwd, filePath),
     log:          (cwd: string, limit?: number)                            => ipcRenderer.invoke(IPC.GIT_LOG, cwd, limit),
     commit:       (cwd: string, message: string)                           => ipcRenderer.invoke(IPC.GIT_COMMIT, cwd, message),
     push:         (cwd: string)                                            => ipcRenderer.invoke(IPC.GIT_PUSH, cwd),

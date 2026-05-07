@@ -24,6 +24,10 @@ export default function GitPanel() {
   const resizeStartXRef = useRef(0)
   const resizeStartWidthRef = useRef(280)
 
+  const [selectedFile, setSelectedFile] = useState<string | null>(null)
+  const selectedFileRef = useRef<string | null>(null)
+  selectedFileRef.current = selectedFile
+
   const notify = (ok: boolean, msg: string) => {
     setToast({ ok, msg })
     setTimeout(() => setToast(null), 4000)
@@ -36,7 +40,7 @@ export default function GitPanel() {
       const [s, l, d, b] = await Promise.all([
         window.forge.git.status(activeProject.path),
         window.forge.git.log(activeProject.path, 20),
-        window.forge.git.diff(activeProject.path),
+        window.forge.git.diff(activeProject.path, selectedFileRef.current || undefined),
         window.forge.git.branches(activeProject.path),
       ])
       setStatus(s); setLog(l); setDiff(d); setBranches(b)
@@ -46,12 +50,27 @@ export default function GitPanel() {
     if (showSpinner) setLoading(false)
   }
 
+  const loadDiffOnly = async (file: string | null) => {
+    if (!activeProject) return
+    try {
+      const d = await window.forge.git.diff(activeProject.path, file || undefined)
+      setDiff(d)
+    } catch (e: any) {
+      notify(false, e.message)
+    }
+  }
+
   useEffect(() => {
+    setSelectedFile(null)
     load(true)
     // auto-refresh every 5s so file changes appear without manual refresh
     const interval = setInterval(() => load(false), 5000)
     return () => clearInterval(interval)
   }, [activeProject])
+
+  useEffect(() => {
+    loadDiffOnly(selectedFile)
+  }, [selectedFile])
 
   // ─── Sidebar resize handling ─────────────────────────────────────────────
   useEffect(() => {
@@ -322,9 +341,50 @@ export default function GitPanel() {
 
           {/* Changed files */}
           <div style={{ flex: 1, overflow: 'auto', padding: '8px 0' }}>
-            {(status?.staged ?? []).map(f => <FileRow key={f} file={f} type="staged" />)}
-            {(status?.modified ?? []).map(f => <FileRow key={f} file={f} type="modified" />)}
-            {(status?.untracked ?? []).map(f => <FileRow key={f} file={f} type="untracked" />)}
+            {!status?.clean && (
+              <button
+                onClick={() => setSelectedFile(null)}
+                className="git-btn"
+                style={{
+                  width: '100%', textAlign: 'left', padding: '6px 14px',
+                  background: selectedFile === null ? 'color-mix(in oklch, var(--pri) 10%, transparent)' : 'transparent',
+                  color: selectedFile === null ? 'var(--pri)' : 'var(--muted)',
+                  fontSize: 12, fontWeight: selectedFile === null ? 600 : 400,
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  border: 'none', cursor: 'pointer',
+                }}
+              >
+                All Changes
+              </button>
+            )}
+
+            {(status?.staged ?? []).map(f => (
+              <FileRow
+                key={f}
+                file={f}
+                type="staged"
+                active={selectedFile === f}
+                onClick={() => setSelectedFile(selectedFile === f ? null : f)}
+              />
+            ))}
+            {(status?.modified ?? []).map(f => (
+              <FileRow
+                key={f}
+                file={f}
+                type="modified"
+                active={selectedFile === f}
+                onClick={() => setSelectedFile(selectedFile === f ? null : f)}
+              />
+            ))}
+            {(status?.untracked ?? []).map(f => (
+              <FileRow
+                key={f}
+                file={f}
+                type="untracked"
+                active={selectedFile === f}
+                onClick={() => setSelectedFile(selectedFile === f ? null : f)}
+              />
+            ))}
             {status?.clean && (
               <div style={{ padding: '20px 14px', color: 'var(--faint)', fontSize: 12, textAlign: 'center' }}>
                 Nothing to commit
@@ -619,17 +679,31 @@ function BranchRow({ name, active, onSwitch, remote }: { name: string; active: b
   )
 }
 
-function FileRow({ file, type }: { file: string; type: string }) {
+function FileRow({ file, type, active, onClick }: {
+  file: string
+  type: string
+  active?: boolean
+  onClick?: () => void
+}) {
   const colors: Record<string, string> = { modified: 'var(--warn)', untracked: 'var(--pri)', staged: 'var(--ok)' }
   const labels: Record<string, string> = { modified: 'M', untracked: '?', staged: 'S' }
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 14px', fontSize: 12 }}>
+    <button
+      onClick={onClick}
+      className="git-btn"
+      style={{
+        width: '100%', textAlign: 'left', border: 'none', background: 'transparent',
+        display: 'flex', alignItems: 'center', gap: 8, padding: '5px 14px', fontSize: 12,
+        backgroundColor: active ? 'color-mix(in oklch, var(--pri) 10%, transparent)' : 'transparent',
+        color: active ? 'var(--txt)' : 'var(--muted)',
+      }}
+    >
       <span style={{ width: 14, fontSize: 10, fontWeight: 700, color: colors[type], flexShrink: 0, fontFamily: 'var(--font-mono)' }}>
         {labels[type]}
       </span>
-      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontFamily: 'var(--font-mono)', color: 'var(--muted)' }}>
+      <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontFamily: 'var(--font-mono)', textAlign: 'left', fontWeight: active ? 500 : 400 }}>
         {file}
       </span>
-    </div>
+    </button>
   )
 }

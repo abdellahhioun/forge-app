@@ -10,7 +10,7 @@ declare global {
       }
       git: {
         status:       (cwd: string) => Promise<GitStatus>
-        diff:         (cwd: string) => Promise<string>
+        diff:         (cwd: string, filePath?: string) => Promise<string>
         log:          (cwd: string, limit?: number) => Promise<GitCommit[]>
         commit:       (cwd: string, message: string) => Promise<{ ok: boolean; out: string }>
         push:         (cwd: string) => Promise<{ ok: boolean; out: string }>
