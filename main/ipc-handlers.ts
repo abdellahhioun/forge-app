@@ -1,5 +1,5 @@
 import { IpcMain, dialog } from 'electron'
-import { execSync } from 'child_process'
+import { execSync, execFileSync } from 'child_process'
 import { existsSync, readFileSync, writeFileSync, readdirSync, statSync, renameSync, rmSync, mkdirSync } from 'fs'
 import { getDb, getSqlite } from './db'
 import { projects, chatSessions, chatMessages } from './db'
@@ -219,10 +219,12 @@ export function registerMcpHandlers(ipcMain: IpcMain) {
         // If push fails, we still proceed so we can capture the original gh error
       }
 
-      const out = execSync(
-        `gh pr create --title ${JSON.stringify(title)} --body ${JSON.stringify(body)} --base ${JSON.stringify(base)}`,
-        { cwd, encoding: 'utf-8', env: getDevEnv() }
-      ).trim()
+      const out = execFileSync('gh', [
+        'pr', 'create',
+        '--title', title,
+        '--body', body,
+        '--base', base
+      ], { cwd, encoding: 'utf-8', env: getDevEnv() }).trim()
       return { ok: true, out }
     } catch (e: any) {
       return { ok: false, out: e.message }
