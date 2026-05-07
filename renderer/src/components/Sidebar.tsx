@@ -83,14 +83,35 @@ export default function Sidebar() {
       }}>
         <div style={{
           width: 28, height: 28,
-          background: 'var(--pri)',
-          borderRadius: 'var(--r2)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           flexShrink: 0,
         }}>
-          {/* Forge logo — stylised F */}
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M3 2h8v2H5v2.5h5v2H5V12H3V2z" fill="white"/>
+          {/* Forge logo — flame + hammer + code brackets */}
+          <svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Forge">
+            <defs>
+              <linearGradient id="sb-flame" x1="24" y1="4" x2="24" y2="44" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#7ee8f2"/>
+                <stop offset="60%" stopColor="#3aa8b5"/>
+                <stop offset="100%" stopColor="#1a5f68"/>
+              </linearGradient>
+              <linearGradient id="sb-steel" x1="24" y1="14" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#dbd9d5"/>
+                <stop offset="50%" stopColor="#a8a6a2"/>
+                <stop offset="100%" stopColor="#6a6866"/>
+              </linearGradient>
+              <filter id="sb-glow" x="-40%" y="-40%" width="180%" height="180%">
+                <feGaussianBlur stdDeviation="1.5" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <path d="M15 41 C6 30 10 16 20 10 C17 19 21 24 23 20 C17 27 19 35 15 41Z" fill="url(#sb-flame)" opacity="0.93" filter="url(#sb-glow)"/>
+            <path d="M33 41 C42 30 38 16 28 10 C31 19 27 24 25 20 C31 27 29 35 33 41Z" fill="url(#sb-flame)" opacity="0.93" filter="url(#sb-glow)"/>
+            <rect x="21" y="27" width="6" height="14" rx="3" fill="url(#sb-steel)"/>
+            <rect x="21" y="27" width="6" height="3" rx="2" fill="rgba(255,255,255,0.18)"/>
+            <rect x="13" y="15" width="22" height="14" rx="3.5" fill="url(#sb-steel)"/>
+            <rect x="13" y="15" width="22" height="4.5" rx="3.5" fill="rgba(255,255,255,0.18)"/>
+            <rect x="13" y="24" width="22" height="5" rx="0" fill="rgba(0,0,0,0.12)"/>
+            <text x="24" y="47" textAnchor="middle" fontSize="7.5" fontFamily="monospace" fontWeight="bold" fill="#4fc9d4" opacity="0.88" filter="url(#sb-glow)">{'< >'}</text>
           </svg>
         </div>
         <div>
