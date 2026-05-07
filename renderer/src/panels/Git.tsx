@@ -629,6 +629,8 @@ function PRModal({ cwd, currentBranch, onClose, onDone }: {
   const [body, setBody]   = useState('')
   const [base, setBase]   = useState('main')
   const [busy, setBusy]   = useState(false)
+  const [aiBusy, setAiBusy] = useState(false)
+  const [aiError, setAiError] = useState('')
 
   const submit = async () => {
     if (!title.trim()) return
@@ -636,6 +638,25 @@ function PRModal({ cwd, currentBranch, onClose, onDone }: {
     const res = await window.forge.git.pr(cwd, title, body, base)
     onDone(res.ok ? `PR created: ${res.out}` : res.out, res.ok)
     setBusy(false)
+  }
+
+  const handleAiSuggestPR = async () => {
+    if (aiBusy) return
+    setAiBusy(true)
+    setAiError('')
+    try {
+      const res = await window.forge.git.suggestPR(cwd, base)
+      if (res.ok && res.title && res.body) {
+        setTitle(res.title)
+        setBody(res.body)
+      } else {
+        setAiError(res.error || 'Failed to generate PR content')
+      }
+    } catch (err: any) {
+      setAiError(err.message || 'Error communicating with AI')
+    } finally {
+      setAiBusy(false)
+    }
   }
 
   return (
@@ -647,7 +668,7 @@ function PRModal({ cwd, currentBranch, onClose, onDone }: {
     >
       <div style={{
         background: 'var(--surface)', border: '1px solid var(--brd)',
-        borderRadius: 'var(--r3)', padding: 24, width: 420,
+        borderRadius: 'var(--r3)', padding: 24, width: 440,
         display: 'flex', flexDirection: 'column', gap: 12,
         boxShadow: '0 16px 40px rgba(0,0,0,.5)',
       }}>
@@ -656,8 +677,40 @@ function PRModal({ cwd, currentBranch, onClose, onDone }: {
             <GitPullRequest size={16} style={{ color: 'var(--pri)' }} />
             Open Pull Request
           </div>
+
+          <button
+            onClick={handleAiSuggestPR}
+            disabled={aiBusy || busy}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              padding: '4px 10px',
+              background: 'color-mix(in oklch, var(--pri) 12%, transparent)',
+              border: '1px solid color-mix(in oklch, var(--pri) 30%, transparent)',
+              borderRadius: 'var(--r2)',
+              color: 'var(--pri)',
+              fontSize: 11,
+              fontWeight: 600,
+              cursor: (aiBusy || busy) ? 'not-allowed' : 'pointer',
+              marginLeft: 'auto',
+              marginRight: 10,
+              transition: 'all 0.2s ease',
+            }}
+            title="Suggest title & detailed description with AI"
+          >
+            <Sparkles size={12} style={{ animation: aiBusy ? 'spin 2s linear infinite' : 'none' }} />
+            {aiBusy ? 'Analyzing...' : 'AI Suggest'}
+          </button>
+
           <button onClick={onClose} style={{ color: 'var(--faint)', display: 'flex', padding: 2 }}><X size={14} /></button>
         </div>
+
+        {aiError && (
+          <div style={{ fontSize: 11, color: 'var(--warn)', background: 'rgba(235, 94, 85, 0.1)', border: '1px solid var(--warn)', padding: '6px 10px', borderRadius: 'var(--r2)' }}>
+            ⚠️ {aiError}
+          </div>
+        )}
 
         <div style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-mono)', background: 'var(--offset)', padding: '5px 10px', borderRadius: 'var(--r2)' }}>
           {currentBranch} → {base}
@@ -666,8 +719,9 @@ function PRModal({ cwd, currentBranch, onClose, onDone }: {
         <Field label="Title">
           <input
             value={title} onChange={e => setTitle(e.target.value)}
-            placeholder="PR title…"
-            style={inputStyle}
+            placeholder={aiBusy ? 'Analyzing changes & composing title...' : 'PR title…'}
+            disabled={aiBusy}
+            style={{ ...inputStyle, opacity: aiBusy ? 0.6 : 1 }}
           />
         </Field>
 
@@ -675,16 +729,18 @@ function PRModal({ cwd, currentBranch, onClose, onDone }: {
           <input
             value={base} onChange={e => setBase(e.target.value)}
             placeholder="main"
-            style={inputStyle}
+            disabled={aiBusy}
+            style={{ ...inputStyle, opacity: aiBusy ? 0.6 : 1 }}
           />
         </Field>
 
         <Field label="Description (optional)">
           <textarea
             value={body} onChange={e => setBody(e.target.value)}
-            placeholder="Describe your changes…"
-            rows={4}
-            style={{ ...inputStyle, resize: 'vertical', fontFamily: 'var(--font-body)' }}
+            placeholder={aiBusy ? 'Analyzing diff & writing a professional, detailed description...' : 'Describe your changes…'}
+            rows={6}
+            disabled={aiBusy}
+            style={{ ...inputStyle, resize: 'vertical', fontFamily: 'var(--font-body)', opacity: aiBusy ? 0.6 : 1 }}
           />
         </Field>
 
@@ -692,8 +748,8 @@ function PRModal({ cwd, currentBranch, onClose, onDone }: {
           <button onClick={onClose} style={{ padding: '7px 16px', background: 'var(--offset)', border: '1px solid var(--brd)', borderRadius: 'var(--r2)', color: 'var(--muted)', fontSize: 12 }}>Cancel</button>
           <button
             onClick={submit}
-            disabled={!title.trim() || busy}
-            style={{ padding: '7px 16px', background: 'var(--pri)', color: '#fff', borderRadius: 'var(--r2)', fontSize: 12, fontWeight: 500, opacity: busy ? .6 : 1 }}
+            disabled={!title.trim() || busy || aiBusy}
+            style={{ padding: '7px 16px', background: 'var(--pri)', color: '#fff', borderRadius: 'var(--r2)', fontSize: 12, fontWeight: 500, opacity: (busy || aiBusy) ? .6 : 1 }}
           >
             {busy ? 'Creating…' : 'Create PR'}
           </button>

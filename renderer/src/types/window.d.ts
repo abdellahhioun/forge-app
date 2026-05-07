@@ -19,6 +19,7 @@ declare global {
         switchBranch: (cwd: string, name: string) => Promise<{ ok: boolean; out: string }>
         pr:           (cwd: string, title: string, body: string, base: string) => Promise<{ ok: boolean; out: string }>
         suggestCommit: (cwd: string) => Promise<{ ok: boolean; message?: string; error?: string }>
+        suggestPR:    (cwd: string, base: string) => Promise<{ ok: boolean; title?: string; body?: string; error?: string }>
       }
       terminal: {
         spawn: (id: string, cwd: string) => Promise<{ success: boolean }>
@@ -39,9 +40,14 @@ declare global {
         onError: (cb: (err: string) => void) => () => void
       }
       files: {
-        list: (cwd: string) => Promise<any[]>
-        read: (path: string) => Promise<{ ok: boolean; content?: string; error?: string }>
-        write: (path: string, content: string) => Promise<{ ok: boolean }>
+        list:    (cwd: string) => Promise<any[]>
+        read:    (path: string) => Promise<{ ok: boolean; content?: string; error?: string }>
+        write:   (path: string, content: string) => Promise<{ ok: boolean }>
+        rename:  (oldPath: string, newPath: string) => Promise<{ ok: boolean }>
+        delete:  (path: string) => Promise<{ ok: boolean }>
+        mkdir:   (path: string) => Promise<{ ok: boolean }>
+        newfile: (path: string) => Promise<{ ok: boolean }>
+        search:  (cwd: string, query: string, opts?: { matchCase?: boolean; regex?: boolean }) => Promise<{ ok: boolean; results?: { file: string; line: number; text: string }[]; error?: string }>
       }
       context: {
         get: (cwd: string) => Promise<any>

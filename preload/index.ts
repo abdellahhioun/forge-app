@@ -18,6 +18,7 @@ contextBridge.exposeInMainWorld('forge', {
     delete:  (path: string)                         => ipcRenderer.invoke('files:delete', path),
     mkdir:   (path: string)                         => ipcRenderer.invoke('files:mkdir', path),
     newfile: (path: string)                         => ipcRenderer.invoke('files:newfile', path),
+    search:  (cwd: string, query: string, opts?: { matchCase?: boolean; regex?: boolean }) => ipcRenderer.invoke('files:search', cwd, query, opts),
   },
 
   // Git
@@ -32,6 +33,7 @@ contextBridge.exposeInMainWorld('forge', {
     switchBranch: (cwd: string, name: string)                              => ipcRenderer.invoke(IPC.GIT_BRANCH_SWITCH, cwd, name),
     pr:           (cwd: string, title: string, body: string, base: string) => ipcRenderer.invoke(IPC.GIT_PR, cwd, title, body, base),
     suggestCommit: (cwd: string)                                           => ipcRenderer.invoke(IPC.GIT_SUGGEST_COMMIT, cwd),
+    suggestPR:    (cwd: string, base: string)                              => ipcRenderer.invoke(IPC.GIT_SUGGEST_PR, cwd, base),
   },
 
   // Terminal

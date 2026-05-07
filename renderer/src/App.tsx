@@ -3,6 +3,7 @@ import { useForgeStore } from './store'
 import Sidebar from './components/Sidebar'
 import Topbar from './components/Topbar'
 import EditorPanel from './panels/Editor'
+import SearchPanel from './panels/Search'
 import TerminalPanel from './panels/Terminal'
 import GitPanel from './panels/Git'
 import ChatPanel from './panels/Chat'
@@ -40,6 +41,7 @@ export default function App() {
 
         <main style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
           {activePanel === 'editor'    && <EditorPanel />}
+          {activePanel === 'search'    && <SearchPanel />}
           {activePanel === 'terminal'  && <TerminalPanel />}
           {activePanel === 'git'       && <GitPanel />}
           {activePanel === 'chat'      && <ChatPanel />}

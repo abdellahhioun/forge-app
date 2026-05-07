@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import type { Project, ChatSession } from '../../shared/types'
 
-type Panel = 'editor' | 'terminal' | 'git' | 'chat' | 'dashboard' | 'tools'
+type Panel = 'editor' | 'search' | 'terminal' | 'git' | 'chat' | 'dashboard' | 'tools'
 
 interface ForgeState {
   // Theme
