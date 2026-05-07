@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+/* ─── Fonts ──────────────────────────────────────────────────────────────── */
+:root {
+  --font-body: 'Satoshi', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+
+/* ─── Design Tokens ────────────────────────────────────────────────────── */
+:root, [data-theme="dark"] {
+  --bg:        #0f0e0d;
+  --surface:   #161513;
+  --surface-2: #1c1b19;
+  --offset:    #222120;
+  --dynamic:   #2d2c2a;
+  --div:       #262523;
+  --brd:       #343230;
+  --txt:       #e8e6e2;
+  --muted:     #7a7876;
+  --faint:     #4a4947;
+  --pri:       #4f98a3;
+  --pri-h:     #6db8c4;
+  --pri-glow:  rgba(79,152,163,.15);
+  --ok:        #6daa45;
+  --ok-bg:     #1e3318;
+  --warn:      #e89050;
+  --warn-bg:   #3a2410;
+  --err:       #d163a7;
+  --err-bg:    #3a1530;
+  --gold:      #e8af34;
+  --blue:      #5591c7;
+  --r1: .375rem; --r2: .5rem; --r3: .75rem; --r4: 1rem;
+  --sh1: 0 1px 3px rgba(0,0,0,.35);
+  --sh2: 0 4px 16px rgba(0,0,0,.45);
+  --sh3: 0 12px 40px rgba(0,0,0,.55);
+  --sidebar-w: 220px;
+  --topbar-h:  48px;
+}
+
+[data-theme="light"] {
+  --bg:        #f7f6f2;
+  --surface:   #f9f8f5;
+  --surface-2: #fbfbf9;
+  --offset:    #f0ede8;
+  --dynamic:   #e6e4df;
+  --div:       #dcd9d5;
+  --brd:       #d4d1ca;
+  --txt:       #28251d;
+  --muted:     #7a7974;
+  --faint:     #bab9b4;
+  --pri:       #01696f;
+  --pri-h:     #0c4e54;
+  --pri-glow:  rgba(1,105,111,.13);
+  --ok:        #437a22;
+  --ok-bg:     #d4dfcc;
+  --warn:      #964219;
+  --warn-bg:   #ddcfc6;
+  --err:       #a12c7b;
+  --err-bg:    #e0ced7;
+  --gold:      #b07a00;
+  --blue:      #006494;
+  --sh1: 0 1px 3px rgba(40,37,29,.08);
+  --sh2: 0 4px 16px rgba(40,37,29,.10);
+  --sh3: 0 12px 40px rgba(40,37,29,.13);
+}
+
+/* ─── Base ────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; height: 100%; }
+body {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--txt);
+  background: var(--bg);
+  height: 100%;
+  overflow: hidden; /* Electron — no body scroll, panels scroll internally */
+  user-select: none; /* Feels native */
+}
+#root { height: 100%; display: flex; flex-direction: column; }
+button { cursor: pointer; background: none; border: none; font-family: var(--font-body); color: inherit; }
+input, textarea { font-family: var(--font-body); }
+
+/* ─── Scrollbars ──────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--dynamic); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+/* ─── Selection ──────────────────────────────────────────────────────────── */
+::selection { background: rgba(79,152,163,.25); }
+
+/* ─── Mono text ──────────────────────────────────────────────────────────── */
+.mono { font-family: var(--font-mono); }
+
+/* ─── Transitions ────────────────────────────────────────────────────────── */
+a, button, [role="button"] {
+  transition: color 150ms ease, background 150ms ease, border-color 150ms ease, opacity 150ms ease;
+}
+
+/* ─── Focus ──────────────────────────────────────────────────────────────── */
+:focus-visible { outline: 2px solid var(--pri); outline-offset: 2px; border-radius: var(--r1); }

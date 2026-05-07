@@ -1,0 +1,418 @@
+import { IpcMain, dialog } from 'electron'
+import { execSync } from 'child_process'
+import { existsSync, readFileSync, writeFileSync, readdirSync, statSync, renameSync, rmSync, mkdirSync } from 'fs'
+import { getDb, getSqlite } from './db'
+import { projects, chatSessions, chatMessages } from './db'
+import { eq } from 'drizzle-orm'
+import type { IpcMainInvokeEvent } from 'electron'
+import { IPC } from '../shared/types'
+import * as pty from 'node-pty'
+
+// ─── Active terminal processes ───────────────────────────────────────────────────────
+const terminals = new Map<string, pty.IPty>()
+
+export function registerMcpHandlers(ipcMain: IpcMain) {
+
+  // ─── PROJECTS ──────────────────────────────────────────────────────────────
+  ipcMain.handle(IPC.PROJECTS_LIST, async () => {
+    return getDb().select().from(projects).all()
+  })
+
+  ipcMain.handle(IPC.PROJECTS_ADD, async (_e: IpcMainInvokeEvent, folderPath?: string) => {
+    let targetPath = folderPath
+    if (!targetPath) {
+      const result = await dialog.showOpenDialog({
+        properties: ['openDirectory'],
+        message: 'Select a project folder'
+      })
+      if (result.canceled || !result.filePaths[0]) return null
+      targetPath = result.filePaths[0]
+    }
+    if (!existsSync(targetPath)) throw new Error('Path does not exist')
+
+    // Try to get context from the MCP server
+    let name = targetPath.split('/').pop() ?? 'Project'
+    let stack = null
+    let description = null
+    try {
+      const pkgPath = `${targetPath}/package.json`
+      if (existsSync(pkgPath)) {
+        const pkg = JSON.parse(require('fs').readFileSync(pkgPath, 'utf-8'))
+        name = pkg.name ?? name
+        description = pkg.description ?? null
+      }
+    } catch {}
+
+    const db = getDb()
+    const existing = db.select().from(projects).where(eq(projects.path, targetPath)).get()
+    if (existing) return existing
+
+    db.insert(projects).values({ name, path: targetPath, description, stack }).run()
+    return db.select().from(projects).where(eq(projects.path, targetPath)).get()
+  })
+
+  ipcMain.handle(IPC.PROJECTS_REMOVE, async (_e: IpcMainInvokeEvent, id: number) => {
+    getDb().delete(projects).where(eq(projects.id, id)).run()
+    return { success: true }
+  })
+
+  // ─── GIT ─────────────────────────────────────────────────────────────────────
+  const git = (cmd: string, cwd: string) => {
+    try { return { ok: true, out: execSync(cmd, { cwd, encoding: 'utf-8' }).trim() } }
+    catch (e: any) { return { ok: false, out: e.message as string } }
+  }
+
+  ipcMain.handle(IPC.GIT_STATUS, async (_e, cwd: string) => {
+    const branch = git('git rev-parse --abbrev-ref HEAD', cwd)
+    const status = git('git status --porcelain', cwd)
+    const lines = status.out.split('\n').filter(Boolean)
+    return {
+      branch: branch.out,
+      clean: lines.length === 0,
+      modified: lines.filter(l => l.startsWith(' M') || l.startsWith('M ')).map(l => l.slice(3)),
+      untracked: lines.filter(l => l.startsWith('??')).map(l => l.slice(3)),
+      staged: lines.filter(l => l.match(/^[MADRCU]/)).map(l => l.slice(3)),
+    }
+  })
+
+  ipcMain.handle(IPC.GIT_DIFF, async (_e, cwd: string) => {
+    const unstaged = git('git diff', cwd).out
+    const staged   = git('git diff --cached', cwd).out
+
+    // Untracked files: build a synthetic diff showing full content as additions
+    const untrackedOut = git('git ls-files --others --exclude-standard', cwd).out
+    const untrackedDiffs = untrackedOut
+      .split('\n').filter(Boolean)
+      .map(file => {
+        try {
+          const fullPath = `${cwd}/${file}`
+          const content = readFileSync(fullPath, 'utf-8')
+          const lines = content.split('\n')
+          const added = lines.map(l => '+' + l).join('\n')
+          return `diff --git a/${file} b/${file}\nnew file mode 100644\n--- /dev/null\n+++ b/${file}\n@@ -0,0 +1,${lines.length} @@\n${added}`
+        } catch { return '' }
+      })
+      .filter(Boolean)
+      .join('\n')
+
+    return [staged, unstaged, untrackedDiffs].filter(Boolean).join('\n') || ''
+  })
+
+
+  ipcMain.handle(IPC.GIT_LOG, async (_e, cwd: string, limit = 20) => {
+    const out = git(`git log --oneline -${limit} --pretty=format:"%h|%s|%an|%ar"`, cwd).out
+    return out.split('\n').filter(Boolean).map(line => {
+      const [hash, message, author, date] = line.split('|')
+      return { hash, message, author, date }
+    })
+  })
+
+  ipcMain.handle(IPC.GIT_COMMIT, async (_e, cwd: string, message: string) => {
+    const add = git('git add .', cwd)
+    if (!add.ok) return { ok: false, out: 'git add failed: ' + add.out }
+    const status = git('git status --porcelain', cwd)
+    if (status.out.trim() === '') return { ok: false, out: 'Nothing to commit — working tree clean' }
+    return git(`git commit -m ${JSON.stringify(message)}`, cwd)
+  })
+
+  ipcMain.handle(IPC.GIT_PUSH, async (_e, cwd: string) => {
+    // auto set-upstream if needed
+    const branch = git('git rev-parse --abbrev-ref HEAD', cwd).out
+    const hasUpstream = git(`git rev-parse --abbrev-ref --symbolic-full-name @{u}`, cwd)
+    if (!hasUpstream.ok) {
+      return git(`git push --set-upstream origin "${branch}"`, cwd)
+    }
+    return git('git push', cwd)
+  })
+
+  ipcMain.handle(IPC.GIT_BRANCH, async (_e, cwd: string, name: string) => {
+    const create = git(`git checkout -b "${name}"`, cwd)
+    if (!create.ok) return create
+    // push and set upstream immediately so the branch exists on remote
+    const push = git(`git push --set-upstream origin "${name}"`, cwd)
+    return { ok: push.ok, out: push.ok ? `Branch '${name}' created and pushed` : create.out + '\n(local only — push failed: ' + push.out + ')' }
+  })
+
+  ipcMain.handle(IPC.GIT_BRANCHES, async (_e, cwd: string) => {
+    const local = git('git branch', cwd)
+    const remote = git('git branch -r', cwd)
+    const current = git('git rev-parse --abbrev-ref HEAD', cwd)
+    const parseBranch = (line: string) => line.replace(/^[* ]+/, '').trim()
+    return {
+      current: current.out.trim(),
+      local: local.out.split('\n').map(parseBranch).filter(Boolean),
+      remote: remote.out.split('\n').map(parseBranch).filter(Boolean),
+    }
+  })
+
+  ipcMain.handle(IPC.GIT_BRANCH_SWITCH, async (_e, cwd: string, name: string) => {
+    // if it's a remote-only branch, checkout tracking branch
+    const tracking = name.replace(/^origin\//, '')
+    const local = git('git branch', cwd)
+    const exists = local.out.split('\n').map(b => b.replace(/^[* ]+/, '').trim()).includes(tracking)
+    if (exists) return git(`git checkout "${tracking}"`, cwd)
+    return git(`git checkout -b "${tracking}" --track "${name}"`, cwd)
+  })
+
+  ipcMain.handle(IPC.GIT_PR, async (_e, cwd: string, title: string, body: string, base: string) => {
+    // requires gh CLI installed
+    try {
+      const out = execSync(
+        `gh pr create --title ${JSON.stringify(title)} --body ${JSON.stringify(body)} --base ${JSON.stringify(base)}`,
+        { cwd, encoding: 'utf-8' }
+      ).trim()
+      return { ok: true, out }
+    } catch (e: any) {
+      return { ok: false, out: e.message }
+    }
+  })
+
+  // ─── TERMINAL (node-pty — real PTY) ────────────────────────────────────────
+  ipcMain.handle(IPC.TERM_SPAWN, async (event, id: string, cwd: string) => {
+    const os = require('os')
+    const shell = process.env.SHELL || '/bin/zsh'
+    const safeCwd = existsSync(cwd) ? cwd : os.homedir()
+    const env: Record<string, string> = {
+      ...process.env as Record<string, string>,
+      TERM: 'xterm-256color',
+      COLORTERM: 'truecolor',
+      TERM_PROGRAM: 'ForgeApp',
+      HOME: os.homedir(),
+      USER: os.userInfo().username,
+      SHELL: shell,
+      LANG: process.env.LANG || 'en_US.UTF-8',
+    }
+    const ptyProc = pty.spawn(shell, [], {
+      name: 'xterm-256color',
+      cols: 80,
+      rows: 24,
+      cwd: safeCwd,
+      env,
+    })
+    terminals.set(id, ptyProc)
+    ptyProc.onData(data => event.sender.send(IPC.TERM_OUTPUT, id, data))
+    ptyProc.onExit(() => {
+      terminals.delete(id)
+      event.sender.send(IPC.TERM_OUTPUT, id, '\r\n[Process exited]\r\n')
+    })
+    return { success: true }
+  })
+
+  ipcMain.handle(IPC.TERM_INPUT, async (_e, id: string, data: string) => {
+    terminals.get(id)?.write(data)
+  })
+
+  ipcMain.handle(IPC.TERM_RESIZE, async (_e, id: string, cols: number, rows: number) => {
+    terminals.get(id)?.resize(cols, rows)
+  })
+
+  ipcMain.handle(IPC.TERM_KILL, async (_e, id: string) => {
+    terminals.get(id)?.kill()
+    terminals.delete(id)
+  })
+
+
+  // ─── CHAT AI — Groq streaming ───────────────────────────────────────────────
+  ipcMain.handle(IPC.CHAT_AI, async (event, messages: Array<{role:string;content:string}>, projectCtx?: string) => {
+    const GROQ_API_KEY = process.env.GROQ_API_KEY
+    if (!GROQ_API_KEY) {
+      event.sender.send(IPC.CHAT_AI_ERROR, 'GROQ_API_KEY not found in environment')
+      return
+    }
+
+    const systemPrompt = projectCtx
+      ? `You are Forge AI, an expert coding assistant embedded in a desktop IDE.\nActive project context:\n${projectCtx}\n\nYou help the developer understand, write, debug, and improve code. Be concise and precise.`
+      : `You are Forge AI, an expert coding assistant. Be concise, precise, and helpful.`
+
+    const body = JSON.stringify({
+      model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+      messages: [{ role: 'system', content: systemPrompt }, ...messages],
+      stream: true,
+      max_tokens: 2048,
+    })
+
+    const https = require('https')
+    const url = new URL('https://api.groq.com/openai/v1/chat/completions')
+
+    const req = https.request(
+      { hostname: url.hostname, path: url.pathname, method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_API_KEY}`, 'Content-Length': Buffer.byteLength(body) } },
+      (res: any) => {
+        let buffer = ''
+        res.on('data', (chunk: Buffer) => {
+          buffer += chunk.toString()
+          const lines = buffer.split('\n')
+          buffer = lines.pop() ?? ''
+          for (const line of lines) {
+            const trimmed = line.replace(/^ /, '').trim()
+            if (!trimmed || trimmed === '[DONE]') continue
+            try {
+              const parsed = JSON.parse(trimmed)
+              const token = parsed.choices?.[0]?.delta?.content
+              if (token) event.sender.send(IPC.CHAT_AI_TOKEN, token)
+            } catch {}
+          }
+        })
+        res.on('end', () => event.sender.send(IPC.CHAT_AI_DONE))
+        res.on('error', (e: Error) => event.sender.send(IPC.CHAT_AI_ERROR, e.message))
+      }
+    )
+    req.on('error', (e: Error) => event.sender.send(IPC.CHAT_AI_ERROR, e.message))
+    req.write(body)
+    req.end()
+  })
+
+  // ─── CHAT SESSIONS ─────────────────────────────────────────────────────────
+  ipcMain.handle(IPC.CHAT_SESSION_NEW, async (_e, title: string, projectId?: number) => {
+    const db = getDb()
+    db.insert(chatSessions).values({ title: title || 'New Chat', projectId: projectId ?? null }).run()
+    return db.select().from(chatSessions).all()
+  })
+
+  ipcMain.handle(IPC.CHAT_SESSIONS, async (_e, projectId?: number) => {
+    const db = getDb()
+    if (projectId) return db.select().from(chatSessions).where(eq(chatSessions.projectId, projectId)).all()
+    return db.select().from(chatSessions).all()
+  })
+
+  ipcMain.handle(IPC.CHAT_MESSAGES, async (_e, sessionId: number) => {
+    return getDb().select().from(chatMessages).where(eq(chatMessages.sessionId, sessionId)).all()
+  })
+
+  ipcMain.handle(IPC.CHAT_SEND, async (_e, sessionId: number, role: string, content: string) => {
+    getDb().insert(chatMessages).values({ sessionId, role, content }).run()
+    return { success: true }
+  })
+
+  // ─── CONTEXT ─────────────────────────────────────────────────────────────────
+  ipcMain.handle(IPC.CONTEXT_GET, async (_e, cwd: string) => {
+    try {
+      const ctxPath = `${cwd}/.mcp-context.json`
+      if (existsSync(ctxPath)) {
+        return JSON.parse(require('fs').readFileSync(ctxPath, 'utf-8'))
+      }
+      return null
+    } catch { return null }
+  })
+
+  ipcMain.handle(IPC.CONTEXT_INDEX, async (_e, cwd: string) => {
+    try {
+      const fs = require('fs')
+      const path = require('path')
+
+      // Count files and lines
+      const IGNORED_DIRS = new Set(['.git', 'node_modules', 'dist', 'dist-electron', 'out', '.next', '__pycache__'])
+      const CODE_EXTS = new Set(['.ts', '.tsx', '.js', '.jsx', '.py', '.go', '.rs', '.java', '.css', '.scss', '.html', '.json', '.md'])
+      let fileCount = 0
+      let totalLines = 0
+      const keyFiles: string[] = []
+      const KEY_NAMES = ['package.json', 'README.md', 'tsconfig.json', 'vite.config.ts', 'electron.vite.config.ts', 'Cargo.toml', 'go.mod', 'pyproject.toml']
+
+      function walk(dir: string, depth = 0) {
+        if (depth > 6) return
+        try {
+          for (const name of fs.readdirSync(dir)) {
+            if (IGNORED_DIRS.has(name) || name.startsWith('.')) continue
+            const full = path.join(dir, name)
+            const stat = fs.statSync(full)
+            if (stat.isDirectory()) { walk(full, depth + 1); continue }
+            if (KEY_NAMES.includes(name) && depth <= 1) keyFiles.push(path.relative(cwd, full))
+            const ext = path.extname(name)
+            if (!CODE_EXTS.has(ext)) continue
+            fileCount++
+            try {
+              const content = fs.readFileSync(full, 'utf-8')
+              totalLines += content.split('\n').length
+            } catch {}
+          }
+        } catch {}
+      }
+      walk(cwd)
+
+      // Git info
+      let branch = 'unknown'
+      let clean = true
+      let lastCommit = 'No commits yet'
+      try { branch = execSync('git rev-parse --abbrev-ref HEAD', { cwd, encoding: 'utf-8' }).trim() } catch {}
+      try { clean = execSync('git status --porcelain', { cwd, encoding: 'utf-8' }).trim() === '' } catch {}
+      try { lastCommit = execSync('git log -1 --pretty=format:"%h %s (%ar)"', { cwd, encoding: 'utf-8' }).trim() } catch {}
+
+      // Stack detection
+      let stack = 'Unknown'
+      try {
+        const pkgPath = path.join(cwd, 'package.json')
+        if (fs.existsSync(pkgPath)) {
+          const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'))
+          const deps = { ...pkg.dependencies, ...pkg.devDependencies }
+          const tags: string[] = []
+          if (deps['electron']) tags.push('Electron')
+          if (deps['react']) tags.push('React')
+          if (deps['vite']) tags.push('Vite')
+          if (deps['typescript'] || deps['ts-node']) tags.push('TypeScript')
+          if (deps['tailwindcss']) tags.push('Tailwind')
+          if (deps['next']) tags.push('Next.js')
+          if (deps['express']) tags.push('Express')
+          stack = tags.join(' + ') || 'Node.js'
+        }
+      } catch {}
+
+      const context = { branch, clean, lastCommit, fileCount, totalLines, stack, keyFiles: keyFiles.slice(0, 8), indexedAt: new Date().toISOString() }
+      fs.writeFileSync(path.join(cwd, '.mcp-context.json'), JSON.stringify(context, null, 2))
+      return { success: true }
+    } catch (e: any) {
+      return { success: false, error: e.message }
+    }
+  })
+}
+
+// NOTE: FILE_LIST and FILE_READ handlers — appended
+
+export function registerFileHandlers() {
+  const { ipcMain } = require('electron')
+  const IGNORED = new Set(['.git', 'node_modules', '.DS_Store', 'dist', 'dist-electron', 'out', '.next', '__pycache__'])
+
+  function buildTree(dir: string, depth = 0): any[] {
+    if (depth > 6) return []
+    try {
+      return readdirSync(dir)
+        .filter(n => !IGNORED.has(n) && !n.startsWith('.'))
+        .sort((a, b) => {
+          const aIsDir = statSync(`${dir}/${a}`).isDirectory()
+          const bIsDir = statSync(`${dir}/${b}`).isDirectory()
+          if (aIsDir !== bIsDir) return aIsDir ? -1 : 1
+          return a.localeCompare(b)
+        })
+        .map(name => {
+          const path = `${dir}/${name}`
+          const isDir = statSync(path).isDirectory()
+          return { name, path, isDir, children: isDir ? buildTree(path, depth + 1) : [] }
+        })
+    } catch { return [] }
+  }
+
+  ipcMain.handle('files:list', (_e: any, cwd: string) => buildTree(cwd))
+  ipcMain.handle('files:read', (_e: any, path: string) => {
+    try { return { ok: true, content: readFileSync(path, 'utf-8') } }
+    catch (e: any) { return { ok: false, error: e.message } }
+  })
+  ipcMain.handle('files:write', (_e: any, path: string, content: string) => {
+    try { writeFileSync(path, content, 'utf-8'); return { ok: true } }
+    catch (e: any) { return { ok: false, error: e.message } }
+  })
+  ipcMain.handle('files:rename', (_e: any, oldPath: string, newPath: string) => {
+    try { renameSync(oldPath, newPath); return { ok: true } }
+    catch (e: any) { return { ok: false, error: e.message } }
+  })
+  ipcMain.handle('files:delete', (_e: any, path: string) => {
+    try { rmSync(path, { recursive: true, force: true }); return { ok: true } }
+    catch (e: any) { return { ok: false, error: e.message } }
+  })
+  ipcMain.handle('files:mkdir', (_e: any, path: string) => {
+    try { mkdirSync(path, { recursive: true }); return { ok: true } }
+    catch (e: any) { return { ok: false, error: e.message } }
+  })
+  ipcMain.handle('files:newfile', (_e: any, path: string) => {
+    try { writeFileSync(path, '', 'utf-8'); return { ok: true } }
+    catch (e: any) { return { ok: false, error: e.message } }
+  })
+}
