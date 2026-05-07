@@ -260,7 +260,7 @@ export function registerMcpHandlers(ipcMain: IpcMain) {
       diff = diff.slice(0, 25000) + '\n\n...[diff truncated for AI context]...'
     }
 
-    const systemPrompt = "You are an expert developer. Analyze the provided git diff of changes. Pay close attention to the specific files changed, functions modified, and content added or removed. Suggest a highly tailored, clean, precise, and concise commit message following the Conventional Commits style, including a component scope in parentheses (e.g., 'feat(git): add sparkles icon to input', 'fix(sidebar): resolve spinner deadlock'). Give ONLY the raw commit message as your single-line response. No explanation, no markdown backticks, no introductory text, no bullet points, no quotes."
+    const systemPrompt = "You are a world-class staff software engineer. Analyze the provided git diff of changes and generate a premium, highly detailed, and professional Git commit message. Your response MUST follow this exact structure:\n\n1. A concise, descriptive single-line header in Conventional Commits format (maximum 72 characters), including a specific component/area scope in parentheses (e.g., 'feat(editor): add robust overflow widgets', 'fix(sidebar): resolve animation stutter').\n2. A blank line.\n3. A detailed, clean, bulleted list of specific changes, describing exactly WHAT was changed and WHY (not just listing file names). Be precise about functions, CSS properties, variables, and handlers added, modified, or removed.\n\nExample format:\nfeat(editor): add robust overflow widgets\n\n- Add `fixedOverflowWidgets: true` to prevent tooltips from clipping inside overflow-hidden parent elements\n- Configure Monaco typescript and javascript default options once globally asynchronously on startup\n- Prevent race condition runtime errors inside editor onMount hook by removing repetitive diagnostics\n\nProvide ONLY the raw commit message as your final response. Do NOT wrap it in markdown backticks, quotes, or add any introductory/explanatory text. Start directly with the header line."
     const userMessage = `Here is the git diff:\n\n${diff}`
 
     if (process.env.GROQ_API_KEY) {
@@ -272,7 +272,7 @@ export function registerMcpHandlers(ipcMain: IpcMain) {
             { role: 'system', content: systemPrompt },
             { role: 'user', content: userMessage }
           ],
-          max_tokens: 150,
+          max_tokens: 450,
         })
         
         return new Promise((resolve) => {
