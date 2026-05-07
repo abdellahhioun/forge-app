@@ -212,6 +212,13 @@ export function registerMcpHandlers(ipcMain: IpcMain) {
   ipcMain.handle(IPC.GIT_PR, async (_e, cwd: string, title: string, body: string, base: string) => {
     // requires gh CLI installed
     try {
+      // Auto-push current branch to remote upstream first so gh can create the PR
+      try {
+        execSync('git push -u origin HEAD', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER, env: getDevEnv() })
+      } catch (err) {
+        // If push fails, we still proceed so we can capture the original gh error
+      }
+
       const out = execSync(
         `gh pr create --title ${JSON.stringify(title)} --body ${JSON.stringify(body)} --base ${JSON.stringify(base)}`,
         { cwd, encoding: 'utf-8', env: getDevEnv() }
