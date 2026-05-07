@@ -341,6 +341,144 @@ export function registerMcpHandlers(ipcMain: IpcMain) {
     }
   })
 
+  ipcMain.handle(IPC.GIT_SUGGEST_PR, async (_e, cwd: string, base: string) => {
+    let diff = ''
+    try {
+      diff = execSync(`git diff ${base}...`, { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER, env: getDevEnv() }).trim()
+    } catch {
+      try {
+        diff = execSync(`git diff ${base}`, { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER, env: getDevEnv() }).trim()
+      } catch {
+        try {
+          diff = execSync('git diff HEAD', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER, env: getDevEnv() }).trim()
+        } catch {}
+      }
+    }
+
+    if (!diff) {
+      return { ok: false, error: 'No branch differences detected compared to base.' }
+    }
+
+    if (diff.length > 25000) {
+      diff = diff.slice(0, 25000) + '\n\n...[diff truncated for AI context]...'
+    }
+
+    const systemPrompt = `You are a world-class principal developer. Analyze the provided git diff showing differences between the current branch and the base branch.
+Suggest a premium, highly professional Pull Request.
+Your output MUST be a single, strict, valid JSON object with EXACTLY two keys:
+1. "title": A concise, descriptive, and professional PR title following Conventional Commits style (e.g., "feat(ui): add AI-powered Pull Request suggester").
+2. "body": A comprehensive, detailed, "pro" markdown-formatted PR description. Use clean headers, bullet points, and highlight modified components/features under "Overview", "Key Changes", and "Testing & Verification".
+
+Do NOT wrap your response in markdown code blocks (\`\`\`json), do NOT include any introductory or conversational text, and do NOT include any backticks or notes. Output ONLY the raw JSON object.`
+
+    const userMessage = `Here is the branch diff:\n\n${diff}`
+
+    const parseSuggestResponse = (rawText: string) => {
+      try {
+        const start = rawText.indexOf('{')
+        const end = rawText.lastIndexOf('}')
+        if (start !== -1 && end !== -1 && end > start) {
+          const parsed = JSON.parse(rawText.slice(start, end + 1))
+          if (parsed && typeof parsed === 'object') {
+            return { ok: true, title: parsed.title || '', body: parsed.body || '' }
+          }
+        }
+        return { ok: false, error: 'Failed to extract JSON keys from AI response' }
+      } catch (e: any) {
+        return { ok: false, error: 'JSON parsing failed: ' + e.message }
+      }
+    }
+
+    if (process.env.GROQ_API_KEY) {
+      try {
+        const https = require('https')
+        const body = JSON.stringify({
+          model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userMessage }
+          ],
+          response_format: { type: 'json_object' },
+          max_tokens: 1000,
+        })
+        
+        return new Promise((resolve) => {
+          const req = https.request(
+            {
+              hostname: 'api.groq.com',
+              path: '/openai/v1/chat/completions',
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${process.env.GROQ_API_KEY}` }
+            },
+            (res: any) => {
+              let data = ''
+              res.on('data', (chunk: any) => data += chunk)
+              res.on('end', () => {
+                try {
+                  const parsed = JSON.parse(data)
+                  const text = parsed?.choices?.[0]?.message?.content?.trim()
+                  if (text) {
+                    resolve(parseSuggestResponse(text))
+                  } else {
+                    resolve({ ok: false, error: 'Empty response from Groq' })
+                  }
+                } catch {
+                  resolve({ ok: false, error: 'Failed to parse Groq response' })
+                }
+              })
+            }
+          )
+          req.on('error', (e: Error) => resolve({ ok: false, error: e.message }))
+          req.write(body)
+          req.end()
+        })
+      } catch {
+        // Fallback to Ollama
+      }
+    }
+
+    try {
+      const http = require('http')
+      const body = JSON.stringify({
+        model: 'llama3',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userMessage }
+        ],
+        format: 'json',
+        stream: false,
+      })
+      
+      return new Promise((resolve) => {
+        const req = http.request(
+          { hostname: '127.0.0.1', port: 11434, path: '/api/chat', method: 'POST', headers: { 'Content-Type': 'application/json' } },
+          (res: any) => {
+            let data = ''
+            res.on('data', (chunk: any) => data += chunk)
+            res.on('end', () => {
+              try {
+                const parsed = JSON.parse(data)
+                const text = parsed?.message?.content?.trim()
+                if (text) {
+                  resolve(parseSuggestResponse(text))
+                } else {
+                  resolve({ ok: false, error: 'Empty response from Ollama' })
+                }
+              } catch {
+                resolve({ ok: false, error: 'Failed to parse Ollama response' })
+              }
+            })
+          }
+        )
+        req.on('error', (e: Error) => resolve({ ok: false, error: 'Ollama not running: ' + e.message }))
+        req.write(body)
+        req.end()
+      })
+    } catch (e: any) {
+      return { ok: false, error: 'No AI model available or configured.' }
+    }
+  })
+
   // ─── TERMINAL (node-pty — real PTY) ────────────────────────────────────────
   ipcMain.handle(IPC.TERM_SPAWN, async (event, id: string, cwd: string) => {
     const os = require('os')

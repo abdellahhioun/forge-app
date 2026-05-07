@@ -21401,12 +21401,32 @@ function PRModal({ cwd, currentBranch, onClose, onDone }) {
   const [body, setBody] = reactExports.useState("");
   const [base, setBase] = reactExports.useState("main");
   const [busy, setBusy] = reactExports.useState(false);
+  const [aiBusy, setAiBusy] = reactExports.useState(false);
+  const [aiError, setAiError] = reactExports.useState("");
   const submit = async () => {
     if (!title.trim()) return;
     setBusy(true);
     const res = await window.forge.git.pr(cwd, title, body, base);
     onDone(res.ok ? `PR created: ${res.out}` : res.out, res.ok);
     setBusy(false);
+  };
+  const handleAiSuggestPR = async () => {
+    if (aiBusy) return;
+    setAiBusy(true);
+    setAiError("");
+    try {
+      const res = await window.forge.git.suggestPR(cwd, base);
+      if (res.ok && res.title && res.body) {
+        setTitle(res.title);
+        setBody(res.body);
+      } else {
+        setAiError(res.error || "Failed to generate PR content");
+      }
+    } catch (err) {
+      setAiError(err.message || "Error communicating with AI");
+    } finally {
+      setAiBusy(false);
+    }
   };
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     "div",
@@ -21428,7 +21448,7 @@ function PRModal({ cwd, currentBranch, onClose, onDone }) {
         border: "1px solid var(--brd)",
         borderRadius: "var(--r3)",
         padding: 24,
-        width: 420,
+        width: 440,
         display: "flex",
         flexDirection: "column",
         gap: 12,
@@ -21439,7 +21459,39 @@ function PRModal({ cwd, currentBranch, onClose, onDone }) {
             /* @__PURE__ */ jsxRuntimeExports.jsx(GitPullRequest, { size: 16, style: { color: "var(--pri)" } }),
             "Open Pull Request"
           ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              onClick: handleAiSuggestPR,
+              disabled: aiBusy || busy,
+              style: {
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                padding: "4px 10px",
+                background: "color-mix(in oklch, var(--pri) 12%, transparent)",
+                border: "1px solid color-mix(in oklch, var(--pri) 30%, transparent)",
+                borderRadius: "var(--r2)",
+                color: "var(--pri)",
+                fontSize: 11,
+                fontWeight: 600,
+                cursor: aiBusy || busy ? "not-allowed" : "pointer",
+                marginLeft: "auto",
+                marginRight: 10,
+                transition: "all 0.2s ease"
+              },
+              title: "Suggest title & detailed description with AI",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Sparkles, { size: 12, style: { animation: aiBusy ? "spin 2s linear infinite" : "none" } }),
+                aiBusy ? "Analyzing..." : "AI Suggest"
+              ]
+            }
+          ),
           /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: onClose, style: { color: "var(--faint)", display: "flex", padding: 2 }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 14 }) })
+        ] }),
+        aiError && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { fontSize: 11, color: "var(--warn)", background: "rgba(235, 94, 85, 0.1)", border: "1px solid var(--warn)", padding: "6px 10px", borderRadius: "var(--r2)" }, children: [
+          "⚠️ ",
+          aiError
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { fontSize: 12, color: "var(--muted)", fontFamily: "var(--font-mono)", background: "var(--offset)", padding: "5px 10px", borderRadius: "var(--r2)" }, children: [
           currentBranch,
@@ -21451,8 +21503,9 @@ function PRModal({ cwd, currentBranch, onClose, onDone }) {
           {
             value: title,
             onChange: (e) => setTitle(e.target.value),
-            placeholder: "PR title…",
-            style: inputStyle
+            placeholder: aiBusy ? "Analyzing changes & composing title..." : "PR title…",
+            disabled: aiBusy,
+            style: { ...inputStyle, opacity: aiBusy ? 0.6 : 1 }
           }
         ) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Field, { label: "Base branch", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -21461,7 +21514,8 @@ function PRModal({ cwd, currentBranch, onClose, onDone }) {
             value: base,
             onChange: (e) => setBase(e.target.value),
             placeholder: "main",
-            style: inputStyle
+            disabled: aiBusy,
+            style: { ...inputStyle, opacity: aiBusy ? 0.6 : 1 }
           }
         ) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Field, { label: "Description (optional)", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -21469,9 +21523,10 @@ function PRModal({ cwd, currentBranch, onClose, onDone }) {
           {
             value: body,
             onChange: (e) => setBody(e.target.value),
-            placeholder: "Describe your changes…",
-            rows: 4,
-            style: { ...inputStyle, resize: "vertical", fontFamily: "var(--font-body)" }
+            placeholder: aiBusy ? "Analyzing diff & writing a professional, detailed description..." : "Describe your changes…",
+            rows: 6,
+            disabled: aiBusy,
+            style: { ...inputStyle, resize: "vertical", fontFamily: "var(--font-body)", opacity: aiBusy ? 0.6 : 1 }
           }
         ) }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 4 }, children: [
@@ -21480,8 +21535,8 @@ function PRModal({ cwd, currentBranch, onClose, onDone }) {
             "button",
             {
               onClick: submit,
-              disabled: !title.trim() || busy,
-              style: { padding: "7px 16px", background: "var(--pri)", color: "#fff", borderRadius: "var(--r2)", fontSize: 12, fontWeight: 500, opacity: busy ? 0.6 : 1 },
+              disabled: !title.trim() || busy || aiBusy,
+              style: { padding: "7px 16px", background: "var(--pri)", color: "#fff", borderRadius: "var(--r2)", fontSize: 12, fontWeight: 500, opacity: busy || aiBusy ? 0.6 : 1 },
               children: busy ? "Creating…" : "Create PR"
             }
           )

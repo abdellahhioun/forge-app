@@ -19,6 +19,7 @@ declare global {
         switchBranch: (cwd: string, name: string) => Promise<{ ok: boolean; out: string }>
         pr:           (cwd: string, title: string, body: string, base: string) => Promise<{ ok: boolean; out: string }>
         suggestCommit: (cwd: string) => Promise<{ ok: boolean; message?: string; error?: string }>
+        suggestPR:    (cwd: string, base: string) => Promise<{ ok: boolean; title?: string; body?: string; error?: string }>
       }
       terminal: {
         spawn: (id: string, cwd: string) => Promise<{ success: boolean }>

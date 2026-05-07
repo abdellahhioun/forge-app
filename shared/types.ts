@@ -99,6 +99,7 @@ export const IPC = {
   GIT_BRANCH_SWITCH: 'git:branch:switch',
   GIT_PR:            'git:pr',
   GIT_SUGGEST_COMMIT:'git:suggest-commit',
+  GIT_SUGGEST_PR:    'git:suggest-pr',
   // Terminal
   TERM_SPAWN:        'terminal:spawn',
   TERM_INPUT:        'terminal:input',

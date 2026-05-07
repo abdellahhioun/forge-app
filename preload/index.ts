@@ -32,6 +32,7 @@ contextBridge.exposeInMainWorld('forge', {
     switchBranch: (cwd: string, name: string)                              => ipcRenderer.invoke(IPC.GIT_BRANCH_SWITCH, cwd, name),
     pr:           (cwd: string, title: string, body: string, base: string) => ipcRenderer.invoke(IPC.GIT_PR, cwd, title, body, base),
     suggestCommit: (cwd: string)                                           => ipcRenderer.invoke(IPC.GIT_SUGGEST_COMMIT, cwd),
+    suggestPR:    (cwd: string, base: string)                              => ipcRenderer.invoke(IPC.GIT_SUGGEST_PR, cwd, base),
   },
 
   // Terminal
