@@ -56,7 +56,13 @@ export default function SplashScreen({ onDone }: Props) {
           transform: iconVisible ? 'translateX(0) scale(1)' : 'translateX(-18px) scale(0.85)',
           transition: 'opacity 500ms cubic-bezier(0.16,1,0.3,1), transform 500ms cubic-bezier(0.16,1,0.3,1)',
         }}>
-          <ForgeIcon size={56} />
+          <img
+            src="/logoforforge.png"
+            alt="Forge logo"
+            width={56}
+            height={56}
+            style={{ objectFit: 'contain' }}
+          />
         </div>
 
         {/* ── Letters ── */}
