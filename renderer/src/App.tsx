@@ -1,5 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForgeStore } from './store'
+import SplashScreen from './components/SplashScreen'
 import Sidebar from './components/Sidebar'
 import Topbar from './components/Topbar'
 import EditorPanel from './panels/Editor'
@@ -11,6 +12,7 @@ import DashboardPanel from './panels/Dashboard'
 
 export default function App() {
   const { activePanel, setProjects, theme } = useForgeStore()
+  const [splashDone, setSplashDone] = useState(false)
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -25,29 +27,32 @@ export default function App() {
   }, [])
 
   return (
-    <div style={{
-      display: 'flex',
-      height: '100vh',
-      width: '100vw',
-      overflow: 'hidden',
-      background: 'var(--bg)',
-      color: 'var(--txt)',
-    }}>
-      {/* macOS traffic light spacer */}
-      <Sidebar />
+    <>
+      {!splashDone && <SplashScreen onDone={() => setSplashDone(true)} />}
+      <div style={{
+        display: 'flex',
+        height: '100vh',
+        width: '100vw',
+        overflow: 'hidden',
+        background: 'var(--bg)',
+        color: 'var(--txt)',
+      }}>
+        {/* macOS traffic light spacer */}
+        <Sidebar />
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-        <Topbar />
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          <Topbar />
 
-        <main style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
-          {activePanel === 'editor'    && <EditorPanel />}
-          {activePanel === 'search'    && <SearchPanel />}
-          {activePanel === 'terminal'  && <TerminalPanel />}
-          {activePanel === 'git'       && <GitPanel />}
-          {activePanel === 'chat'      && <ChatPanel />}
-          {activePanel === 'dashboard' && <DashboardPanel />}
-        </main>
+          <main style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
+            {activePanel === 'editor'    && <EditorPanel />}
+            {activePanel === 'search'    && <SearchPanel />}
+            {activePanel === 'terminal'  && <TerminalPanel />}
+            {activePanel === 'git'       && <GitPanel />}
+            {activePanel === 'chat'      && <ChatPanel />}
+            {activePanel === 'dashboard' && <DashboardPanel />}
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
