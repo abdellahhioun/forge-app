@@ -218,41 +218,81 @@ export default function GitPanel() {
           background: 'var(--surface)', flexShrink: 0,
         }}>
 
-          {/* Branch header */}
+          {/* Branch header & Actions */}
           <div style={{
-            padding: '10px 12px', borderBottom: '1px solid var(--brd)',
-            display: 'flex', alignItems: 'center', gap: 7,
+            borderBottom: '1px solid var(--brd)',
+            background: 'var(--surface)',
           }}>
-            <GitBranch size={13} style={{ color: 'var(--pri)', flexShrink: 0 }} />
-
-            {/* Branch switcher button */}
-            <button
-              onClick={() => setShowBranches(v => !v)}
-              style={{
-                flex: 1, display: 'flex', alignItems: 'center', gap: 5,
-                background: 'var(--offset)', border: '1px solid var(--brd)',
-                borderRadius: 'var(--r2)', padding: '4px 8px',
-                color: 'var(--txt)', fontSize: 12, fontFamily: 'var(--font-mono)',
-                cursor: 'pointer', textAlign: 'left',
-              }}
-            >
-              <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                {status?.branch ?? '—'}
-              </span>
-              <ChevronsUpDown size={11} style={{ color: 'var(--faint)', flexShrink: 0 }} />
-            </button>
-
-            <span style={{
-              fontSize: 10, padding: '2px 7px', borderRadius: 99, flexShrink: 0,
-              background: status?.clean ? 'var(--ok-bg)' : 'var(--warn-bg)',
-              color: status?.clean ? 'var(--ok)' : 'var(--warn)',
+            {/* Main branch switcher row */}
+            <div style={{
+              padding: '10px 12px 6px',
+              display: 'flex', alignItems: 'center', gap: 7,
             }}>
-              {status?.clean ? 'clean' : 'dirty'}
-            </span>
+              <GitBranch size={13} style={{ color: 'var(--pri)', flexShrink: 0 }} />
 
-            <button onClick={() => load(true)} style={{ color: 'var(--muted)', display: 'flex', padding: 2, borderRadius: 'var(--r1)', flexShrink: 0 }}>
-              <RefreshCw size={12} className={loading ? 'spin' : ''} />
-            </button>
+              {/* Branch switcher button */}
+              <button
+                onClick={() => setShowBranches(v => !v)}
+                style={{
+                  flex: 1, display: 'flex', alignItems: 'center', gap: 5,
+                  background: 'var(--offset)', border: '1px solid var(--brd)',
+                  borderRadius: 'var(--r2)', padding: '4px 8px',
+                  color: 'var(--txt)', fontSize: 12, fontFamily: 'var(--font-mono)',
+                  cursor: 'pointer', textAlign: 'left',
+                }}
+              >
+                <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {status?.branch ?? '—'}
+                </span>
+                <ChevronsUpDown size={11} style={{ color: 'var(--faint)', flexShrink: 0 }} />
+              </button>
+
+              <span style={{
+                fontSize: 10, padding: '2px 7px', borderRadius: 99, flexShrink: 0,
+                background: status?.clean ? 'var(--ok-bg)' : 'var(--warn-bg)',
+                color: status?.clean ? 'var(--ok)' : 'var(--warn)',
+              }}>
+                {status?.clean ? 'clean' : 'dirty'}
+              </span>
+
+              <button onClick={() => load(true)} style={{ color: 'var(--muted)', display: 'flex', padding: 2, borderRadius: 'var(--r1)', flexShrink: 0 }}>
+                <RefreshCw size={12} className={loading ? 'spin' : ''} />
+              </button>
+            </div>
+
+            {/* New branch creation row */}
+            <div style={{
+              padding: '0 12px 10px',
+              display: 'flex', alignItems: 'center', gap: 7,
+            }}>
+              <GitBranch size={13} style={{ color: 'var(--faint)', flexShrink: 0 }} />
+              <input
+                value={newBranch}
+                onChange={e => setNewBranch(e.target.value)}
+                placeholder="Create branch…"
+                style={{
+                  flex: 1, background: 'var(--offset)',
+                  border: '1px solid var(--brd)', borderRadius: 'var(--r2)',
+                  color: 'var(--txt)', fontSize: 11.5, padding: '5px 8px',
+                  outline: 'none', fontFamily: 'var(--font-body)',
+                }}
+                onKeyDown={e => { if (e.key === 'Enter') handleBranch() }}
+              />
+              <button
+                onClick={handleBranch}
+                disabled={!newBranch.trim() || loading}
+                title="Create branch"
+                className="git-btn"
+                style={{
+                  padding: '5px 10px', background: 'var(--offset)',
+                  border: '1px solid var(--brd)', borderRadius: 'var(--r2)',
+                  color: !newBranch.trim() ? 'var(--faint)' : 'var(--pri)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}
+              >
+                <Plus size={13} />
+              </button>
+            </div>
           </div>
 
           {/* Branch dropdown */}
@@ -295,87 +335,76 @@ export default function GitPanel() {
           {/* Actions */}
           <div style={{ padding: 12, borderTop: '1px solid var(--brd)', display: 'flex', flexDirection: 'column', gap: 8 }}>
 
-            {/* Commit */}
+            {/* Commit Message Textarea */}
             <textarea
               value={commitMsg}
               onChange={e => setCommitMsg(e.target.value)}
               placeholder="Commit message… (⌘↵ to commit)"
-              rows={3}
+              rows={2}
               style={{
                 width: '100%', background: 'var(--offset)',
                 border: '1px solid var(--brd)', borderRadius: 'var(--r2)',
-                color: 'var(--txt)', fontSize: 12, padding: '7px 10px',
+                color: 'var(--txt)', fontSize: 12, padding: '6px 9px',
                 resize: 'none', fontFamily: 'var(--font-body)', outline: 'none',
+                transition: 'border-color 0.15s',
               }}
+              onFocus={e => (e.target.style.borderColor = 'var(--pri)')}
+              onBlur={e => (e.target.style.borderColor = 'var(--brd)')}
               onKeyDown={e => { if (e.key === 'Enter' && e.metaKey) handleCommit() }}
             />
-            <div style={{ display: 'flex', gap: 6 }}>
+
+            {/* Actions Grid */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <div style={{ display: 'flex', gap: 6 }}>
+                {/* Commit Button */}
+                <button
+                  onClick={handleCommit}
+                  disabled={!commitMsg.trim() || loading}
+                  className="git-btn git-btn-pri"
+                  style={{
+                    flex: 1, padding: '7px 0',
+                    background: commitMsg.trim() ? 'var(--pri)' : 'var(--dynamic)',
+                    color: commitMsg.trim() ? '#fff' : 'var(--faint)',
+                    border: 'none',
+                    borderRadius: 'var(--r2)', fontSize: 12, fontWeight: 500,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
+                  }}
+                >
+                  <GitCommit size={13} /> Commit
+                </button>
+
+                {/* Push Button */}
+                <button
+                  onClick={handlePush}
+                  disabled={loading}
+                  className="git-btn"
+                  title="Push commits to remote"
+                  style={{
+                    flex: 1, padding: '7px 0',
+                    background: 'var(--offset)',
+                    border: '1px solid var(--brd)',
+                    borderRadius: 'var(--r2)', color: 'var(--muted)', fontSize: 12,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
+                  }}
+                >
+                  <Upload size={13} /> Push
+                </button>
+              </div>
+
+              {/* Pull Request Button */}
               <button
-                onClick={handleCommit}
-                disabled={!commitMsg.trim() || loading}
+                onClick={() => setShowPR(true)}
+                className="git-btn"
                 style={{
-                  flex: 1, padding: '6px 0',
-                  background: commitMsg.trim() ? 'var(--pri)' : 'var(--dynamic)',
-                  color: commitMsg.trim() ? '#fff' : 'var(--faint)',
-                  borderRadius: 'var(--r2)', fontSize: 12, fontWeight: 500,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
+                  width: '100%', padding: '7px 0',
+                  background: 'var(--offset)', border: '1px solid var(--brd)',
+                  borderRadius: 'var(--r2)', color: 'var(--muted)', fontSize: 12,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
                 }}
               >
-                <GitCommit size={12} /> Commit
-              </button>
-              <button
-                onClick={handlePush}
-                disabled={loading}
-                style={{
-                  padding: '6px 10px', background: 'var(--offset)',
-                  border: '1px solid var(--brd)', borderRadius: 'var(--r2)',
-                  color: 'var(--muted)', fontSize: 12,
-                  display: 'flex', alignItems: 'center', gap: 4,
-                }}
-              >
-                <Upload size={12} /> Push
+                <GitPullRequest size={13} /> Open Pull Request
               </button>
             </div>
-
-            {/* New branch */}
-            <div style={{ display: 'flex', gap: 6 }}>
-              <input
-                value={newBranch}
-                onChange={e => setNewBranch(e.target.value)}
-                placeholder="New branch…"
-                style={{
-                  flex: 1, background: 'var(--offset)',
-                  border: '1px solid var(--brd)', borderRadius: 'var(--r2)',
-                  color: 'var(--txt)', fontSize: 12, padding: '5px 8px',
-                  outline: 'none', fontFamily: 'var(--font-body)',
-                }}
-                onKeyDown={e => { if (e.key === 'Enter') handleBranch() }}
-              />
-              <button
-                onClick={handleBranch}
-                disabled={!newBranch.trim() || loading}
-                style={{
-                  padding: '5px 8px', background: 'var(--offset)',
-                  border: '1px solid var(--brd)', borderRadius: 'var(--r2)',
-                  color: 'var(--muted)', display: 'flex', alignItems: 'center',
-                }}
-              >
-                <Plus size={13} />
-              </button>
-            </div>
-
-            {/* Open PR */}
-            <button
-              onClick={() => setShowPR(true)}
-              style={{
-                width: '100%', padding: '6px 0',
-                background: 'var(--offset)', border: '1px solid var(--brd)',
-                borderRadius: 'var(--r2)', color: 'var(--muted)', fontSize: 12,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-              }}
-            >
-              <GitPullRequest size={13} /> Open Pull Request
-            </button>
           </div>
         </div>
 
@@ -445,6 +474,26 @@ export default function GitPanel() {
       <style>{`
         .spin { animation: spin .7s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
+        .git-btn {
+          cursor: pointer;
+          transition: all 0.15s ease-in-out;
+        }
+        .git-btn:hover:not(:disabled) {
+          background: var(--offset) !important;
+          color: var(--txt) !important;
+          border-color: var(--div) !important;
+        }
+        .git-btn:disabled {
+          cursor: not-allowed;
+          opacity: 0.6;
+        }
+        .git-btn-pri {
+          transition: filter 0.15s ease-in-out;
+        }
+        .git-btn-pri:hover:not(:disabled) {
+          filter: brightness(1.15);
+          color: #fff !important;
+        }
       `}</style>
     </div>
   )

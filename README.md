@@ -6,7 +6,7 @@ Forge is a standalone desktop app that wraps your custom MCP server engine and g
 
 ## Stack
 
-- **Electron** — desktop shell (Node.js + Chromium)
+- **Electron** — desktop shell (Node.js + Chromium).
 - **React + Vite** — renderer (UI)
 - **Monaco Editor** — VS Code's editor engine, embedded
 - **xterm.js** — fully featured terminal emulator
