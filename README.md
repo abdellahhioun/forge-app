@@ -1,6 +1,6 @@
 # ⚡ Forge App
 
-> A personal AI-powered desktop IDE — built on Electron, powered by your MCP server.
+> A personal AI-powered desktop IDE — built on Electron, powered by your MCP server..
 
 Forge is a standalone desktop app that wraps your custom MCP server engine and gives you a full UI for coding, project management, git, terminal, AI chat, and more — without ever opening Cursor.
 
