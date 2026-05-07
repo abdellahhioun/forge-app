@@ -13217,7 +13217,7 @@ function fileColor(name) {
 }
 function TreeNode({ node, depth = 0, onRefresh, onCtxMenu }) {
   const [open, setOpen] = reactExports.useState(depth === 0);
-  const { openFile, setActiveFile, activeFile } = useForgeStore();
+  const { openFile, setActiveFile, activeFile, setActivePanel } = useForgeStore();
   const isActive = activeFile === node.path;
   const handleClick = reactExports.useCallback(async () => {
     if (node.isDir) {
@@ -13229,8 +13229,9 @@ function TreeNode({ node, depth = 0, onRefresh, onCtxMenu }) {
     if (res.ok && res.content !== void 0) {
       openFile(node.path, res.content);
       setActiveFile(node.path);
+      setActivePanel("editor");
     }
-  }, [node]);
+  }, [node, openFile, setActiveFile, setActivePanel]);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "div",
@@ -14474,6 +14475,22 @@ function Ve({ defaultValue: e, defaultLanguage: r, defaultPath: n, value: t, lan
 var fe = Ve;
 var de = reactExports.memo(fe);
 var Ft = de;
+loader.init().then((monaco) => {
+  if (monaco?.languages?.typescript?.typescriptDefaults) {
+    monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: true,
+      noSyntaxValidation: false
+    });
+  }
+  if (monaco?.languages?.javascript?.javascriptDefaults) {
+    monaco.languages.javascript.javascriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: true,
+      noSyntaxValidation: false
+    });
+  }
+}).catch((err) => {
+  console.error("Failed to configure Monaco defaults:", err);
+});
 function EditorPanel() {
   const {
     openFiles,
@@ -14626,7 +14643,9 @@ function EditorPanel() {
           cursorBlinking: "smooth",
           cursorSmoothCaretAnimation: "on",
           padding: { top: 12 },
-          tabSize: 2
+          tabSize: 2,
+          fixedOverflowWidgets: true
+          // Prevent hover tooltips and dropdowns from clipping or going past screen boundaries
         }
       },
       currentFile.path
@@ -14683,7 +14702,7 @@ const EXT_COLOR = {
   sh: "#a86fdf"
 };
 function SearchPanel() {
-  const { activeProject, openFile, setActiveFile } = useForgeStore();
+  const { activeProject, openFile, setActiveFile, setActivePanel } = useForgeStore();
   const [query, setQuery] = reactExports.useState("");
   const [matchCase, setMatchCase] = reactExports.useState(false);
   const [useRegex, setUseRegex] = reactExports.useState(false);
@@ -14737,6 +14756,7 @@ function SearchPanel() {
     if (res.ok && res.content !== void 0) {
       openFile(fullPath, res.content);
       setActiveFile(fullPath);
+      setActivePanel("editor");
     }
   };
   const toggleCollapse = (file) => {
@@ -21964,6 +21984,9 @@ function PRModal({ cwd, currentBranch, onClose, onDone }) {
         borderRadius: "var(--r3)",
         padding: 24,
         width: 440,
+        maxHeight: "calc(100vh - 40px)",
+        overflowY: "auto",
+        boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
         gap: 12,

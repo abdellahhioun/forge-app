@@ -1,7 +1,25 @@
 import { useRef, useEffect, useCallback } from 'react'
-import MonacoEditor from '@monaco-editor/react'
+import MonacoEditor, { loader } from '@monaco-editor/react'
 import { useForgeStore } from '../store'
 import { X, FileCode } from 'lucide-react'
+
+// Configure Monaco language diagnostics globally once to avoid repetitive mounting errors
+loader.init().then(monaco => {
+  if (monaco?.languages?.typescript?.typescriptDefaults) {
+    monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: true,
+      noSyntaxValidation: false,
+    })
+  }
+  if (monaco?.languages?.javascript?.javascriptDefaults) {
+    monaco.languages.javascript.javascriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: true,
+      noSyntaxValidation: false,
+    })
+  }
+}).catch(err => {
+  console.error('Failed to configure Monaco defaults:', err)
+})
 
 export default function EditorPanel() {
   const {
@@ -150,6 +168,7 @@ export default function EditorPanel() {
               cursorSmoothCaretAnimation: 'on',
               padding: { top: 12 },
               tabSize: 2,
+              fixedOverflowWidgets: true, // Prevent hover tooltips and dropdowns from clipping or going past screen boundaries
             }}
           />
         )}

@@ -23,7 +23,7 @@ function TreeNode({ node, depth = 0, onRefresh, onCtxMenu }: {
   onCtxMenu: (e: React.MouseEvent, node: Node) => void
 }) {
   const [open, setOpen] = useState(depth === 0)
-  const { openFile, setActiveFile, activeFile } = useForgeStore()
+  const { openFile, setActiveFile, activeFile, setActivePanel } = useForgeStore()
   const isActive = activeFile === node.path
 
   const handleClick = useCallback(async () => {
@@ -33,8 +33,9 @@ function TreeNode({ node, depth = 0, onRefresh, onCtxMenu }: {
     if (res.ok && res.content !== undefined) {
       openFile(node.path, res.content)
       setActiveFile(node.path)
+      setActivePanel('editor')
     }
-  }, [node])
+  }, [node, openFile, setActiveFile, setActivePanel])
 
   return (
     <div>

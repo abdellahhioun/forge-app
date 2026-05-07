@@ -49,7 +49,7 @@ const EXT_COLOR: Record<string, string> = {
 }
 
 export default function SearchPanel() {
-  const { activeProject, openFile, setActiveFile } = useForgeStore()
+  const { activeProject, openFile, setActiveFile, setActivePanel } = useForgeStore()
 
   const [query, setQuery]           = useState('')
   const [matchCase, setMatchCase]   = useState(false)
@@ -106,6 +106,7 @@ export default function SearchPanel() {
     if (res.ok && res.content !== undefined) {
       openFile(fullPath, res.content)
       setActiveFile(fullPath)
+      setActivePanel('editor')
       // Monaco will open the file — line jump via editor action if available
     }
   }

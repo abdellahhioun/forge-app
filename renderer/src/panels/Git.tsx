@@ -669,6 +669,9 @@ function PRModal({ cwd, currentBranch, onClose, onDone }: {
       <div style={{
         background: 'var(--surface)', border: '1px solid var(--brd)',
         borderRadius: 'var(--r3)', padding: 24, width: 440,
+        maxHeight: 'calc(100vh - 40px)',
+        overflowY: 'auto',
+        boxSizing: 'border-box',
         display: 'flex', flexDirection: 'column', gap: 12,
         boxShadow: '0 16px 40px rgba(0,0,0,.5)',
       }}>
