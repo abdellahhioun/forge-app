@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useForgeStore } from '../store'
 import { GitBranch, GitCommit, RefreshCw, Upload, Plus, Check, X, GitPullRequest, ChevronsUpDown } from 'lucide-react'
 import type { GitStatus, GitCommit as IGitCommit } from '../../../shared/types'
@@ -18,6 +18,11 @@ export default function GitPanel() {
   const [toast, setToast]       = useState<Toast | null>(null)
   const [showBranches, setShowBranches] = useState(false)
   const [showPR, setShowPR]     = useState(false)
+
+  const [sidebarWidth, setSidebarWidth] = useState(280)
+  const isResizingRef = useRef(false)
+  const resizeStartXRef = useRef(0)
+  const resizeStartWidthRef = useRef(280)
 
   const notify = (ok: boolean, msg: string) => {
     setToast({ ok, msg })
@@ -47,6 +52,38 @@ export default function GitPanel() {
     const interval = setInterval(() => load(false), 5000)
     return () => clearInterval(interval)
   }, [activeProject])
+
+  // ─── Sidebar resize handling ─────────────────────────────────────────────
+  useEffect(() => {
+    const onMouseMove = (e: MouseEvent) => {
+      if (!isResizingRef.current) return
+      const delta = e.clientX - resizeStartXRef.current
+      const next = resizeStartWidthRef.current + delta
+      const clamped = Math.max(200, Math.min(600, next))
+      setSidebarWidth(clamped)
+    }
+    const onMouseUp = () => {
+      if (!isResizingRef.current) return
+      isResizingRef.current = false
+      document.body.style.cursor = ''
+      document.body.style.userSelect = ''
+    }
+    window.addEventListener('mousemove', onMouseMove)
+    window.addEventListener('mouseup', onMouseUp)
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('mouseup', onMouseUp)
+    }
+  }, [])
+
+  // ─── Auto-resize sidebar to accommodate long branch names ────────────────
+  useEffect(() => {
+    if (status?.branch) {
+      // Estimated width required = fixed elements (approx 155px) + monospace characters (7.2px each)
+      const neededWidth = Math.ceil(155 + status.branch.length * 7.2)
+      setSidebarWidth(prev => Math.max(prev, Math.min(500, neededWidth)))
+    }
+  }, [status?.branch])
 
   const handleCommit = async () => {
     if (!activeProject || !commitMsg.trim()) return
@@ -176,7 +213,7 @@ export default function GitPanel() {
 
         {/* ── Left sidebar ── */}
         <div style={{
-          width: 280, borderRight: '1px solid var(--brd)',
+          width: sidebarWidth,
           display: 'flex', flexDirection: 'column',
           background: 'var(--surface)', flexShrink: 0,
         }}>
@@ -341,6 +378,29 @@ export default function GitPanel() {
             </button>
           </div>
         </div>
+
+        {/* ── Drag separator ── */}
+        <div
+          onMouseDown={(e) => {
+            isResizingRef.current = true
+            resizeStartXRef.current = e.clientX
+            resizeStartWidthRef.current = sidebarWidth
+            document.body.style.cursor = 'col-resize'
+            document.body.style.userSelect = 'none'
+          }}
+          title="Drag to resize panel"
+          style={{
+            width: 6,
+            cursor: 'col-resize',
+            background: 'transparent',
+            borderLeft: '1px solid var(--brd)',
+            borderRight: '1px solid transparent',
+            flexShrink: 0,
+            zIndex: 10,
+            marginLeft: -3,
+            marginRight: -3,
+          }}
+        />
 
         {/* ── Right: diff + log ── */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
