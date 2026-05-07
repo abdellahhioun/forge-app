@@ -10,6 +10,7 @@ import * as pty from 'node-pty'
 
 // ─── Active terminal processes ───────────────────────────────────────────────────────
 const terminals = new Map<string, pty.IPty>()
+const MAX_BUFFER = 100 * 1024 * 1024; // 100MB
 
 export function registerMcpHandlers(ipcMain: IpcMain) {
 
@@ -57,7 +58,6 @@ export function registerMcpHandlers(ipcMain: IpcMain) {
   })
 
   // ─── GIT ─────────────────────────────────────────────────────────────────────
-  const MAX_BUFFER = 100 * 1024 * 1024; // 100MB
 
   const getDevEnv = () => {
     const env = { ...process.env }
@@ -1048,5 +1048,65 @@ export function registerFileHandlers() {
   ipcMain.handle('files:newfile', (_e: any, path: string) => {
     try { writeFileSync(path, '', 'utf-8'); return { ok: true } }
     catch (e: any) { return { ok: false, error: e.message } }
+  })
+
+  const BINARY_EXTS = new Set([
+    'png','jpg','jpeg','gif','svg','ico','webp','bmp',
+    'ttf','woff','woff2','eot','otf',
+    'mp3','mp4','wav','ogg','webm',
+    'zip','tar','gz','dmg','pkg','exe',
+    'pdf','lock',
+  ])
+
+  ipcMain.handle('files:search', (_e: any, cwd: string, query: string, opts: { matchCase?: boolean; regex?: boolean } = {}) => {
+    if (!query.trim()) return { ok: true, results: [] }
+
+    const escaped = opts.regex ? query : query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+    const parseOutput = (raw: string, isGitGrep: boolean) => {
+      const results: { file: string; line: number; text: string }[] = []
+      for (const l of raw.split('\n')) {
+        if (!l) continue
+        const m = l.match(isGitGrep ? /^([^:]+?):(\d+):(.*)$/ : /^\.\/(.+?):(\d+):(.*)$/)
+        if (!m) continue
+        const [, relPath, lineStr, text] = m
+        const ext = relPath.split('.').pop()?.toLowerCase() ?? ''
+        if (BINARY_EXTS.has(ext)) continue
+        results.push({ file: relPath, line: parseInt(lineStr, 10), text: text.trim() })
+        if (results.length >= 500) break
+      }
+      return results
+    }
+
+    try {
+      // 1. Lightning fast search using git grep (respects .gitignore, ignores binaries automatically)
+      const gitFlags = ['-n', '-I', '--untracked']
+      if (!opts.matchCase) gitFlags.push('-i')
+      
+      const raw = execSync(
+        `git grep ${gitFlags.join(' ')} -e ${JSON.stringify(escaped)} -- .`,
+        { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER }
+      )
+      return { ok: true, results: parseOutput(raw, true) }
+    } catch (e: any) {
+      // Exit code 1 means "no matches found" in git grep — which is success
+      if (e.status === 1) return { ok: true, results: [] }
+
+      // 2. Fallback to standard grep if not a git repository (or other failure)
+      try {
+        const flags = ['-rn', '--include=*.*', '--color=never']
+        if (!opts.matchCase) flags.push('-i')
+        const ignoreDirs = ['node_modules', '.git', 'dist', 'dist-electron', 'out', '.next', '__pycache__']
+        const excludeDirs = ignoreDirs.map(d => `--exclude-dir=${d}`).join(' ')
+        const raw = execSync(
+          `grep ${flags.join(' ')} ${excludeDirs} -e ${JSON.stringify(escaped)} .`,
+          { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER }
+        )
+        return { ok: true, results: parseOutput(raw, false) }
+      } catch (fallbackErr: any) {
+        if (fallbackErr.status === 1) return { ok: true, results: [] }
+        return { ok: false, error: fallbackErr.message }
+      }
+    }
   })
 }

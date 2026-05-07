@@ -40,9 +40,14 @@ declare global {
         onError: (cb: (err: string) => void) => () => void
       }
       files: {
-        list: (cwd: string) => Promise<any[]>
-        read: (path: string) => Promise<{ ok: boolean; content?: string; error?: string }>
-        write: (path: string, content: string) => Promise<{ ok: boolean }>
+        list:    (cwd: string) => Promise<any[]>
+        read:    (path: string) => Promise<{ ok: boolean; content?: string; error?: string }>
+        write:   (path: string, content: string) => Promise<{ ok: boolean }>
+        rename:  (oldPath: string, newPath: string) => Promise<{ ok: boolean }>
+        delete:  (path: string) => Promise<{ ok: boolean }>
+        mkdir:   (path: string) => Promise<{ ok: boolean }>
+        newfile: (path: string) => Promise<{ ok: boolean }>
+        search:  (cwd: string, query: string, opts?: { matchCase?: boolean; regex?: boolean }) => Promise<{ ok: boolean; results?: { file: string; line: number; text: string }[]; error?: string }>
       }
       context: {
         get: (cwd: string) => Promise<any>

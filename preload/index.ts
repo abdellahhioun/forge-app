@@ -18,6 +18,7 @@ contextBridge.exposeInMainWorld('forge', {
     delete:  (path: string)                         => ipcRenderer.invoke('files:delete', path),
     mkdir:   (path: string)                         => ipcRenderer.invoke('files:mkdir', path),
     newfile: (path: string)                         => ipcRenderer.invoke('files:newfile', path),
+    search:  (cwd: string, query: string, opts?: { matchCase?: boolean; regex?: boolean }) => ipcRenderer.invoke('files:search', cwd, query, opts),
   },
 
   // Git

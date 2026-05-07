@@ -1,13 +1,14 @@
 import { useForgeStore } from '../store'
 import {
   Code2, Terminal, GitBranch, MessageSquare,
-  LayoutDashboard, FolderOpen, Plus, Sun, Moon, Trash2
+  LayoutDashboard, FolderOpen, Plus, Sun, Moon, Trash2, Search
 } from 'lucide-react'
 import type { Project } from '../../../shared/types'
 import FileTree from './FileTree'
 
 const NAV = [
   { id: 'editor',    icon: Code2,          label: 'Editor' },
+  { id: 'search',    icon: Search,          label: 'Search' },
   { id: 'terminal',  icon: Terminal,        label: 'Terminal' },
   { id: 'git',       icon: GitBranch,       label: 'Git' },
   { id: 'chat',      icon: MessageSquare,   label: 'Chat' },
