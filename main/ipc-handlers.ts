@@ -59,8 +59,22 @@ export function registerMcpHandlers(ipcMain: IpcMain) {
   // ─── GIT ─────────────────────────────────────────────────────────────────────
   const MAX_BUFFER = 100 * 1024 * 1024; // 100MB
 
+  const getDevEnv = () => {
+    const env = { ...process.env }
+    const paths = [
+      '/opt/homebrew/bin',
+      '/usr/local/bin',
+      '/usr/bin',
+      '/bin',
+      '/usr/sbin',
+      '/sbin'
+    ]
+    env.PATH = paths.join(':') + (env.PATH ? `:${env.PATH}` : '')
+    return env
+  }
+
   const git = (cmd: string, cwd: string) => {
-    try { return { ok: true, out: execSync(cmd, { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER }).trim() } }
+    try { return { ok: true, out: execSync(cmd, { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER, env: getDevEnv() }).trim() } }
     catch (e: any) { return { ok: false, out: e.message as string } }
   }
 
@@ -68,7 +82,7 @@ export function registerMcpHandlers(ipcMain: IpcMain) {
     const branch = git('git rev-parse --abbrev-ref HEAD', cwd)
     let statusOut = ''
     try {
-      statusOut = execSync('git status --porcelain', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER })
+      statusOut = execSync('git status --porcelain', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER, env: getDevEnv() })
     } catch {
       statusOut = ''
     }
@@ -200,7 +214,7 @@ export function registerMcpHandlers(ipcMain: IpcMain) {
     try {
       const out = execSync(
         `gh pr create --title ${JSON.stringify(title)} --body ${JSON.stringify(body)} --base ${JSON.stringify(base)}`,
-        { cwd, encoding: 'utf-8' }
+        { cwd, encoding: 'utf-8', env: getDevEnv() }
       ).trim()
       return { ok: true, out }
     } catch (e: any) {
@@ -211,9 +225,9 @@ export function registerMcpHandlers(ipcMain: IpcMain) {
   ipcMain.handle(IPC.GIT_SUGGEST_COMMIT, async (_e, cwd: string) => {
     let diff = ''
     try {
-      diff = execSync('git diff HEAD', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER }).trim()
+      diff = execSync('git diff HEAD', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER, env: getDevEnv() }).trim()
       if (!diff) {
-        const untracked = execSync('git status --porcelain', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER })
+        const untracked = execSync('git status --porcelain', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER, env: getDevEnv() })
           .split('\n')
           .filter(l => l.startsWith('??'))
           .map(l => l.slice(3))
@@ -224,7 +238,7 @@ export function registerMcpHandlers(ipcMain: IpcMain) {
       }
     } catch {
       try {
-        diff = execSync('git diff', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER }).trim()
+        diff = execSync('git diff', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER, env: getDevEnv() }).trim()
       } catch {}
     }
 
@@ -808,9 +822,9 @@ ${fileContext}`
       let branch = 'unknown'
       let clean = true
       let lastCommit = 'No commits yet'
-      try { branch = execSync('git rev-parse --abbrev-ref HEAD', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER }).trim() } catch {}
-      try { clean = execSync('git status --porcelain', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER }).trim() === '' } catch {}
-      try { lastCommit = execSync('git log -1 --pretty=format:"%h %s (%ar)"', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER }).trim() } catch {}
+      try { branch = execSync('git rev-parse --abbrev-ref HEAD', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER, env: getDevEnv() }).trim() } catch {}
+      try { clean = execSync('git status --porcelain', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER, env: getDevEnv() }).trim() === '' } catch {}
+      try { lastCommit = execSync('git log -1 --pretty=format:"%h %s (%ar)"', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER, env: getDevEnv() }).trim() } catch {}
 
       // Stack detection
       let stack = 'Unknown'
