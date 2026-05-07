@@ -227,7 +227,8 @@ export function registerMcpHandlers(ipcMain: IpcMain) {
       ], { cwd, encoding: 'utf-8', env: getDevEnv() }).trim()
       return { ok: true, out }
     } catch (e: any) {
-      return { ok: false, out: e.message }
+      const errMsg = (e.stderr ? e.stderr.toString() : '') || (e.stdout ? e.stdout.toString() : '') || e.message
+      return { ok: false, out: errMsg.trim() }
     }
   })
 
