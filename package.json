@@ -68,8 +68,10 @@
   "build": {
     "appId": "io.laplateforme.forge",
     "productName": "Forge",
+    "icon": "build/icons/icon.png",
     "mac": {
       "category": "public.app-category.developer-tools",
+      "icon": "build/icons/icon.icns",
       "target": [
         "dmg",
         "zip"

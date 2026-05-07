@@ -1,9 +1,9 @@
 {
-  "branch": "main",
+  "branch": "testt",
   "clean": false,
-  "lastCommit": "9471239 feat: add file-specific diff support and interactive file selection to Git panel (40 minutes ago)",
-  "fileCount": 27,
-  "totalLines": 4328,
+  "lastCommit": "75d65a9 feat(splash): replace SVG ForgeIcon with logoforforge.png (41 minutes ago)",
+  "fileCount": 30,
+  "totalLines": 5290,
   "stack": "Electron + React + Vite + TypeScript + Tailwind",
   "keyFiles": [
     "README.md",
@@ -11,5 +11,5 @@
     "package.json",
     "tsconfig.json"
   ],
-  "indexedAt": "2026-05-07T17:05:39.818Z"
+  "indexedAt": "2026-05-07T23:28:41.550Z"
 }

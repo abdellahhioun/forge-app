@@ -73,29 +73,51 @@ export default function Sidebar() {
       userSelect: 'none',
     }}>
 
-      {/* Logo */}
       <div style={{
-        padding: '12px 16px 12px',
+        padding: '12px 16px',
         borderBottom: '1px solid var(--brd)',
         display: 'flex',
         alignItems: 'center',
         gap: 8,
       }}>
         <div style={{
-          width: 28, height: 28,
-          background: 'var(--pri)',
-          borderRadius: 'var(--r2)',
+          width: 32, height: 32,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           flexShrink: 0,
+          overflow: 'visible', // Ensure the scaled image can render outside the 32px box
         }}>
-          {/* Forge logo — stylised F */}
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M3 2h8v2H5v2.5h5v2H5V12H3V2z" fill="white"/>
-          </svg>
+          <img
+            src="./logoforforge.png"
+            alt="Forge"
+            width={32}
+            height={32}
+            style={{
+              objectFit: 'contain',
+              transform: 'scale(1.85)',
+              transformOrigin: 'center',
+            }}
+          />
         </div>
         <div>
-          <div style={{ fontSize: 13, fontWeight: 600, letterSpacing: '-.02em' }}>Forge</div>
-          <div style={{ fontSize: 10, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>v0.1.0</div>
+          <div style={{
+            fontFamily: "var(--font-body)",
+            fontSize: '16px',
+            fontWeight: 800,
+            letterSpacing: '-0.03em',
+            background: 'linear-gradient(135deg, var(--txt) 30%, var(--pri) 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}>Forge</div>
+          <div style={{
+            fontSize: '9px',
+            color: 'var(--pri)',
+            fontFamily: 'var(--font-mono)',
+            fontWeight: 700,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            marginTop: '1px',
+          }}>beta</div>
         </div>
       </div>
 

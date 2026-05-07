@@ -12579,6 +12579,103 @@ const useForgeStore = create$1((set, get) => ({
   fileTreeRevision: 0,
   refreshFileTree: () => set((s) => ({ fileTreeRevision: s.fileTreeRevision + 1 }))
 }));
+const LETTERS = ["F", "O", "R", "G", "E"];
+const LETTER_DELAY = 120;
+const ICON_DELAY = LETTERS.length * LETTER_DELAY + 200;
+const HOLD_DELAY = ICON_DELAY + 600;
+const FADE_DURATION = 600;
+function SplashScreen({ onDone }) {
+  const [visibleLetters, setVisibleLetters] = reactExports.useState(-1);
+  const [iconVisible, setIconVisible] = reactExports.useState(false);
+  const [fadeOut, setFadeOut] = reactExports.useState(false);
+  reactExports.useEffect(() => {
+    LETTERS.forEach((_2, i) => {
+      setTimeout(() => setVisibleLetters(i), i * LETTER_DELAY + 200);
+    });
+    setTimeout(() => setIconVisible(true), ICON_DELAY + 200);
+    setTimeout(() => setFadeOut(true), HOLD_DELAY + 400);
+    setTimeout(() => onDone(), HOLD_DELAY + 400 + FADE_DURATION);
+  }, []);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      style: {
+        position: "fixed",
+        inset: 0,
+        zIndex: 9999,
+        background: "#0f0e0d",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        opacity: fadeOut ? 0 : 1,
+        transition: `opacity ${FADE_DURATION}ms cubic-bezier(0.16,1,0.3,1)`,
+        pointerEvents: fadeOut ? "none" : "all"
+      },
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+          display: "flex",
+          alignItems: "center",
+          gap: "24px",
+          userSelect: "none"
+        }, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
+            opacity: iconVisible ? 1 : 0,
+            transform: iconVisible ? "translateX(0) scale(1)" : "translateX(-18px) scale(0.85)",
+            transition: "opacity 500ms cubic-bezier(0.16,1,0.3,1), transform 500ms cubic-bezier(0.16,1,0.3,1)"
+          }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "img",
+            {
+              src: "./logoforforge.png",
+              alt: "Forge logo",
+              width: 120,
+              height: 120,
+              style: { objectFit: "contain" }
+            }
+          ) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
+            display: "flex",
+            gap: "2px",
+            alignItems: "baseline"
+          }, children: LETTERS.map((letter, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "span",
+            {
+              style: {
+                fontFamily: "'Satoshi', system-ui, sans-serif",
+                fontSize: "52px",
+                fontWeight: 700,
+                letterSpacing: "-0.02em",
+                lineHeight: 1,
+                // Gradient: steel grey → teal, left to right
+                background: `linear-gradient(135deg,
+                  #c8c6c2 ${i * 20}%,
+                  #4f98a3 ${50 + i * 10}%,
+                  #4f98a3 100%)`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                opacity: visibleLetters >= i ? 1 : 0,
+                transform: visibleLetters >= i ? "translateY(0)" : "translateY(14px)",
+                transition: "opacity 350ms cubic-bezier(0.16,1,0.3,1), transform 350ms cubic-bezier(0.16,1,0.3,1)",
+                display: "inline-block"
+              },
+              children: letter
+            },
+            letter
+          )) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
+          position: "absolute",
+          width: "320px",
+          height: "120px",
+          background: "radial-gradient(ellipse at center, rgba(79,152,163,0.12) 0%, transparent 70%)",
+          pointerEvents: "none",
+          opacity: iconVisible ? 1 : 0,
+          transition: "opacity 800ms ease"
+        } })
+      ]
+    }
+  );
+}
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -13452,25 +13549,55 @@ Remove it from the list anyway?`
     userSelect: "none"
   }, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-      padding: "12px 16px 12px",
+      padding: "12px 16px",
       borderBottom: "1px solid var(--brd)",
       display: "flex",
       alignItems: "center",
       gap: 8
     }, children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
-        width: 28,
-        height: 28,
-        background: "var(--pri)",
-        borderRadius: "var(--r2)",
+        width: 32,
+        height: 32,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        flexShrink: 0
-      }, children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M3 2h8v2H5v2.5h5v2H5V12H3V2z", fill: "white" }) }) }),
+        flexShrink: 0,
+        overflow: "visible"
+        // Ensure the scaled image can render outside the 32px box
+      }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "img",
+        {
+          src: "./logoforforge.png",
+          alt: "Forge",
+          width: 32,
+          height: 32,
+          style: {
+            objectFit: "contain",
+            transform: "scale(1.85)",
+            transformOrigin: "center"
+          }
+        }
+      ) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 13, fontWeight: 600, letterSpacing: "-.02em" }, children: "Forge" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 10, color: "var(--muted)", fontFamily: "var(--font-mono)" }, children: "v0.1.0" })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
+          fontFamily: "var(--font-body)",
+          fontSize: "16px",
+          fontWeight: 800,
+          letterSpacing: "-0.03em",
+          background: "linear-gradient(135deg, var(--txt) 30%, var(--pri) 100%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text"
+        }, children: "Forge" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
+          fontSize: "9px",
+          color: "var(--pri)",
+          fontFamily: "var(--font-mono)",
+          fontWeight: 700,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+          marginTop: "1px"
+        }, children: "beta" })
       ] })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { padding: "12px 8px 4px" }, children: [
@@ -22769,6 +22896,7 @@ function Section({ title, children }) {
 }
 function App() {
   const { activePanel, setProjects, theme } = useForgeStore();
+  const [splashDone, setSplashDone] = reactExports.useState(false);
   reactExports.useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
@@ -22779,24 +22907,27 @@ function App() {
     }
     window.forge.projects.list().then(setProjects).catch((err) => console.error("[Forge] projects.list failed:", err));
   }, []);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-    display: "flex",
-    height: "100vh",
-    width: "100vw",
-    overflow: "hidden",
-    background: "var(--bg)",
-    color: "var(--txt)"
-  }, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Sidebar, {}),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }, children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Topbar, {}),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { style: { flex: 1, overflow: "hidden", display: "flex" }, children: [
-        activePanel === "editor" && /* @__PURE__ */ jsxRuntimeExports.jsx(EditorPanel, {}),
-        activePanel === "search" && /* @__PURE__ */ jsxRuntimeExports.jsx(SearchPanel, {}),
-        activePanel === "terminal" && /* @__PURE__ */ jsxRuntimeExports.jsx(TerminalPanel, {}),
-        activePanel === "git" && /* @__PURE__ */ jsxRuntimeExports.jsx(GitPanel, {}),
-        activePanel === "chat" && /* @__PURE__ */ jsxRuntimeExports.jsx(ChatPanel, {}),
-        activePanel === "dashboard" && /* @__PURE__ */ jsxRuntimeExports.jsx(DashboardPanel, {})
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    !splashDone && /* @__PURE__ */ jsxRuntimeExports.jsx(SplashScreen, { onDone: () => setSplashDone(true) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+      display: "flex",
+      height: "100vh",
+      width: "100vw",
+      overflow: "hidden",
+      background: "var(--bg)",
+      color: "var(--txt)"
+    }, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Sidebar, {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Topbar, {}),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { style: { flex: 1, overflow: "hidden", display: "flex" }, children: [
+          activePanel === "editor" && /* @__PURE__ */ jsxRuntimeExports.jsx(EditorPanel, {}),
+          activePanel === "search" && /* @__PURE__ */ jsxRuntimeExports.jsx(SearchPanel, {}),
+          activePanel === "terminal" && /* @__PURE__ */ jsxRuntimeExports.jsx(TerminalPanel, {}),
+          activePanel === "git" && /* @__PURE__ */ jsxRuntimeExports.jsx(GitPanel, {}),
+          activePanel === "chat" && /* @__PURE__ */ jsxRuntimeExports.jsx(ChatPanel, {}),
+          activePanel === "dashboard" && /* @__PURE__ */ jsxRuntimeExports.jsx(DashboardPanel, {})
+        ] })
       ] })
     ] })
   ] });
