@@ -37,7 +37,7 @@ export default defineConfig({
     build: {
       rollupOptions: {
         input: resolve('renderer/index.html'),
-      }
+      },
     },
     resolve: {
       alias: {

@@ -12684,24 +12684,47 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$p = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$p);
+const __iconNode$r = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$r);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$o = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$o);
+const __iconNode$q = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$q);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$n = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$n);
+const __iconNode$p = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$p);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$o = [
+  ["path", { d: "m7 15 5 5 5-5", key: "1hf1tw" }],
+  ["path", { d: "m7 9 5-5 5 5", key: "sgt6xg" }]
+];
+const ChevronsUpDown = createLucideIcon("chevrons-up-down", __iconNode$o);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$n = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
+  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
+];
+const CircleAlert = createLucideIcon("circle-alert", __iconNode$n);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12709,10 +12732,11 @@ const ChevronRight = createLucideIcon("chevron-right", __iconNode$n);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$m = [
-  ["path", { d: "m7 15 5 5 5-5", key: "1hf1tw" }],
-  ["path", { d: "m7 9 5-5 5 5", key: "sgt6xg" }]
+  ["path", { d: "m18 16 4-4-4-4", key: "1inbqp" }],
+  ["path", { d: "m6 8-4 4 4 4", key: "15zrgr" }],
+  ["path", { d: "m14.5 4-5 16", key: "e7oirm" }]
 ];
-const ChevronsUpDown = createLucideIcon("chevrons-up-down", __iconNode$m);
+const CodeXml = createLucideIcon("code-xml", __iconNode$m);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12720,30 +12744,6 @@ const ChevronsUpDown = createLucideIcon("chevrons-up-down", __iconNode$m);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$l = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
-  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
-];
-const CircleAlert = createLucideIcon("circle-alert", __iconNode$l);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$k = [
-  ["path", { d: "m18 16 4-4-4-4", key: "1inbqp" }],
-  ["path", { d: "m6 8-4 4 4 4", key: "15zrgr" }],
-  ["path", { d: "m14.5 4-5 16", key: "e7oirm" }]
-];
-const CodeXml = createLucideIcon("code-xml", __iconNode$k);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$j = [
   ["path", { d: "M12 20v2", key: "1lh1kg" }],
   ["path", { d: "M12 2v2", key: "tus03m" }],
   ["path", { d: "M17 20v2", key: "1rnc9c" }],
@@ -12759,7 +12759,32 @@ const __iconNode$j = [
   ["rect", { x: "4", y: "4", width: "16", height: "16", rx: "2", key: "1vbyd7" }],
   ["rect", { x: "8", y: "8", width: "8", height: "8", rx: "1", key: "z9xiuo" }]
 ];
-const Cpu = createLucideIcon("cpu", __iconNode$j);
+const Cpu = createLucideIcon("cpu", __iconNode$l);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$k = [
+  ["path", { d: "M10 12.5 8 15l2 2.5", key: "1tg20x" }],
+  ["path", { d: "m14 12.5 2 2.5-2 2.5", key: "yinavb" }],
+  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z", key: "1mlx9k" }]
+];
+const FileCode = createLucideIcon("file-code", __iconNode$k);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$j = [
+  ["path", { d: "M20 7h-3a2 2 0 0 1-2-2V2", key: "x099mo" }],
+  ["path", { d: "M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z", key: "18t6ie" }],
+  ["path", { d: "M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8", key: "1nja0z" }]
+];
+const Files = createLucideIcon("files", __iconNode$j);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12767,31 +12792,6 @@ const Cpu = createLucideIcon("cpu", __iconNode$j);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$i = [
-  ["path", { d: "M10 12.5 8 15l2 2.5", key: "1tg20x" }],
-  ["path", { d: "m14 12.5 2 2.5-2 2.5", key: "yinavb" }],
-  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z", key: "1mlx9k" }]
-];
-const FileCode = createLucideIcon("file-code", __iconNode$i);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$h = [
-  ["path", { d: "M20 7h-3a2 2 0 0 1-2-2V2", key: "x099mo" }],
-  ["path", { d: "M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z", key: "18t6ie" }],
-  ["path", { d: "M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8", key: "1nja0z" }]
-];
-const Files = createLucideIcon("files", __iconNode$h);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$g = [
   [
     "path",
     {
@@ -12800,14 +12800,14 @@ const __iconNode$g = [
     }
   ]
 ];
-const FolderOpen = createLucideIcon("folder-open", __iconNode$g);
+const FolderOpen = createLucideIcon("folder-open", __iconNode$i);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$f = [
+const __iconNode$h = [
   [
     "path",
     {
@@ -12816,7 +12816,32 @@ const __iconNode$f = [
     }
   ]
 ];
-const Folder = createLucideIcon("folder", __iconNode$f);
+const Folder = createLucideIcon("folder", __iconNode$h);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$g = [
+  ["line", { x1: "6", x2: "6", y1: "3", y2: "15", key: "17qcm7" }],
+  ["circle", { cx: "18", cy: "6", r: "3", key: "1h7g24" }],
+  ["circle", { cx: "6", cy: "18", r: "3", key: "fqmcym" }],
+  ["path", { d: "M18 9a9 9 0 0 1-9 9", key: "n2h4wq" }]
+];
+const GitBranch = createLucideIcon("git-branch", __iconNode$g);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$f = [
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }],
+  ["line", { x1: "3", x2: "9", y1: "12", y2: "12", key: "1dyftd" }],
+  ["line", { x1: "15", x2: "21", y1: "12", y2: "12", key: "oup4p8" }]
+];
+const GitCommitHorizontal = createLucideIcon("git-commit-horizontal", __iconNode$f);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12824,12 +12849,12 @@ const Folder = createLucideIcon("folder", __iconNode$f);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$e = [
-  ["line", { x1: "6", x2: "6", y1: "3", y2: "15", key: "17qcm7" }],
-  ["circle", { cx: "18", cy: "6", r: "3", key: "1h7g24" }],
-  ["circle", { cx: "6", cy: "18", r: "3", key: "fqmcym" }],
-  ["path", { d: "M18 9a9 9 0 0 1-9 9", key: "n2h4wq" }]
+  ["circle", { cx: "18", cy: "18", r: "3", key: "1xkwt0" }],
+  ["circle", { cx: "6", cy: "6", r: "3", key: "1lh9wr" }],
+  ["path", { d: "M13 6h3a2 2 0 0 1 2 2v7", key: "1yeb86" }],
+  ["line", { x1: "6", x2: "6", y1: "9", y2: "21", key: "rroup" }]
 ];
-const GitBranch = createLucideIcon("git-branch", __iconNode$e);
+const GitPullRequest = createLucideIcon("git-pull-request", __iconNode$e);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12837,31 +12862,6 @@ const GitBranch = createLucideIcon("git-branch", __iconNode$e);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$d = [
-  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }],
-  ["line", { x1: "3", x2: "9", y1: "12", y2: "12", key: "1dyftd" }],
-  ["line", { x1: "15", x2: "21", y1: "12", y2: "12", key: "oup4p8" }]
-];
-const GitCommitHorizontal = createLucideIcon("git-commit-horizontal", __iconNode$d);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$c = [
-  ["circle", { cx: "18", cy: "18", r: "3", key: "1xkwt0" }],
-  ["circle", { cx: "6", cy: "6", r: "3", key: "1lh9wr" }],
-  ["path", { d: "M13 6h3a2 2 0 0 1 2 2v7", key: "1yeb86" }],
-  ["line", { x1: "6", x2: "6", y1: "9", y2: "21", key: "rroup" }]
-];
-const GitPullRequest = createLucideIcon("git-pull-request", __iconNode$c);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$b = [
   [
     "path",
     {
@@ -12884,7 +12884,30 @@ const __iconNode$b = [
     }
   ]
 ];
-const Layers = createLucideIcon("layers", __iconNode$b);
+const Layers = createLucideIcon("layers", __iconNode$d);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$c = [
+  ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
+  ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
+  ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
+  ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
+];
+const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$c);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$b = [
+  ["path", { d: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", key: "1lielz" }]
+];
+const MessageSquare = createLucideIcon("message-square", __iconNode$b);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12892,12 +12915,9 @@ const Layers = createLucideIcon("layers", __iconNode$b);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$a = [
-  ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
-  ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
-  ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
-  ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
+  ["path", { d: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z", key: "a7tn18" }]
 ];
-const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$a);
+const Moon = createLucideIcon("moon", __iconNode$a);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12905,9 +12925,10 @@ const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$a);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$9 = [
-  ["path", { d: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", key: "1lielz" }]
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "M12 5v14", key: "s699le" }]
 ];
-const MessageSquare = createLucideIcon("message-square", __iconNode$9);
+const Plus = createLucideIcon("plus", __iconNode$9);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12915,9 +12936,12 @@ const MessageSquare = createLucideIcon("message-square", __iconNode$9);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$8 = [
-  ["path", { d: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z", key: "a7tn18" }]
+  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
+  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
+  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
+  ["path", { d: "M8 16H3v5", key: "1cv678" }]
 ];
-const Moon = createLucideIcon("moon", __iconNode$8);
+const RefreshCw = createLucideIcon("refresh-cw", __iconNode$8);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12925,30 +12949,6 @@ const Moon = createLucideIcon("moon", __iconNode$8);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$7 = [
-  ["path", { d: "M5 12h14", key: "1ays0h" }],
-  ["path", { d: "M12 5v14", key: "s699le" }]
-];
-const Plus = createLucideIcon("plus", __iconNode$7);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$6 = [
-  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
-  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
-  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
-  ["path", { d: "M8 16H3v5", key: "1cv678" }]
-];
-const RefreshCw = createLucideIcon("refresh-cw", __iconNode$6);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$5 = [
   [
     "path",
     {
@@ -12958,14 +12958,34 @@ const __iconNode$5 = [
   ],
   ["path", { d: "m21.854 2.147-10.94 10.939", key: "12cjpa" }]
 ];
-const Send = createLucideIcon("send", __iconNode$5);
+const Send = createLucideIcon("send", __iconNode$7);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$4 = [
+const __iconNode$6 = [
+  [
+    "path",
+    {
+      d: "M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z",
+      key: "4pj2yx"
+    }
+  ],
+  ["path", { d: "M20 3v4", key: "1olli1" }],
+  ["path", { d: "M22 5h-4", key: "1gvqau" }],
+  ["path", { d: "M4 17v2", key: "vumght" }],
+  ["path", { d: "M5 18H3", key: "zchphs" }]
+];
+const Sparkles = createLucideIcon("sparkles", __iconNode$6);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$5 = [
   ["circle", { cx: "12", cy: "12", r: "4", key: "4exip2" }],
   ["path", { d: "M12 2v2", key: "tus03m" }],
   ["path", { d: "M12 20v2", key: "1lh1kg" }],
@@ -12976,7 +12996,18 @@ const __iconNode$4 = [
   ["path", { d: "m6.34 17.66-1.41 1.41", key: "1m8zz5" }],
   ["path", { d: "m19.07 4.93-1.41 1.41", key: "1shlcs" }]
 ];
-const Sun = createLucideIcon("sun", __iconNode$4);
+const Sun = createLucideIcon("sun", __iconNode$5);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$4 = [
+  ["path", { d: "M12 19h8", key: "baeox8" }],
+  ["path", { d: "m4 17 6-6-6-6", key: "1yngyt" }]
+];
+const Terminal = createLucideIcon("terminal", __iconNode$4);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12984,10 +13015,13 @@ const Sun = createLucideIcon("sun", __iconNode$4);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$3 = [
-  ["path", { d: "M12 19h8", key: "baeox8" }],
-  ["path", { d: "m4 17 6-6-6-6", key: "1yngyt" }]
+  ["path", { d: "M3 6h18", key: "d0wm0j" }],
+  ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
+  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }],
+  ["line", { x1: "10", x2: "10", y1: "11", y2: "17", key: "1uufr5" }],
+  ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }]
 ];
-const Terminal = createLucideIcon("terminal", __iconNode$3);
+const Trash2 = createLucideIcon("trash-2", __iconNode$3);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -13342,6 +13376,30 @@ function Sidebar() {
   const handleSelectProject = (p) => {
     setActiveProject(p);
   };
+  const handleRemoveProject = async (projectId) => {
+    const project = projects.find((p) => p.id === projectId);
+    if (project?.path) {
+      try {
+        const status = await window.forge.git.status(project.path);
+        const looksLikeGitRepo = status.branch && !status.branch.toLowerCase().includes("fatal");
+        if (looksLikeGitRepo && !status.clean) {
+          const confirmed = window.confirm(
+            `This project has uncommitted changes on branch "${status.branch}".
+
+Remove it from the list anyway?`
+          );
+          if (!confirmed) return;
+        }
+      } catch {
+      }
+    }
+    await window.forge.projects.remove(projectId);
+    const all = await window.forge.projects.list();
+    setProjects(all);
+    if (activeProject?.id === projectId) {
+      setActiveProject(all[0] ?? null);
+    }
+  };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("aside", { style: {
     width: "var(--sidebar-w)",
     minHeight: "100vh",
@@ -13353,9 +13411,7 @@ function Sidebar() {
     userSelect: "none"
   }, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-      padding: "16px 16px 12px",
-      paddingTop: "44px",
-      // clear macOS traffic lights
+      padding: "12px 16px 12px",
       borderBottom: "1px solid var(--brd)",
       display: "flex",
       alignItems: "center",
@@ -13386,27 +13442,68 @@ function Sidebar() {
         padding: "0 8px 6px"
       }, children: "Projects" }),
       projects.map((p) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "button",
+        "div",
         {
-          onClick: () => handleSelectProject(p),
           style: {
             display: "flex",
             alignItems: "center",
-            gap: 7,
-            width: "100%",
-            padding: "7px 10px",
-            borderRadius: "var(--r2)",
-            fontSize: 12.5,
-            color: activeProject?.id === p.id ? "var(--pri)" : "var(--muted)",
-            background: activeProject?.id === p.id ? "var(--pri-glow)" : "transparent",
-            fontWeight: activeProject?.id === p.id ? 500 : 400,
-            textAlign: "left",
-            marginBottom: 1,
-            transition: "all .15s"
+            gap: 4,
+            marginBottom: 1
           },
           children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(FolderOpen, { size: 13, style: { flexShrink: 0, opacity: 0.7 } }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: p.name })
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "button",
+              {
+                onClick: () => handleSelectProject(p),
+                style: {
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 7,
+                  width: "100%",
+                  padding: "7px 10px",
+                  borderRadius: "var(--r2)",
+                  fontSize: 12.5,
+                  color: activeProject?.id === p.id ? "var(--pri)" : "var(--muted)",
+                  background: activeProject?.id === p.id ? "var(--pri-glow)" : "transparent",
+                  fontWeight: activeProject?.id === p.id ? 500 : 400,
+                  textAlign: "left",
+                  transition: "all .15s"
+                },
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(FolderOpen, { size: 13, style: { flexShrink: 0, opacity: 0.7 } }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: p.name })
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                title: "Remove project from list",
+                onClick: async (e) => {
+                  e.stopPropagation();
+                  await handleRemoveProject(p.id);
+                },
+                style: {
+                  width: 22,
+                  height: 22,
+                  borderRadius: "var(--r1)",
+                  color: "var(--faint)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0
+                },
+                onMouseEnter: (e) => {
+                  e.currentTarget.style.color = "var(--err-txt, #f87171)";
+                  e.currentTarget.style.background = "rgba(255,60,60,.08)";
+                },
+                onMouseLeave: (e) => {
+                  e.currentTarget.style.color = "var(--faint)";
+                  e.currentTarget.style.background = "transparent";
+                },
+                children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 12 })
+              }
+            )
           ]
         },
         p.id
@@ -20657,9 +20754,17 @@ function GitPanel() {
   const [commitMsg, setCommitMsg] = reactExports.useState("");
   const [newBranch, setNewBranch] = reactExports.useState("");
   const [loading, setLoading] = reactExports.useState(false);
+  const [suggesting, setSuggesting] = reactExports.useState(false);
   const [toast, setToast] = reactExports.useState(null);
   const [showBranches, setShowBranches] = reactExports.useState(false);
   const [showPR, setShowPR] = reactExports.useState(false);
+  const [sidebarWidth, setSidebarWidth] = reactExports.useState(280);
+  const isResizingRef = reactExports.useRef(false);
+  const resizeStartXRef = reactExports.useRef(0);
+  const resizeStartWidthRef = reactExports.useRef(280);
+  const [selectedFile, setSelectedFile] = reactExports.useState(null);
+  const selectedFileRef = reactExports.useRef(null);
+  selectedFileRef.current = selectedFile;
   const notify = (ok, msg) => {
     setToast({ ok, msg });
     setTimeout(() => setToast(null), 4e3);
@@ -20671,7 +20776,7 @@ function GitPanel() {
       const [s, l2, d, b] = await Promise.all([
         window.forge.git.status(activeProject.path),
         window.forge.git.log(activeProject.path, 20),
-        window.forge.git.diff(activeProject.path),
+        window.forge.git.diff(activeProject.path, selectedFileRef.current || void 0),
         window.forge.git.branches(activeProject.path)
       ]);
       setStatus(s);
@@ -20683,11 +20788,68 @@ function GitPanel() {
     }
     if (showSpinner) setLoading(false);
   };
+  const loadDiffOnly = async (file) => {
+    if (!activeProject) return;
+    try {
+      const d = await window.forge.git.diff(activeProject.path, file || void 0);
+      setDiff(d);
+    } catch (e) {
+      notify(false, e.message);
+    }
+  };
   reactExports.useEffect(() => {
+    setSelectedFile(null);
     load(true);
     const interval = setInterval(() => load(false), 5e3);
     return () => clearInterval(interval);
   }, [activeProject]);
+  reactExports.useEffect(() => {
+    loadDiffOnly(selectedFile);
+  }, [selectedFile]);
+  reactExports.useEffect(() => {
+    const onMouseMove = (e) => {
+      if (!isResizingRef.current) return;
+      const delta = e.clientX - resizeStartXRef.current;
+      const next = resizeStartWidthRef.current + delta;
+      const clamped = Math.max(200, Math.min(600, next));
+      setSidebarWidth(clamped);
+    };
+    const onMouseUp = () => {
+      if (!isResizingRef.current) return;
+      isResizingRef.current = false;
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    };
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
+    return () => {
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+    };
+  }, []);
+  reactExports.useEffect(() => {
+    if (status?.branch) {
+      const neededWidth = Math.ceil(155 + status.branch.length * 7.2);
+      setSidebarWidth((prev) => Math.max(prev, Math.min(500, neededWidth)));
+    }
+  }, [status?.branch]);
+  const handleSuggestCommit = async () => {
+    if (!activeProject) return;
+    setSuggesting(true);
+    try {
+      const res = await window.forge.git.suggestCommit(activeProject.path);
+      if (res.ok && res.message) {
+        setCommitMsg(res.message);
+        notify(true, "AI suggested a commit message!");
+      } else {
+        notify(false, res.error || "Failed to generate commit message");
+      }
+    } catch (e) {
+      notify(false, e.message);
+    } finally {
+      setSuggesting(false);
+    }
+  };
   const handleCommit = async () => {
     if (!activeProject || !commitMsg.trim()) return;
     const res = await window.forge.git.commit(activeProject.path, commitMsg);
@@ -20708,10 +20870,16 @@ function GitPanel() {
   const handleBranch = async () => {
     if (!activeProject || !newBranch.trim()) return;
     setLoading(true);
-    const res = await window.forge.git.branch(activeProject.path, newBranch.trim());
-    notify(res.ok, res.out);
-    setNewBranch("");
-    load();
+    try {
+      const res = await window.forge.git.branch(activeProject.path, newBranch.trim());
+      notify(res.ok, res.out);
+      setNewBranch("");
+    } catch (e) {
+      notify(false, e.message);
+    } finally {
+      setLoading(false);
+      load();
+    }
   };
   const handleSwitch = async (name) => {
     if (!activeProject) return;
@@ -20810,55 +20978,108 @@ function GitPanel() {
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, display: "flex", overflow: "hidden" }, children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-        width: 280,
-        borderRight: "1px solid var(--brd)",
+        width: sidebarWidth,
         display: "flex",
         flexDirection: "column",
         background: "var(--surface)",
         flexShrink: 0
       }, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-          padding: "10px 12px",
           borderBottom: "1px solid var(--brd)",
-          display: "flex",
-          alignItems: "center",
-          gap: 7
+          background: "var(--surface)"
         }, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(GitBranch, { size: 13, style: { color: "var(--pri)", flexShrink: 0 } }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            "button",
-            {
-              onClick: () => setShowBranches((v2) => !v2),
-              style: {
-                flex: 1,
-                display: "flex",
-                alignItems: "center",
-                gap: 5,
-                background: "var(--offset)",
-                border: "1px solid var(--brd)",
-                borderRadius: "var(--r2)",
-                padding: "4px 8px",
-                color: "var(--txt)",
-                fontSize: 12,
-                fontFamily: "var(--font-mono)",
-                cursor: "pointer",
-                textAlign: "left"
-              },
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: status?.branch ?? "—" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronsUpDown, { size: 11, style: { color: "var(--faint)", flexShrink: 0 } })
-              ]
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: {
-            fontSize: 10,
-            padding: "2px 7px",
-            borderRadius: 99,
-            flexShrink: 0,
-            background: status?.clean ? "var(--ok-bg)" : "var(--warn-bg)",
-            color: status?.clean ? "var(--ok)" : "var(--warn)"
-          }, children: status?.clean ? "clean" : "dirty" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => load(true), style: { color: "var(--muted)", display: "flex", padding: 2, borderRadius: "var(--r1)", flexShrink: 0 }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { size: 12, className: loading ? "spin" : "" }) })
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+            padding: "10px 12px 6px",
+            display: "flex",
+            alignItems: "center",
+            gap: 7
+          }, children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(GitBranch, { size: 13, style: { color: "var(--pri)", flexShrink: 0 } }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "button",
+              {
+                onClick: () => setShowBranches((v2) => !v2),
+                style: {
+                  flex: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 5,
+                  background: "var(--offset)",
+                  border: "1px solid var(--brd)",
+                  borderRadius: "var(--r2)",
+                  padding: "4px 8px",
+                  color: "var(--txt)",
+                  fontSize: 12,
+                  fontFamily: "var(--font-mono)",
+                  cursor: "pointer",
+                  textAlign: "left"
+                },
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: status?.branch ?? "—" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronsUpDown, { size: 11, style: { color: "var(--faint)", flexShrink: 0 } })
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: {
+              fontSize: 10,
+              padding: "2px 7px",
+              borderRadius: 99,
+              flexShrink: 0,
+              background: status?.clean ? "var(--ok-bg)" : "var(--warn-bg)",
+              color: status?.clean ? "var(--ok)" : "var(--warn)"
+            }, children: status?.clean ? "clean" : "dirty" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => load(true), style: { color: "var(--muted)", display: "flex", padding: 2, borderRadius: "var(--r1)", flexShrink: 0 }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { size: 12, className: loading ? "spin" : "" }) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+            padding: "0 12px 10px",
+            display: "flex",
+            alignItems: "center",
+            gap: 7
+          }, children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(GitBranch, { size: 13, style: { color: "var(--faint)", flexShrink: 0 } }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                value: newBranch,
+                onChange: (e) => setNewBranch(e.target.value),
+                placeholder: "Create branch…",
+                style: {
+                  flex: 1,
+                  background: "var(--offset)",
+                  border: "1px solid var(--brd)",
+                  borderRadius: "var(--r2)",
+                  color: "var(--txt)",
+                  fontSize: 11.5,
+                  padding: "5px 8px",
+                  outline: "none",
+                  fontFamily: "var(--font-body)"
+                },
+                onKeyDown: (e) => {
+                  if (e.key === "Enter") handleBranch();
+                }
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                onClick: handleBranch,
+                disabled: !newBranch.trim() || loading,
+                title: "Create branch",
+                className: "git-btn",
+                style: {
+                  padding: "5px 10px",
+                  background: "var(--offset)",
+                  border: "1px solid var(--brd)",
+                  borderRadius: "var(--r2)",
+                  color: !newBranch.trim() ? "var(--faint)" : "var(--pri)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                },
+                children: /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 13 })
+              }
+            )
+          ] })
         ] }),
         showBranches && branches && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
           borderBottom: "1px solid var(--brd)",
@@ -20874,150 +21095,243 @@ function GitPanel() {
           ] })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, overflow: "auto", padding: "8px 0" }, children: [
-          (status?.staged ?? []).map((f) => /* @__PURE__ */ jsxRuntimeExports.jsx(FileRow, { file: f, type: "staged" }, f)),
-          (status?.modified ?? []).map((f) => /* @__PURE__ */ jsxRuntimeExports.jsx(FileRow, { file: f, type: "modified" }, f)),
-          (status?.untracked ?? []).map((f) => /* @__PURE__ */ jsxRuntimeExports.jsx(FileRow, { file: f, type: "untracked" }, f)),
+          !status?.clean && /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              onClick: () => setSelectedFile(null),
+              className: "git-btn",
+              style: {
+                width: "100%",
+                textAlign: "left",
+                padding: "6px 14px",
+                background: selectedFile === null ? "color-mix(in oklch, var(--pri) 10%, transparent)" : "transparent",
+                color: selectedFile === null ? "var(--pri)" : "var(--muted)",
+                fontSize: 12,
+                fontWeight: selectedFile === null ? 600 : 400,
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                border: "none",
+                cursor: "pointer"
+              },
+              children: "All Changes"
+            }
+          ),
+          (status?.staged ?? []).map((f) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            FileRow,
+            {
+              file: f,
+              type: "staged",
+              active: selectedFile === f,
+              onClick: () => setSelectedFile(selectedFile === f ? null : f)
+            },
+            f
+          )),
+          (status?.modified ?? []).map((f) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            FileRow,
+            {
+              file: f,
+              type: "modified",
+              active: selectedFile === f,
+              onClick: () => setSelectedFile(selectedFile === f ? null : f)
+            },
+            f
+          )),
+          (status?.untracked ?? []).map((f) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            FileRow,
+            {
+              file: f,
+              type: "untracked",
+              active: selectedFile === f,
+              onClick: () => setSelectedFile(selectedFile === f ? null : f)
+            },
+            f
+          )),
           status?.clean && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { padding: "20px 14px", color: "var(--faint)", fontSize: 12, textAlign: "center" }, children: "Nothing to commit" })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { padding: 12, borderTop: "1px solid var(--brd)", display: "flex", flexDirection: "column", gap: 8 }, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "textarea",
-            {
-              value: commitMsg,
-              onChange: (e) => setCommitMsg(e.target.value),
-              placeholder: "Commit message… (⌘↵ to commit)",
-              rows: 3,
-              style: {
-                width: "100%",
-                background: "var(--offset)",
-                border: "1px solid var(--brd)",
-                borderRadius: "var(--r2)",
-                color: "var(--txt)",
-                fontSize: 12,
-                padding: "7px 10px",
-                resize: "none",
-                fontFamily: "var(--font-body)",
-                outline: "none"
-              },
-              onKeyDown: (e) => {
-                if (e.key === "Enter" && e.metaKey) handleCommit();
-              }
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", gap: 6 }, children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              "button",
-              {
-                onClick: handleCommit,
-                disabled: !commitMsg.trim() || loading,
-                style: {
-                  flex: 1,
-                  padding: "6px 0",
-                  background: commitMsg.trim() ? "var(--pri)" : "var(--dynamic)",
-                  color: commitMsg.trim() ? "#fff" : "var(--faint)",
-                  borderRadius: "var(--r2)",
-                  fontSize: 12,
-                  fontWeight: 500,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 5
-                },
-                children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(GitCommitHorizontal, { size: 12 }),
-                  " Commit"
-                ]
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              "button",
-              {
-                onClick: handlePush,
-                disabled: loading,
-                style: {
-                  padding: "6px 10px",
-                  background: "var(--offset)",
-                  border: "1px solid var(--brd)",
-                  borderRadius: "var(--r2)",
-                  color: "var(--muted)",
-                  fontSize: 12,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 4
-                },
-                children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Upload, { size: 12 }),
-                  " Push"
-                ]
-              }
-            )
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", gap: 6 }, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { position: "relative", width: "100%" }, children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
+              "textarea",
               {
-                value: newBranch,
-                onChange: (e) => setNewBranch(e.target.value),
-                placeholder: "New branch…",
+                value: commitMsg,
+                onChange: (e) => setCommitMsg(e.target.value),
+                placeholder: suggesting ? "Analyzing changes..." : "Commit message… (⌘↵ to commit)",
+                rows: 2,
+                disabled: suggesting,
                 style: {
-                  flex: 1,
+                  width: "100%",
                   background: "var(--offset)",
                   border: "1px solid var(--brd)",
                   borderRadius: "var(--r2)",
                   color: "var(--txt)",
                   fontSize: 12,
-                  padding: "5px 8px",
+                  padding: "6px 32px 6px 9px",
+                  resize: "none",
+                  fontFamily: "var(--font-body)",
                   outline: "none",
-                  fontFamily: "var(--font-body)"
+                  transition: "border-color 0.15s",
+                  opacity: suggesting ? 0.7 : 1
                 },
+                onFocus: (e) => e.target.style.borderColor = "var(--pri)",
+                onBlur: (e) => e.target.style.borderColor = "var(--brd)",
                 onKeyDown: (e) => {
-                  if (e.key === "Enter") handleBranch();
+                  if (e.key === "Enter" && e.metaKey) handleCommit();
                 }
               }
             ),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
               "button",
               {
-                onClick: handleBranch,
-                disabled: !newBranch.trim() || loading,
+                onClick: handleSuggestCommit,
+                disabled: suggesting || loading,
+                title: "AI Suggest Commit Message",
                 style: {
-                  padding: "5px 8px",
+                  position: "absolute",
+                  right: 8,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  background: "none",
+                  border: "none",
+                  color: suggesting ? "var(--pri)" : "var(--faint)",
+                  cursor: suggesting || loading ? "not-allowed" : "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "5px",
+                  borderRadius: "var(--r1)",
+                  transition: "color 0.15s, background-color 0.15s"
+                },
+                onMouseEnter: (e) => {
+                  if (!suggesting && !loading) {
+                    e.currentTarget.style.color = "var(--pri)";
+                    e.currentTarget.style.backgroundColor = "var(--dynamic)";
+                  }
+                },
+                onMouseLeave: (e) => {
+                  if (!suggesting && !loading) {
+                    e.currentTarget.style.color = "var(--faint)";
+                    e.currentTarget.style.backgroundColor = "transparent";
+                  }
+                },
+                children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Sparkles,
+                  {
+                    size: 14,
+                    style: {
+                      animation: suggesting ? "spin 2s linear infinite" : "none"
+                    }
+                  }
+                )
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", flexDirection: "column", gap: 6 }, children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", gap: 6 }, children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "button",
+                {
+                  onClick: handleCommit,
+                  disabled: !commitMsg.trim() || loading,
+                  className: "git-btn git-btn-pri",
+                  style: {
+                    flex: 1,
+                    padding: "7px 0",
+                    background: commitMsg.trim() ? "var(--pri)" : "var(--dynamic)",
+                    color: commitMsg.trim() ? "#fff" : "var(--faint)",
+                    border: "none",
+                    borderRadius: "var(--r2)",
+                    fontSize: 12,
+                    fontWeight: 500,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 5
+                  },
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(GitCommitHorizontal, { size: 13 }),
+                    " Commit"
+                  ]
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "button",
+                {
+                  onClick: handlePush,
+                  disabled: loading,
+                  className: "git-btn",
+                  title: "Push commits to remote",
+                  style: {
+                    flex: 1,
+                    padding: "7px 0",
+                    background: "var(--offset)",
+                    border: "1px solid var(--brd)",
+                    borderRadius: "var(--r2)",
+                    color: "var(--muted)",
+                    fontSize: 12,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 5
+                  },
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(Upload, { size: 13 }),
+                    " Push"
+                  ]
+                }
+              )
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "button",
+              {
+                onClick: () => setShowPR(true),
+                className: "git-btn",
+                style: {
+                  width: "100%",
+                  padding: "7px 0",
                   background: "var(--offset)",
                   border: "1px solid var(--brd)",
                   borderRadius: "var(--r2)",
                   color: "var(--muted)",
+                  fontSize: 12,
                   display: "flex",
-                  alignItems: "center"
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 6
                 },
-                children: /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 13 })
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(GitPullRequest, { size: 13 }),
+                  " Open Pull Request"
+                ]
               }
             )
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            "button",
-            {
-              onClick: () => setShowPR(true),
-              style: {
-                width: "100%",
-                padding: "6px 0",
-                background: "var(--offset)",
-                border: "1px solid var(--brd)",
-                borderRadius: "var(--r2)",
-                color: "var(--muted)",
-                fontSize: 12,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 6
-              },
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(GitPullRequest, { size: 13 }),
-                " Open Pull Request"
-              ]
-            }
-          )
+          ] })
         ] })
       ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "div",
+        {
+          onMouseDown: (e) => {
+            isResizingRef.current = true;
+            resizeStartXRef.current = e.clientX;
+            resizeStartWidthRef.current = sidebarWidth;
+            document.body.style.cursor = "col-resize";
+            document.body.style.userSelect = "none";
+          },
+          title: "Drag to resize panel",
+          style: {
+            width: 6,
+            cursor: "col-resize",
+            background: "transparent",
+            borderLeft: "1px solid var(--brd)",
+            borderRight: "1px solid transparent",
+            flexShrink: 0,
+            zIndex: 10,
+            marginLeft: -3,
+            marginRight: -3
+          }
+        }
+      ),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
           flex: 1,
@@ -21059,6 +21373,26 @@ function GitPanel() {
     /* @__PURE__ */ jsxRuntimeExports.jsx("style", { children: `
         .spin { animation: spin .7s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
+        .git-btn {
+          cursor: pointer;
+          transition: all 0.15s ease-in-out;
+        }
+        .git-btn:hover:not(:disabled) {
+          background: var(--offset) !important;
+          color: var(--txt) !important;
+          border-color: var(--div) !important;
+        }
+        .git-btn:disabled {
+          cursor: not-allowed;
+          opacity: 0.6;
+        }
+        .git-btn-pri {
+          transition: filter 0.15s ease-in-out;
+        }
+        .git-btn-pri:hover:not(:disabled) {
+          filter: brightness(1.15);
+          color: #fff !important;
+        }
       ` })
   ] });
 }
@@ -21199,13 +21533,33 @@ function BranchRow({ name, active, onSwitch, remote }) {
     }
   );
 }
-function FileRow({ file, type }) {
+function FileRow({ file, type, active, onClick }) {
   const colors = { modified: "var(--warn)", untracked: "var(--pri)", staged: "var(--ok)" };
   const labels = { modified: "M", untracked: "?", staged: "S" };
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 8, padding: "4px 14px", fontSize: 12 }, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { width: 14, fontSize: 10, fontWeight: 700, color: colors[type], flexShrink: 0, fontFamily: "var(--font-mono)" }, children: labels[type] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontFamily: "var(--font-mono)", color: "var(--muted)" }, children: file })
-  ] });
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "button",
+    {
+      onClick,
+      className: "git-btn",
+      style: {
+        width: "100%",
+        textAlign: "left",
+        border: "none",
+        background: "transparent",
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        padding: "5px 14px",
+        fontSize: 12,
+        backgroundColor: active ? "color-mix(in oklch, var(--pri) 10%, transparent)" : "transparent",
+        color: active ? "var(--txt)" : "var(--muted)"
+      },
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { width: 14, fontSize: 10, fontWeight: 700, color: colors[type], flexShrink: 0, fontFamily: "var(--font-mono)" }, children: labels[type] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontFamily: "var(--font-mono)", textAlign: "left", fontWeight: active ? 500 : 400 }, children: file })
+      ]
+    }
+  );
 }
 function renderMarkdown(text) {
   const nodes = [];
@@ -21340,6 +21694,45 @@ function MessageBubble({ msg, isStreaming }) {
     ] })
   ] });
 }
+const MODEL_OPTIONS = [
+  { id: "groq", label: "Llama 4", sub: "Groq" },
+  { id: "gemini", label: "Gemini 2", sub: "Google" },
+  { id: "ollama", label: "Llama 3.1", sub: "Local" }
+];
+function ModelToggle({ value, onChange }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
+    display: "flex",
+    gap: 4,
+    padding: "6px 10px",
+    borderTop: "1px solid var(--brd)"
+  }, children: MODEL_OPTIONS.map((opt) => {
+    const active = value === opt.id;
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        onClick: () => onChange(opt.id),
+        style: {
+          flex: 1,
+          padding: "5px 6px",
+          borderRadius: "var(--r2)",
+          fontSize: 11,
+          lineHeight: 1.3,
+          textAlign: "center",
+          background: active ? "var(--pri-glow)" : "transparent",
+          border: `1px solid ${active ? "rgba(79,152,163,.35)" : "var(--brd)"}`,
+          color: active ? "var(--pri)" : "var(--faint)",
+          transition: "all .15s",
+          cursor: "pointer"
+        },
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontWeight: 600 }, children: opt.label }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 9, opacity: 0.7 }, children: opt.sub })
+        ]
+      },
+      opt.id
+    );
+  }) });
+}
 function ChatPanel() {
   const { activeProject } = useForgeStore();
   const [sessions, setSessions] = reactExports.useState([]);
@@ -21347,12 +21740,21 @@ function ChatPanel() {
   const [messages, setMessages] = reactExports.useState([]);
   const [input, setInput] = reactExports.useState("");
   const [isStreaming, setIsStreaming] = reactExports.useState(false);
+  const [model, setModel] = reactExports.useState("groq");
+  const [sidebarWidth, setSidebarWidth] = reactExports.useState(210);
   const bottomRef = reactExports.useRef(null);
   const inputRef = reactExports.useRef(null);
   const streamingIdRef = reactExports.useRef(null);
+  const activeSessionRef = reactExports.useRef(null);
+  const isResizingRef = reactExports.useRef(false);
+  const resizeStartXRef = reactExports.useRef(0);
+  const resizeStartWidthRef = reactExports.useRef(210);
   reactExports.useEffect(() => {
     window.forge.chat.sessions().then(setSessions);
   }, [activeProject]);
+  reactExports.useEffect(() => {
+    activeSessionRef.current = activeSession;
+  }, [activeSession]);
   reactExports.useEffect(() => {
     if (activeSession) {
       window.forge.chat.messages(activeSession.id).then(setMessages);
@@ -21362,6 +21764,27 @@ function ChatPanel() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
   reactExports.useEffect(() => {
+    const onMouseMove = (e) => {
+      if (!isResizingRef.current) return;
+      const delta = e.clientX - resizeStartXRef.current;
+      const next = resizeStartWidthRef.current + delta;
+      const clamped = Math.max(180, Math.min(420, next));
+      setSidebarWidth(clamped);
+    };
+    const onMouseUp = () => {
+      if (!isResizingRef.current) return;
+      isResizingRef.current = false;
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    };
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
+    return () => {
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+    };
+  }, []);
+  reactExports.useEffect(() => {
     const offToken = window.forge.chat.onToken((token) => {
       setMessages((prev) => prev.map(
         (m) => m.id === streamingIdRef.current ? { ...m, content: m.content + token } : m
@@ -21369,10 +21792,18 @@ function ChatPanel() {
     });
     const offDone = window.forge.chat.onDone(() => {
       setIsStreaming(false);
-      streamingIdRef.current = null;
+      setMessages((prev) => {
+        const aiMsg = prev.find((m) => m.id === streamingIdRef.current);
+        if (aiMsg && activeSessionRef.current) {
+          window.forge.chat.send(activeSessionRef.current.id, "assistant", aiMsg.content);
+        }
+        streamingIdRef.current = null;
+        return prev;
+      });
     });
     const offError = window.forge.chat.onError((err) => {
       setIsStreaming(false);
+      const sid = streamingIdRef.current;
       streamingIdRef.current = null;
       const errMsg = {
         id: Math.random().toString(36),
@@ -21382,7 +21813,7 @@ function ChatPanel() {
         isError: true
       };
       setMessages((prev) => [
-        ...prev.filter((m) => m.id !== streamingIdRef.current),
+        ...prev.filter((m) => m.id !== sid),
         errMsg
       ]);
     });
@@ -21402,6 +21833,36 @@ function ChatPanel() {
       setMessages([]);
     }
   }, [activeProject]);
+  const deleteSession = reactExports.useCallback(async (sessionId) => {
+    const previousSessions = sessions;
+    const wasActive = activeSessionRef.current?.id === sessionId;
+    setSessions((prev) => prev.filter((s) => s.id !== sessionId));
+    if (wasActive) {
+      setActiveSession(null);
+      setMessages([]);
+      activeSessionRef.current = null;
+    }
+    try {
+      if (!window.forge.chat.deleteSession) {
+        throw new Error("deleteSession API is unavailable. Please restart the app.");
+      }
+      await window.forge.chat.deleteSession(sessionId);
+      const updated = await window.forge.chat.sessions(activeProject?.id);
+      setSessions(updated);
+    } catch (e) {
+      setSessions(previousSessions);
+      if (wasActive) {
+        const prevActive = previousSessions.find((s) => s.id === sessionId) ?? null;
+        setActiveSession(prevActive);
+        activeSessionRef.current = prevActive;
+        if (prevActive) {
+          const msgs = await window.forge.chat.messages(prevActive.id);
+          setMessages(msgs);
+        }
+      }
+      alert(e?.message || "Failed to delete chat session");
+    }
+  }, [sessions, activeProject?.id]);
   const send = reactExports.useCallback(async () => {
     if (!input.trim() || !activeSession || isStreaming) return;
     const content = input.trim();
@@ -21434,8 +21895,8 @@ function ChatPanel() {
       } catch {
       }
     }
-    window.forge.chat.ai(history, projectCtx);
-  }, [input, activeSession, isStreaming, messages, activeProject]);
+    window.forge.chat.ai(history, projectCtx, model, activeProject?.path);
+  }, [input, activeSession, isStreaming, messages, activeProject, model]);
   const handleInput = (e) => {
     setInput(e.target.value);
     e.target.style.height = "auto";
@@ -21443,8 +21904,7 @@ function ChatPanel() {
   };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, display: "flex", overflow: "hidden" }, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-      width: 210,
-      borderRight: "1px solid var(--brd)",
+      width: sidebarWidth,
       background: "var(--surface)",
       display: "flex",
       flexDirection: "column",
@@ -21499,41 +21959,95 @@ function ChatPanel() {
         /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontSize: 11 }, children: "Click + to start" })
       ] }) : sessions.map((s) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "button",
+        "div",
         {
-          onClick: () => setActiveSession(s),
           style: {
             display: "flex",
             alignItems: "center",
-            gap: 7,
-            width: "100%",
-            padding: "7px 9px",
-            borderRadius: "var(--r2)",
-            fontSize: 12,
-            textAlign: "left",
-            marginBottom: 1,
-            color: activeSession?.id === s.id ? "var(--pri)" : "var(--muted)",
-            background: activeSession?.id === s.id ? "var(--pri-glow)" : "transparent",
-            transition: "background .12s, color .12s"
+            gap: 6,
+            marginBottom: 1
           },
           children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(MessageSquare, { size: 11, style: { flexShrink: 0 } }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }, children: s.title })
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "button",
+              {
+                onClick: () => setActiveSession(s),
+                style: {
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 7,
+                  width: "100%",
+                  padding: "7px 9px",
+                  borderRadius: "var(--r2)",
+                  fontSize: 12,
+                  textAlign: "left",
+                  color: activeSession?.id === s.id ? "var(--pri)" : "var(--muted)",
+                  background: activeSession?.id === s.id ? "var(--pri-glow)" : "transparent",
+                  transition: "background .12s, color .12s"
+                },
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(MessageSquare, { size: 11, style: { flexShrink: 0 } }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }, children: s.title })
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                title: "Delete chat session",
+                onClick: async (e) => {
+                  e.stopPropagation();
+                  await deleteSession(s.id);
+                },
+                style: {
+                  width: 24,
+                  height: 24,
+                  borderRadius: "var(--r1)",
+                  color: "var(--faint)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                  transition: "all .12s"
+                },
+                onMouseEnter: (e) => {
+                  e.currentTarget.style.color = "var(--err-txt, #f87171)";
+                  e.currentTarget.style.background = "rgba(255,60,60,.08)";
+                },
+                onMouseLeave: (e) => {
+                  e.currentTarget.style.color = "var(--faint)";
+                  e.currentTarget.style.background = "transparent";
+                },
+                children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 12 })
+              }
+            )
           ]
         },
         s.id
       )) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-        padding: "8px 12px",
-        borderTop: "1px solid var(--brd)",
-        display: "flex",
-        alignItems: "center",
-        gap: 5
-      }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Zap, { size: 10, style: { color: "var(--pri)", flexShrink: 0 } }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontSize: 10, color: "var(--faint)", fontFamily: "var(--font-mono, monospace)" }, children: "llama-4 · Groq" })
-      ] })
+      /* @__PURE__ */ jsxRuntimeExports.jsx(ModelToggle, { value: model, onChange: setModel })
     ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "div",
+      {
+        onMouseDown: (e) => {
+          isResizingRef.current = true;
+          resizeStartXRef.current = e.clientX;
+          resizeStartWidthRef.current = sidebarWidth;
+          document.body.style.cursor = "col-resize";
+          document.body.style.userSelect = "none";
+        },
+        title: "Drag to resize sessions panel",
+        style: {
+          width: 6,
+          cursor: "col-resize",
+          background: "transparent",
+          borderLeft: "1px solid var(--brd)",
+          borderRight: "1px solid transparent",
+          flexShrink: 0
+        }
+      }
+    ),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }, children: !activeSession ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
       flex: 1,
       display: "flex",
@@ -21555,7 +22069,7 @@ function ChatPanel() {
       }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Zap, { size: 22, style: { color: "var(--pri)" }, strokeWidth: 1.5 }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { textAlign: "center", lineHeight: 1.6 }, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 14, fontWeight: 600, color: "var(--muted)", marginBottom: 4 }, children: "Forge AI" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 12, color: "var(--faint)" }, children: "Powered by Groq · llama-4-scout" })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 12, color: "var(--faint)" }, children: model === "gemini" ? "Powered by Google · Gemini 2.0 Flash" : model === "ollama" ? "Powered by Local Ollama · Llama 3.1" : "Powered by Groq · Llama 4 Scout" })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs(
         "button",
