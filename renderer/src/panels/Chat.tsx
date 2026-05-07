@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { useForgeStore } from '../store'
-import { Send, Plus, MessageSquare, Zap, AlertCircle } from 'lucide-react'
-import type { ChatSession, ChatMessage } from '../../../shared/types'
+import { Send, Plus, MessageSquare, Zap, AlertCircle, Trash2 } from 'lucide-react'
+import type { ChatSession, ChatMessage, AiModel } from '../../../shared/types'
 
 // ─── Tiny inline markdown renderer ─────────────────────────────────────────
 function renderMarkdown(text: string): React.ReactNode[] {
@@ -141,6 +141,43 @@ function MessageBubble({ msg, isStreaming }: { msg: ChatMessage; isStreaming?: b
   )
 }
 
+// ─── Model toggle ────────────────────────────────────────────────────────────
+const MODEL_OPTIONS: { id: AiModel; label: string; sub: string }[] = [
+  { id: 'groq',   label: 'Llama 4',  sub: 'Groq'   },
+  { id: 'gemini', label: 'Gemini 2', sub: 'Google' },
+  { id: 'ollama', label: 'Llama 3.1', sub: 'Local' },
+]
+
+function ModelToggle({ value, onChange }: { value: AiModel; onChange: (m: AiModel) => void }) {
+  return (
+    <div style={{
+      display: 'flex', gap: 4, padding: '6px 10px',
+      borderTop: '1px solid var(--brd)',
+    }}>
+      {MODEL_OPTIONS.map(opt => {
+        const active = value === opt.id
+        return (
+          <button
+            key={opt.id}
+            onClick={() => onChange(opt.id)}
+            style={{
+              flex: 1, padding: '5px 6px', borderRadius: 'var(--r2)',
+              fontSize: 11, lineHeight: 1.3, textAlign: 'center',
+              background: active ? 'var(--pri-glow)' : 'transparent',
+              border: `1px solid ${active ? 'rgba(79,152,163,.35)' : 'var(--brd)'}`,
+              color: active ? 'var(--pri)' : 'var(--faint)',
+              transition: 'all .15s', cursor: 'pointer',
+            }}
+          >
+            <div style={{ fontWeight: 600 }}>{opt.label}</div>
+            <div style={{ fontSize: 9, opacity: .7 }}>{opt.sub}</div>
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
 // ─── Main panel ─────────────────────────────────────────────────────────────
 export default function ChatPanel() {
   const { activeProject } = useForgeStore()
@@ -149,14 +186,25 @@ export default function ChatPanel() {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [input, setInput] = useState('')
   const [isStreaming, setIsStreaming] = useState(false)
+  const [model, setModel] = useState<AiModel>('groq')
+  const [sidebarWidth, setSidebarWidth] = useState(210)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const streamingIdRef = useRef<string | null>(null)
+  const activeSessionRef = useRef<ChatSession | null>(null)
+  const isResizingRef = useRef(false)
+  const resizeStartXRef = useRef(0)
+  const resizeStartWidthRef = useRef(210)
 
   // ─── Load sessions ────────────────────────────────────────────────────────
   useEffect(() => {
     window.forge.chat.sessions().then(setSessions)
   }, [activeProject])
+
+  // ─── Sync activeSession to ref (for use in effect closures) ─────────────
+  useEffect(() => {
+    activeSessionRef.current = activeSession
+  }, [activeSession])
 
   // ─── Load messages ───────────────────────────────────────────────────────
   useEffect(() => {
@@ -170,6 +218,29 @@ export default function ChatPanel() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+  // ─── Sidebar resize handling ─────────────────────────────────────────────
+  useEffect(() => {
+    const onMouseMove = (e: MouseEvent) => {
+      if (!isResizingRef.current) return
+      const delta = e.clientX - resizeStartXRef.current
+      const next = resizeStartWidthRef.current + delta
+      const clamped = Math.max(180, Math.min(420, next))
+      setSidebarWidth(clamped)
+    }
+    const onMouseUp = () => {
+      if (!isResizingRef.current) return
+      isResizingRef.current = false
+      document.body.style.cursor = ''
+      document.body.style.userSelect = ''
+    }
+    window.addEventListener('mousemove', onMouseMove)
+    window.addEventListener('mouseup', onMouseUp)
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('mouseup', onMouseUp)
+    }
+  }, [])
+
   // ─── Register stream listeners once ──────────────────────────────────────
   useEffect(() => {
     const offToken = window.forge.chat.onToken((token: string) => {
@@ -181,10 +252,19 @@ export default function ChatPanel() {
     })
     const offDone = window.forge.chat.onDone(() => {
       setIsStreaming(false)
-      streamingIdRef.current = null
+      // Persist the completed AI reply to DB
+      setMessages(prev => {
+        const aiMsg = prev.find(m => m.id === streamingIdRef.current)
+        if (aiMsg && activeSessionRef.current) {
+          window.forge.chat.send(activeSessionRef.current.id, 'assistant', aiMsg.content)
+        }
+        streamingIdRef.current = null
+        return prev
+      })
     })
     const offError = window.forge.chat.onError((err: string) => {
       setIsStreaming(false)
+      const sid = streamingIdRef.current
       streamingIdRef.current = null
       const errMsg: ChatMessage = {
         id: Math.random().toString(36),
@@ -194,7 +274,7 @@ export default function ChatPanel() {
         isError: true,
       } as any
       setMessages(prev => [
-        ...prev.filter(m => m.id !== streamingIdRef.current),
+        ...prev.filter(m => m.id !== sid),
         errMsg,
       ])
     })
@@ -209,6 +289,42 @@ export default function ChatPanel() {
     const newest = [...updated].sort((a, b) => b.id - a.id)[0]
     if (newest) { setActiveSession(newest); setMessages([]) }
   }, [activeProject])
+
+  const deleteSession = useCallback(async (sessionId: number) => {
+    const previousSessions = sessions
+    const wasActive = activeSessionRef.current?.id === sessionId
+
+    // Optimistic UI update for instant feedback
+    setSessions(prev => prev.filter(s => s.id !== sessionId))
+    if (wasActive) {
+      setActiveSession(null)
+      setMessages([])
+      activeSessionRef.current = null
+    }
+
+    try {
+      if (!window.forge.chat.deleteSession) {
+        throw new Error('deleteSession API is unavailable. Please restart the app.')
+      }
+      await window.forge.chat.deleteSession(sessionId)
+      // Re-sync from DB to ensure renderer and storage stay aligned
+      const updated = await window.forge.chat.sessions(activeProject?.id)
+      setSessions(updated)
+    } catch (e: any) {
+      // Rollback optimistic state if delete failed
+      setSessions(previousSessions)
+      if (wasActive) {
+        const prevActive = previousSessions.find(s => s.id === sessionId) ?? null
+        setActiveSession(prevActive)
+        activeSessionRef.current = prevActive
+        if (prevActive) {
+          const msgs = await window.forge.chat.messages(prevActive.id)
+          setMessages(msgs)
+        }
+      }
+      alert(e?.message || 'Failed to delete chat session')
+    }
+  }, [sessions, activeProject?.id])
 
   // ─── Send ────────────────────────────────────────────────────────────────
   const send = useCallback(async () => {
@@ -253,8 +369,8 @@ export default function ChatPanel() {
       } catch {}
     }
 
-    window.forge.chat.ai(history, projectCtx)
-  }, [input, activeSession, isStreaming, messages, activeProject])
+    window.forge.chat.ai(history, projectCtx, model, activeProject?.path)
+  }, [input, activeSession, isStreaming, messages, activeProject, model])
 
   // ─── Textarea auto-resize ────────────────────────────────────────────────
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -268,7 +384,7 @@ export default function ChatPanel() {
 
       {/* ── Sessions sidebar ─────────────────────────────────────────────── */}
       <div style={{
-        width: 210, borderRight: '1px solid var(--brd)',
+        width: sidebarWidth,
         background: 'var(--surface)',
         display: 'flex', flexDirection: 'column', flexShrink: 0,
       }}>
@@ -305,37 +421,78 @@ export default function ChatPanel() {
               <span style={{ fontSize: 11 }}>Click + to start</span>
             </div>
           ) : sessions.map(s => (
-            <button
+            <div
               key={s.id}
-              onClick={() => setActiveSession(s)}
               style={{
-                display: 'flex', alignItems: 'center', gap: 7,
-                width: '100%', padding: '7px 9px', borderRadius: 'var(--r2)',
-                fontSize: 12, textAlign: 'left', marginBottom: 1,
-                color: activeSession?.id === s.id ? 'var(--pri)' : 'var(--muted)',
-                background: activeSession?.id === s.id ? 'var(--pri-glow)' : 'transparent',
-                transition: 'background .12s, color .12s',
+                display: 'flex', alignItems: 'center', gap: 6,
+                marginBottom: 1,
               }}
             >
-              <MessageSquare size={11} style={{ flexShrink: 0 }} />
-              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>
-                {s.title}
-              </span>
-            </button>
+              <button
+                onClick={() => setActiveSession(s)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 7,
+                  width: '100%', padding: '7px 9px', borderRadius: 'var(--r2)',
+                  fontSize: 12, textAlign: 'left',
+                  color: activeSession?.id === s.id ? 'var(--pri)' : 'var(--muted)',
+                  background: activeSession?.id === s.id ? 'var(--pri-glow)' : 'transparent',
+                  transition: 'background .12s, color .12s',
+                }}
+              >
+                <MessageSquare size={11} style={{ flexShrink: 0 }} />
+                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>
+                  {s.title}
+                </span>
+              </button>
+              <button
+                title="Delete chat session"
+                onClick={async (e) => {
+                  e.stopPropagation()
+                  await deleteSession(s.id)
+                }}
+                style={{
+                  width: 24, height: 24, borderRadius: 'var(--r1)',
+                  color: 'var(--faint)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  flexShrink: 0, transition: 'all .12s',
+                }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLElement).style.color = 'var(--err-txt, #f87171)'
+                  ;(e.currentTarget as HTMLElement).style.background = 'rgba(255,60,60,.08)'
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLElement).style.color = 'var(--faint)'
+                  ;(e.currentTarget as HTMLElement).style.background = 'transparent'
+                }}
+              >
+                <Trash2 size={12} />
+              </button>
+            </div>
           ))}
         </div>
 
-        {/* Model badge */}
-        <div style={{
-          padding: '8px 12px', borderTop: '1px solid var(--brd)',
-          display: 'flex', alignItems: 'center', gap: 5,
-        }}>
-          <Zap size={10} style={{ color: 'var(--pri)', flexShrink: 0 }} />
-          <span style={{ fontSize: 10, color: 'var(--faint)', fontFamily: 'var(--font-mono, monospace)' }}>
-            llama-4 · Groq
-          </span>
-        </div>
+        {/* Model selector */}
+        <ModelToggle value={model} onChange={setModel} />
       </div>
+
+      {/* ── Drag separator ───────────────────────────────────────────────── */}
+      <div
+        onMouseDown={(e) => {
+          isResizingRef.current = true
+          resizeStartXRef.current = e.clientX
+          resizeStartWidthRef.current = sidebarWidth
+          document.body.style.cursor = 'col-resize'
+          document.body.style.userSelect = 'none'
+        }}
+        title="Drag to resize sessions panel"
+        style={{
+          width: 6,
+          cursor: 'col-resize',
+          background: 'transparent',
+          borderLeft: '1px solid var(--brd)',
+          borderRight: '1px solid transparent',
+          flexShrink: 0,
+        }}
+      />
 
       {/* ── Chat area ────────────────────────────────────────────────────── */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -357,7 +514,11 @@ export default function ChatPanel() {
                 Forge AI
               </div>
               <div style={{ fontSize: 12, color: 'var(--faint)' }}>
-                Powered by Groq · llama-4-scout
+                {model === 'gemini'
+                  ? 'Powered by Google · Gemini 2.0 Flash'
+                  : model === 'ollama'
+                    ? 'Powered by Local Ollama · Llama 3.1'
+                    : 'Powered by Groq · Llama 4 Scout'}
               </div>
             </div>
             <button

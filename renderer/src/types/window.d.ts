@@ -1,4 +1,4 @@
-import type { Project, GitStatus, GitCommit, ChatSession, ChatMessage } from '../../../shared/types'
+import type { Project, GitStatus, GitCommit, ChatSession, ChatMessage, AiModel } from '../../../shared/types'
 
 declare global {
   interface Window {
@@ -28,8 +28,14 @@ declare global {
       }
       chat: {
         sessions: (projectId?: number) => Promise<ChatSession[]>
+        newSession: (title: string, projectId?: number) => Promise<ChatSession[]>
+        deleteSession: (sessionId: number) => Promise<{ success: boolean }>
         messages: (sessionId: number) => Promise<ChatMessage[]>
         send: (sessionId: number, role: string, content: string) => Promise<{ success: boolean }>
+        ai: (messages: Array<{ role: string; content: string }>, projectCtx?: string, model?: AiModel, projectPath?: string) => Promise<void>
+        onToken: (cb: (token: string) => void) => () => void
+        onDone: (cb: () => void) => () => void
+        onError: (cb: (err: string) => void) => () => void
       }
       files: {
         list: (cwd: string) => Promise<any[]>

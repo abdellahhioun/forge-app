@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron'
-import { IPC } from '../shared/types'
+import { IPC, type AiModel } from '../shared/types'
 
 contextBridge.exposeInMainWorld('forge', {
   // Projects
@@ -47,9 +47,10 @@ contextBridge.exposeInMainWorld('forge', {
   chat: {
     sessions:   (projectId?: number)                               => ipcRenderer.invoke(IPC.CHAT_SESSIONS, projectId),
     newSession: (title: string, projectId?: number)               => ipcRenderer.invoke(IPC.CHAT_SESSION_NEW, title, projectId),
+    deleteSession: (sessionId: number)                            => ipcRenderer.invoke(IPC.CHAT_SESSION_DELETE, sessionId),
     messages:   (sessionId: number)                                => ipcRenderer.invoke(IPC.CHAT_MESSAGES, sessionId),
     send:       (sessionId: number, role: string, content: string) => ipcRenderer.invoke(IPC.CHAT_SEND, sessionId, role, content),
-    ai:         (messages: Array<{role:string;content:string}>, projectCtx?: string) => ipcRenderer.invoke(IPC.CHAT_AI, messages, projectCtx),
+    ai:         (messages: Array<{role:string;content:string}>, projectCtx?: string, model?: AiModel, projectPath?: string) => ipcRenderer.invoke(IPC.CHAT_AI, messages, projectCtx, model, projectPath),
     onToken:    (cb: (token: string) => void) => { ipcRenderer.on(IPC.CHAT_AI_TOKEN, (_e, t) => cb(t)); return () => ipcRenderer.removeAllListeners(IPC.CHAT_AI_TOKEN) },
     onDone:     (cb: () => void)              => { ipcRenderer.on(IPC.CHAT_AI_DONE,  () => cb());     return () => ipcRenderer.removeAllListeners(IPC.CHAT_AI_DONE) },
     onError:    (cb: (err: string) => void)   => { ipcRenderer.on(IPC.CHAT_AI_ERROR, (_e, e) => cb(e)); return () => ipcRenderer.removeAllListeners(IPC.CHAT_AI_ERROR) },

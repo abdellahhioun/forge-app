@@ -212,54 +212,363 @@ export function registerMcpHandlers(ipcMain: IpcMain) {
   })
 
 
-  // ─── CHAT AI — Groq streaming ───────────────────────────────────────────────
-  ipcMain.handle(IPC.CHAT_AI, async (event, messages: Array<{role:string;content:string}>, projectCtx?: string) => {
-    const GROQ_API_KEY = process.env.GROQ_API_KEY
-    if (!GROQ_API_KEY) {
-      event.sender.send(IPC.CHAT_AI_ERROR, 'GROQ_API_KEY not found in environment')
-      return
+  // ─── CHAT AI — Groq + Gemini + Ollama streaming ────────────────────────────
+  ipcMain.handle(
+    IPC.CHAT_AI,
+    async (
+      event,
+      messages: Array<{ role: string; content: string }>,
+      projectCtx?: string,
+      model: 'groq' | 'gemini' | 'ollama' = 'groq',
+      projectPath?: string,
+    ) => {
+    const https = require('https')
+    const http = require('http')
+    const path = require('path')
+
+    function buildFileContext(cwd?: string, userQuery = ''): string {
+      if (!cwd || !existsSync(cwd)) return ''
+      const TREE_IGNORED_DIRS = new Set(['.git', 'node_modules'])
+      const SNIPPET_IGNORED_DIRS = new Set(['.git', 'node_modules', 'dist', 'dist-electron', 'out', '.next', '__pycache__'])
+      const IGNORED_NAMES = [/^\.env(\..+)?$/, /\.pem$/i, /\.key$/i, /\.crt$/i, /\.p12$/i, /\.pfx$/i]
+      const ALLOWED_EXTS = new Set(['.ts', '.tsx', '.js', '.jsx', '.json', '.md', '.py', '.go', '.rs', '.java', '.css', '.scss', '.html', '.yml', '.yaml'])
+      const preferred = ['package.json', 'README.md', 'tsconfig.json', 'electron.vite.config.ts', 'vite.config.ts']
+
+      const maxFiles = 30
+      const maxCharsPerFile = 4000
+      const maxTotalChars = 80000
+      const maxTreeLines = 2000
+
+      const selected: string[] = []
+      const discovered: string[] = []
+      const snippets: string[] = []
+      const treeLines: string[] = []
+      let totalChars = 0
+
+      for (const rel of preferred) {
+        const full = path.join(cwd, rel)
+        if (existsSync(full)) selected.push(full)
+      }
+
+      function buildTree(dir: string, prefix = '') {
+        if (treeLines.length >= maxTreeLines) return
+        let entries: string[] = []
+        try { entries = readdirSync(dir).sort((a, b) => a.localeCompare(b)) } catch { return }
+        const visible = entries.filter(name => {
+          if (name === '.DS_Store') return false
+          if (TREE_IGNORED_DIRS.has(name)) return false
+          return true
+        })
+        for (let i = 0; i < visible.length; i++) {
+          if (treeLines.length >= maxTreeLines) break
+          const name = visible[i]
+          const full = path.join(dir, name)
+          let st: any
+          try { st = statSync(full) } catch { continue }
+          const isLast = i === visible.length - 1
+          const branch = isLast ? '└── ' : '├── '
+          const nextPrefix = prefix + (isLast ? '    ' : '│   ')
+          treeLines.push(`${prefix}${branch}${name}${st.isDirectory() ? '/' : ''}`)
+          if (st.isDirectory()) buildTree(full, nextPrefix)
+        }
+      }
+
+      function walk(dir: string, depth = 0) {
+        if (depth > 6) return
+        let entries: string[] = []
+        try { entries = readdirSync(dir) } catch { return }
+        for (const name of entries) {
+          if (name.startsWith('.') && name !== '.eslintrc' && name !== '.prettierrc') continue
+          if (SNIPPET_IGNORED_DIRS.has(name)) continue
+          if (IGNORED_NAMES.some(rx => rx.test(name))) continue
+          const full = path.join(dir, name)
+          let st: any
+          try { st = statSync(full) } catch { continue }
+          if (st.isDirectory()) { walk(full, depth + 1); continue }
+          if (st.size > 200 * 1024) continue
+          const ext = path.extname(name).toLowerCase()
+          if (!ALLOWED_EXTS.has(ext)) continue
+          if (!discovered.includes(full)) discovered.push(full)
+        }
+      }
+      treeLines.push(`${path.basename(cwd)}/`)
+      buildTree(cwd)
+      walk(cwd)
+
+      const query = userQuery.toLowerCase()
+      const requestedPaths = new Set<string>()
+      const mentionedBasenames = new Set<string>()
+      const filePattern = /([a-z0-9_\-./]+\.(ts|tsx|js|jsx|json|md|py|go|rs|java|css|scss|html|yml|yaml))/gi
+      for (const m of query.matchAll(filePattern)) {
+        requestedPaths.add(m[1])
+        mentionedBasenames.add(path.basename(m[1]))
+      }
+      if (query.includes('index.ts') && query.includes('main')) requestedPaths.add('main/index.ts')
+      if (query.includes('index.ts') && query.includes('preload')) requestedPaths.add('preload/index.ts')
+
+      const dirHints = ['main', 'preload', 'renderer', 'shared', 'components', 'panels', 'types', 'src']
+        .filter(d => query.includes(d))
+
+      for (const rel of requestedPaths) {
+        const full = path.join(cwd, rel.replace(/^\.\//, ''))
+        if (existsSync(full) && !selected.includes(full)) selected.push(full)
+      }
+      // If user mentions a basename (e.g. "index.ts"), prioritize matching files,
+      // optionally constrained by directory hints (e.g. "preload folder").
+      for (const full of discovered) {
+        const rel = path.relative(cwd, full).toLowerCase()
+        const base = path.basename(full).toLowerCase()
+        if (!mentionedBasenames.has(base)) continue
+        if (dirHints.length > 0 && !dirHints.some(h => rel.includes(`${h}/`) || rel.startsWith(`${h}/`))) continue
+        if (!selected.includes(full)) selected.push(full)
+      }
+      for (const full of discovered) {
+        if (!selected.includes(full)) selected.push(full)
+      }
+
+      for (const full of selected.slice(0, maxFiles)) {
+        try {
+          const rel = path.relative(cwd, full)
+          const content = readFileSync(full, 'utf-8').slice(0, maxCharsPerFile)
+          if (!content.trim()) continue
+          const block = `\n### File: ${rel}\n\`\`\`\n${content}\n\`\`\`\n`
+          if (totalChars + block.length > maxTotalChars) break
+          snippets.push(block)
+          totalChars += block.length
+        } catch {}
+      }
+
+      const treeSection = treeLines.length
+        ? `\n\nProject tree (generated from filesystem, excludes node_modules and .git):\n${treeLines.join('\n')}\n`
+        : ''
+      const snippetSection = snippets.length
+        ? `\n\nAttached project file context (truncated, read-only snapshot):${snippets.join('')}`
+        : ''
+      return `${treeSection}${snippetSection}`
     }
 
-    const systemPrompt = projectCtx
+    const lastUserMessage = [...messages]
+      .reverse()
+      .find(m => m.role === 'user')
+      ?.content
+      ?.trim()
+      .toLowerCase() ?? ''
+    const isGreetingOnly = /^(hi|hello|hey|yo|sup|hola|salam|good morning|good afternoon|good evening)[!. ]*$/.test(lastUserMessage)
+
+    const systemPromptBase = projectCtx
       ? `You are Forge AI, an expert coding assistant embedded in a desktop IDE.\nActive project context:\n${projectCtx}\n\nYou help the developer understand, write, debug, and improve code. Be concise and precise.`
       : `You are Forge AI, an expert coding assistant. Be concise, precise, and helpful.`
+    const fileContext = isGreetingOnly ? '' : buildFileContext(projectPath, lastUserMessage)
+    const systemPrompt = `${systemPromptBase}
 
-    const body = JSON.stringify({
-      model: 'meta-llama/llama-4-scout-17b-16e-instruct',
-      messages: [{ role: 'system', content: systemPrompt }, ...messages],
-      stream: true,
-      max_tokens: 2048,
-    })
+General behavior:
+- If the user sends only a greeting, respond naturally and briefly, then ask what they want to do.
+- Do not mention hidden/system/project context unless the user asks for code/project details.
+- You have access to the attached project tree and file snapshots below. Do NOT claim you cannot access files.
+- If a requested file is present in the tree/snapshots, answer using it directly.
+- Only say a file is missing after checking the provided project tree.
 
-    const https = require('https')
-    const url = new URL('https://api.groq.com/openai/v1/chat/completions')
+When the user asks for project files/tree/structure:
+- Use ONLY the provided "Project tree" section from context.
+- Do not invent, rename, or omit paths from that section.
+- If user asks for "full tree", return the full tree block exactly as provided (except node_modules/.git exclusion already applied).
+${fileContext}`
 
-    const req = https.request(
-      { hostname: url.hostname, path: url.pathname, method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_API_KEY}`, 'Content-Length': Buffer.byteLength(body) } },
-      (res: any) => {
-        let buffer = ''
-        res.on('data', (chunk: Buffer) => {
-          buffer += chunk.toString()
-          const lines = buffer.split('\n')
-          buffer = lines.pop() ?? ''
-          for (const line of lines) {
-            const trimmed = line.replace(/^ /, '').trim()
-            if (!trimmed || trimmed === '[DONE]') continue
-            try {
-              const parsed = JSON.parse(trimmed)
-              const token = parsed.choices?.[0]?.delta?.content
-              if (token) event.sender.send(IPC.CHAT_AI_TOKEN, token)
-            } catch {}
+    // ── helper: parse SSE stream and fire tokens ──────────────────────────────
+    function pipeSSE(res: any, getToken: (parsed: any) => string | undefined, isDone?: (parsed: any) => boolean) {
+      if ((res.statusCode ?? 500) >= 400) {
+        let errBody = ''
+        res.on('data', (chunk: Buffer) => { errBody += chunk.toString() })
+        res.on('end', () => {
+          try {
+            const parsed = JSON.parse(errBody)
+            const msg = parsed?.error?.message || parsed?.message || `AI request failed (${res.statusCode})`
+            event.sender.send(IPC.CHAT_AI_ERROR, msg)
+          } catch {
+            event.sender.send(IPC.CHAT_AI_ERROR, errBody || `AI request failed (${res.statusCode})`)
           }
         })
-        res.on('end', () => event.sender.send(IPC.CHAT_AI_DONE))
         res.on('error', (e: Error) => event.sender.send(IPC.CHAT_AI_ERROR, e.message))
+        return
       }
-    )
-    req.on('error', (e: Error) => event.sender.send(IPC.CHAT_AI_ERROR, e.message))
-    req.write(body)
-    req.end()
+
+      let buffer = ''
+      let doneSent = false
+      res.on('data', (chunk: Buffer) => {
+        buffer += chunk.toString()
+        const lines = buffer.split('\n')
+        buffer = lines.pop() ?? ''
+        for (const line of lines) {
+          const trimmed = line.trim()
+          if (!trimmed.startsWith('data:')) continue
+          const json = trimmed.slice(5).trim()
+          if (!json || json === '[DONE]') continue
+          try {
+            const parsed = JSON.parse(json)
+            if (isDone?.(parsed)) {
+              if (!doneSent) event.sender.send(IPC.CHAT_AI_DONE)
+              doneSent = true
+              return
+            }
+            const token = getToken(parsed)
+            if (token) event.sender.send(IPC.CHAT_AI_TOKEN, token)
+          } catch {}
+        }
+      })
+      res.on('end', () => {
+        if (!doneSent) event.sender.send(IPC.CHAT_AI_DONE)
+      })
+      res.on('error', (e: Error) => event.sender.send(IPC.CHAT_AI_ERROR, e.message))
+    }
+
+    function pipeJsonLines(res: any, getToken: (parsed: any) => string | undefined, isDone?: (parsed: any) => boolean) {
+      if ((res.statusCode ?? 500) >= 400) {
+        let errBody = ''
+        res.on('data', (chunk: Buffer) => { errBody += chunk.toString() })
+        res.on('end', () => {
+          try {
+            const parsed = JSON.parse(errBody)
+            const msg = parsed?.error || parsed?.message || `AI request failed (${res.statusCode})`
+            event.sender.send(IPC.CHAT_AI_ERROR, msg)
+          } catch {
+            event.sender.send(IPC.CHAT_AI_ERROR, errBody || `AI request failed (${res.statusCode})`)
+          }
+        })
+        res.on('error', (e: Error) => event.sender.send(IPC.CHAT_AI_ERROR, e.message))
+        return
+      }
+
+      let buffer = ''
+      let doneSent = false
+      let tokenCount = 0
+      res.on('data', (chunk: Buffer) => {
+        buffer += chunk.toString()
+        const lines = buffer.split('\n')
+        buffer = lines.pop() ?? ''
+        for (const line of lines) {
+          const trimmed = line.trim()
+          if (!trimmed) continue
+          try {
+            const parsed = JSON.parse(trimmed)
+            if (isDone?.(parsed)) {
+              if (!doneSent) {
+                if (tokenCount === 0) {
+                  event.sender.send(
+                    IPC.CHAT_AI_ERROR,
+                    'Ollama returned an empty response. Ensure the model is installed (e.g. `ollama pull llama3.1:8b`) and try again.'
+                  )
+                } else {
+                  event.sender.send(IPC.CHAT_AI_DONE)
+                }
+              }
+              doneSent = true
+              return
+            }
+            const token = getToken(parsed)
+            if (token) {
+              tokenCount++
+              event.sender.send(IPC.CHAT_AI_TOKEN, token)
+            }
+          } catch {}
+        }
+      })
+      res.on('end', () => {
+        if (!doneSent) {
+          if (tokenCount === 0) {
+            event.sender.send(
+              IPC.CHAT_AI_ERROR,
+              'Ollama stream ended without text. Check that Ollama is running and the selected model exists locally.'
+            )
+          } else {
+            event.sender.send(IPC.CHAT_AI_DONE)
+          }
+        }
+      })
+      res.on('error', (e: Error) => event.sender.send(IPC.CHAT_AI_ERROR, e.message))
+    }
+
+    if (model === 'ollama') {
+      // ── Local Ollama (default model: llama3.1:8b) ─────────────────────────
+      const body = JSON.stringify({
+        model: process.env.OLLAMA_MODEL || 'llama3.1:8b',
+        messages: [{ role: 'system', content: systemPrompt }, ...messages],
+        stream: true,
+      })
+      const req = http.request(
+        { hostname: '127.0.0.1', port: 11434, path: '/api/chat', method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) } },
+        (res: any) => pipeJsonLines(
+          res,
+          parsed => parsed?.message?.content,
+          parsed => parsed?.done === true,
+        )
+      )
+      req.on('error', () => {
+        event.sender.send(
+          IPC.CHAT_AI_ERROR,
+          'Cannot connect to Ollama on http://127.0.0.1:11434. Start Ollama first (e.g. `ollama serve`).'
+        )
+      })
+      req.write(body)
+      req.end()
+    } else if (model === 'gemini') {
+      // ── Gemini 2.0 Flash ────────────────────────────────────────────────────
+      const GEMINI_API_KEY = process.env.GEMINI_API_KEY
+      if (!GEMINI_API_KEY) {
+        event.sender.send(IPC.CHAT_AI_ERROR, 'GEMINI_API_KEY not found in environment')
+        return
+      }
+      // Convert messages: assistant → model role, merge with system instruction
+      const geminiContents = messages.map(m => ({
+        role: m.role === 'user' ? 'user' : 'model',
+        parts: [{ text: m.content }],
+      }))
+      const body = JSON.stringify({
+        contents: geminiContents,
+        systemInstruction: { parts: [{ text: systemPrompt }] },
+        generationConfig: { maxOutputTokens: 2048 },
+      })
+      const path = `/v1beta/models/gemini-2.0-flash:streamGenerateContent?alt=sse&key=${GEMINI_API_KEY}`
+      const req = https.request(
+        { hostname: 'generativelanguage.googleapis.com', path, method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) } },
+        (res: any) => pipeSSE(
+          res,
+          parsed => {
+            const parts = parsed?.candidates?.[0]?.content?.parts
+            if (!Array.isArray(parts)) return undefined
+            return parts.map((p: any) => p?.text).filter(Boolean).join('')
+          },
+        )
+      )
+      req.on('error', (e: Error) => event.sender.send(IPC.CHAT_AI_ERROR, e.message))
+      req.write(body)
+      req.end()
+    } else {
+      // ── Groq — Llama 4 Scout ────────────────────────────────────────────────
+      const GROQ_API_KEY = process.env.GROQ_API_KEY
+      if (!GROQ_API_KEY) {
+        event.sender.send(IPC.CHAT_AI_ERROR, 'GROQ_API_KEY not found in environment')
+        return
+      }
+      const body = JSON.stringify({
+        model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+        messages: [{ role: 'system', content: systemPrompt }, ...messages],
+        stream: true,
+        max_tokens: 2048,
+      })
+      const req = https.request(
+        { hostname: 'api.groq.com', path: '/openai/v1/chat/completions', method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_API_KEY}`, 'Content-Length': Buffer.byteLength(body) } },
+        (res: any) => pipeSSE(
+          res,
+          parsed => parsed.choices?.[0]?.delta?.content,
+        )
+      )
+      req.on('error', (e: Error) => event.sender.send(IPC.CHAT_AI_ERROR, e.message))
+      req.write(body)
+      req.end()
+    }
   })
 
   // ─── CHAT SESSIONS ─────────────────────────────────────────────────────────
@@ -267,6 +576,12 @@ export function registerMcpHandlers(ipcMain: IpcMain) {
     const db = getDb()
     db.insert(chatSessions).values({ title: title || 'New Chat', projectId: projectId ?? null }).run()
     return db.select().from(chatSessions).all()
+  })
+
+  ipcMain.handle(IPC.CHAT_SESSION_DELETE, async (_e, sessionId: number) => {
+    const db = getDb()
+    db.delete(chatSessions).where(eq(chatSessions.id, sessionId)).run()
+    return { success: true }
   })
 
   ipcMain.handle(IPC.CHAT_SESSIONS, async (_e, projectId?: number) => {

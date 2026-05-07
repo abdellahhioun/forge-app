@@ -17,9 +17,11 @@ export interface McpToolCall {
 
 export interface McpToolResult {
   success: boolean
-   unknown
+  data?: unknown
   error?: string
 }
+
+export type AiModel = 'groq' | 'gemini' | 'ollama'
 
 // ─── Chat ──────────────────────────────────────────────────────────────────
 export type MessageRole = 'user' | 'assistant' | 'system' | 'tool'
@@ -111,6 +113,7 @@ export const IPC = {
   CHAT_AI_DONE:      'chat:ai:done',
   CHAT_AI_ERROR:     'chat:ai:error',
   CHAT_SESSION_NEW:  'chat:session:new',
+  CHAT_SESSION_DELETE:'chat:session:delete',
   // Context
   CONTEXT_GET:       'context:get',
   CONTEXT_INDEX:     'context:index',

@@ -1,7 +1,7 @@
 import { useForgeStore } from '../store'
 import {
   Code2, Terminal, GitBranch, MessageSquare,
-  LayoutDashboard, FolderOpen, Plus, Sun, Moon
+  LayoutDashboard, FolderOpen, Plus, Sun, Moon, Trash2
 } from 'lucide-react'
 import type { Project } from '../../../shared/types'
 import FileTree from './FileTree'
@@ -34,6 +34,32 @@ export default function Sidebar() {
     setActiveProject(p)
   }
 
+  const handleRemoveProject = async (projectId: number) => {
+    const project = projects.find(p => p.id === projectId)
+    if (project?.path) {
+      try {
+        const status = await window.forge.git.status(project.path)
+        // Prompt only for real dirty repos; skip non-git folders.
+        const looksLikeGitRepo = status.branch && !status.branch.toLowerCase().includes('fatal')
+        if (looksLikeGitRepo && !status.clean) {
+          const confirmed = window.confirm(
+            `This project has uncommitted changes on branch "${status.branch}".\n\nRemove it from the list anyway?`
+          )
+          if (!confirmed) return
+        }
+      } catch {
+        // If git status fails, proceed with remove-from-list behavior.
+      }
+    }
+
+    await window.forge.projects.remove(projectId)
+    const all = await window.forge.projects.list()
+    setProjects(all)
+    if (activeProject?.id === projectId) {
+      setActiveProject(all[0] ?? null)
+    }
+  }
+
   return (
     <aside style={{
       width: 'var(--sidebar-w)',
@@ -46,10 +72,9 @@ export default function Sidebar() {
       userSelect: 'none',
     }}>
 
-      {/* Logo — with macOS traffic light offset */}
+      {/* Logo */}
       <div style={{
-        padding: '16px 16px 12px',
-        paddingTop: '44px', // clear macOS traffic lights
+        padding: '12px 16px 12px',
         borderBottom: '1px solid var(--brd)',
         display: 'flex',
         alignItems: 'center',
@@ -82,27 +107,56 @@ export default function Sidebar() {
         }}>Projects</div>
 
         {projects.map(p => (
-          <button
+          <div
             key={p.id}
-            onClick={() => handleSelectProject(p)}
             style={{
-              display: 'flex', alignItems: 'center', gap: 7,
-              width: '100%', padding: '7px 10px',
-              borderRadius: 'var(--r2)',
-              fontSize: 12.5,
-              color: activeProject?.id === p.id ? 'var(--pri)' : 'var(--muted)',
-              background: activeProject?.id === p.id ? 'var(--pri-glow)' : 'transparent',
-              fontWeight: activeProject?.id === p.id ? 500 : 400,
-              textAlign: 'left',
+              display: 'flex', alignItems: 'center', gap: 4,
               marginBottom: 1,
-              transition: 'all .15s',
             }}
           >
-            <FolderOpen size={13} style={{ flexShrink: 0, opacity: .7 }} />
-            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              {p.name}
-            </span>
-          </button>
+            <button
+              onClick={() => handleSelectProject(p)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 7,
+                width: '100%', padding: '7px 10px',
+                borderRadius: 'var(--r2)',
+                fontSize: 12.5,
+                color: activeProject?.id === p.id ? 'var(--pri)' : 'var(--muted)',
+                background: activeProject?.id === p.id ? 'var(--pri-glow)' : 'transparent',
+                fontWeight: activeProject?.id === p.id ? 500 : 400,
+                textAlign: 'left',
+                transition: 'all .15s',
+              }}
+            >
+              <FolderOpen size={13} style={{ flexShrink: 0, opacity: .7 }} />
+              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {p.name}
+              </span>
+            </button>
+            <button
+              title="Remove project from list"
+              onClick={async (e) => {
+                e.stopPropagation()
+                await handleRemoveProject(p.id)
+              }}
+              style={{
+                width: 22, height: 22, borderRadius: 'var(--r1)',
+                color: 'var(--faint)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                flexShrink: 0,
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLElement).style.color = 'var(--err-txt, #f87171)'
+                ;(e.currentTarget as HTMLElement).style.background = 'rgba(255,60,60,.08)'
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLElement).style.color = 'var(--faint)'
+                ;(e.currentTarget as HTMLElement).style.background = 'transparent'
+              }}
+            >
+              <Trash2 size={12} />
+            </button>
+          </div>
         ))}
 
         <button
