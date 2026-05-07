@@ -1,0 +1,15 @@
+{
+  "branch": "main",
+  "clean": false,
+  "lastCommit": "9471239 feat: add file-specific diff support and interactive file selection to Git panel (40 minutes ago)",
+  "fileCount": 27,
+  "totalLines": 4328,
+  "stack": "Electron + React + Vite + TypeScript + Tailwind",
+  "keyFiles": [
+    "README.md",
+    "electron.vite.config.ts",
+    "package.json",
+    "tsconfig.json"
+  ],
+  "indexedAt": "2026-05-07T17:05:39.818Z"
+}

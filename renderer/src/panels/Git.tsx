@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { useForgeStore } from '../store'
-import { GitBranch, GitCommit, RefreshCw, Upload, Plus, Check, X, GitPullRequest, ChevronsUpDown } from 'lucide-react'
+import { GitBranch, GitCommit, RefreshCw, Upload, Plus, Check, X, GitPullRequest, ChevronsUpDown, Sparkles } from 'lucide-react'
 import type { GitStatus, GitCommit as IGitCommit } from '../../../shared/types'
 
 type Toast = { ok: boolean; msg: string }
@@ -15,6 +15,7 @@ export default function GitPanel() {
   const [commitMsg, setCommitMsg] = useState('')
   const [newBranch, setNewBranch] = useState('')
   const [loading, setLoading]   = useState(false)
+  const [suggesting, setSuggesting] = useState(false)
   const [toast, setToast]       = useState<Toast | null>(null)
   const [showBranches, setShowBranches] = useState(false)
   const [showPR, setShowPR]     = useState(false)
@@ -104,6 +105,24 @@ export default function GitPanel() {
     }
   }, [status?.branch])
 
+  const handleSuggestCommit = async () => {
+    if (!activeProject) return
+    setSuggesting(true)
+    try {
+      const res = await window.forge.git.suggestCommit(activeProject.path)
+      if (res.ok && res.message) {
+        setCommitMsg(res.message)
+        notify(true, 'AI suggested a commit message!')
+      } else {
+        notify(false, res.error || 'Failed to generate commit message')
+      }
+    } catch (e: any) {
+      notify(false, e.message)
+    } finally {
+      setSuggesting(false)
+    }
+  }
+
   const handleCommit = async () => {
     if (!activeProject || !commitMsg.trim()) return
     const res = await window.forge.git.commit(activeProject.path, commitMsg)
@@ -124,10 +143,16 @@ export default function GitPanel() {
   const handleBranch = async () => {
     if (!activeProject || !newBranch.trim()) return
     setLoading(true)
-    const res = await window.forge.git.branch(activeProject.path, newBranch.trim())
-    notify(res.ok, res.out)
-    setNewBranch('')
-    load()
+    try {
+      const res = await window.forge.git.branch(activeProject.path, newBranch.trim())
+      notify(res.ok, res.out)
+      setNewBranch('')
+    } catch (e: any) {
+      notify(false, e.message)
+    } finally {
+      setLoading(false)
+      load()
+    }
   }
 
   const handleSwitch = async (name: string) => {
@@ -396,22 +421,56 @@ export default function GitPanel() {
           <div style={{ padding: 12, borderTop: '1px solid var(--brd)', display: 'flex', flexDirection: 'column', gap: 8 }}>
 
             {/* Commit Message Textarea */}
-            <textarea
-              value={commitMsg}
-              onChange={e => setCommitMsg(e.target.value)}
-              placeholder="Commit message… (⌘↵ to commit)"
-              rows={2}
-              style={{
-                width: '100%', background: 'var(--offset)',
-                border: '1px solid var(--brd)', borderRadius: 'var(--r2)',
-                color: 'var(--txt)', fontSize: 12, padding: '6px 9px',
-                resize: 'none', fontFamily: 'var(--font-body)', outline: 'none',
-                transition: 'border-color 0.15s',
-              }}
-              onFocus={e => (e.target.style.borderColor = 'var(--pri)')}
-              onBlur={e => (e.target.style.borderColor = 'var(--brd)')}
-              onKeyDown={e => { if (e.key === 'Enter' && e.metaKey) handleCommit() }}
-            />
+            <div style={{ position: 'relative', width: '100%' }}>
+              <textarea
+                value={commitMsg}
+                onChange={e => setCommitMsg(e.target.value)}
+                placeholder={suggesting ? "Analyzing changes..." : "Commit message… (⌘↵ to commit)"}
+                rows={2}
+                disabled={suggesting}
+                style={{
+                  width: '100%', background: 'var(--offset)',
+                  border: '1px solid var(--brd)', borderRadius: 'var(--r2)',
+                  color: 'var(--txt)', fontSize: 12, padding: '6px 32px 6px 9px',
+                  resize: 'none', fontFamily: 'var(--font-body)', outline: 'none',
+                  transition: 'border-color 0.15s',
+                  opacity: suggesting ? 0.7 : 1,
+                }}
+                onFocus={e => (e.target.style.borderColor = 'var(--pri)')}
+                onBlur={e => (e.target.style.borderColor = 'var(--brd)')}
+                onKeyDown={e => { if (e.key === 'Enter' && e.metaKey) handleCommit() }}
+              />
+              <button
+                onClick={handleSuggestCommit}
+                disabled={suggesting || loading}
+                title="AI Suggest Commit Message"
+                style={{
+                  position: 'absolute',
+                  right: 8,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  color: suggesting ? 'var(--pri)' : 'var(--faint)',
+                  cursor: (suggesting || loading) ? 'not-allowed' : 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '5px',
+                  borderRadius: 'var(--r1)',
+                  transition: 'color 0.15s, background-color 0.15s',
+                }}
+                onMouseEnter={e => { if (!suggesting && !loading) { e.currentTarget.style.color = 'var(--pri)'; e.currentTarget.style.backgroundColor = 'var(--dynamic)' } }}
+                onMouseLeave={e => { if (!suggesting && !loading) { e.currentTarget.style.color = 'var(--faint)'; e.currentTarget.style.backgroundColor = 'transparent' } }}
+              >
+                <Sparkles
+                  size={14}
+                  style={{
+                    animation: suggesting ? 'spin 2s linear infinite' : 'none',
+                  }}
+                />
+              </button>
+            </div>
 
             {/* Actions Grid */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>

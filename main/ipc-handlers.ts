@@ -57,8 +57,10 @@ export function registerMcpHandlers(ipcMain: IpcMain) {
   })
 
   // ─── GIT ─────────────────────────────────────────────────────────────────────
+  const MAX_BUFFER = 100 * 1024 * 1024; // 100MB
+
   const git = (cmd: string, cwd: string) => {
-    try { return { ok: true, out: execSync(cmd, { cwd, encoding: 'utf-8' }).trim() } }
+    try { return { ok: true, out: execSync(cmd, { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER }).trim() } }
     catch (e: any) { return { ok: false, out: e.message as string } }
   }
 
@@ -66,7 +68,7 @@ export function registerMcpHandlers(ipcMain: IpcMain) {
     const branch = git('git rev-parse --abbrev-ref HEAD', cwd)
     let statusOut = ''
     try {
-      statusOut = execSync('git status --porcelain', { cwd, encoding: 'utf-8' })
+      statusOut = execSync('git status --porcelain', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER })
     } catch {
       statusOut = ''
     }
@@ -203,6 +205,125 @@ export function registerMcpHandlers(ipcMain: IpcMain) {
       return { ok: true, out }
     } catch (e: any) {
       return { ok: false, out: e.message }
+    }
+  })
+
+  ipcMain.handle(IPC.GIT_SUGGEST_COMMIT, async (_e, cwd: string) => {
+    let diff = ''
+    try {
+      diff = execSync('git diff HEAD', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER }).trim()
+      if (!diff) {
+        const untracked = execSync('git status --porcelain', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER })
+          .split('\n')
+          .filter(l => l.startsWith('??'))
+          .map(l => l.slice(3))
+          .join(', ')
+        if (untracked) {
+          diff = `Untracked files created: ${untracked}`
+        }
+      }
+    } catch {
+      try {
+        diff = execSync('git diff', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER }).trim()
+      } catch {}
+    }
+
+    if (!diff) {
+      return { ok: false, error: 'No changes detected. Stage or modify some files first.' }
+    }
+
+    if (diff.length > 25000) {
+      diff = diff.slice(0, 25000) + '\n\n...[diff truncated for AI context]...'
+    }
+
+    const systemPrompt = "You are an expert developer. Analyze the provided git diff of changes. Pay close attention to the specific files changed, functions modified, and content added or removed. Suggest a highly tailored, clean, precise, and concise commit message following the Conventional Commits style, including a component scope in parentheses (e.g., 'feat(git): add sparkles icon to input', 'fix(sidebar): resolve spinner deadlock'). Give ONLY the raw commit message as your single-line response. No explanation, no markdown backticks, no introductory text, no bullet points, no quotes."
+    const userMessage = `Here is the git diff:\n\n${diff}`
+
+    if (process.env.GROQ_API_KEY) {
+      try {
+        const https = require('https')
+        const body = JSON.stringify({
+          model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userMessage }
+          ],
+          max_tokens: 150,
+        })
+        
+        return new Promise((resolve) => {
+          const req = https.request(
+            {
+              hostname: 'api.groq.com',
+              path: '/openai/v1/chat/completions',
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${process.env.GROQ_API_KEY}` }
+            },
+            (res: any) => {
+              let data = ''
+              res.on('data', (chunk: any) => data += chunk)
+              res.on('end', () => {
+                try {
+                  const parsed = JSON.parse(data)
+                  const text = parsed?.choices?.[0]?.message?.content?.trim()
+                  if (text) {
+                    resolve({ ok: true, message: text.replace(/^[`'"]|[`'"]$/g, '') })
+                  } else {
+                    resolve({ ok: false, error: 'Empty response from Groq' })
+                  }
+                } catch {
+                  resolve({ ok: false, error: 'Failed to parse Groq response' })
+                }
+              })
+            }
+          )
+          req.on('error', (e: Error) => resolve({ ok: false, error: e.message }))
+          req.write(body)
+          req.end()
+        })
+      } catch {
+        // Fallback to Ollama
+      }
+    }
+
+    try {
+      const http = require('http')
+      const body = JSON.stringify({
+        model: 'llama3',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userMessage }
+        ],
+        stream: false,
+      })
+      
+      return new Promise((resolve) => {
+        const req = http.request(
+          { hostname: '127.0.0.1', port: 11434, path: '/api/chat', method: 'POST', headers: { 'Content-Type': 'application/json' } },
+          (res: any) => {
+            let data = ''
+            res.on('data', (chunk: any) => data += chunk)
+            res.on('end', () => {
+              try {
+                const parsed = JSON.parse(data)
+                const text = parsed?.message?.content?.trim()
+                if (text) {
+                  resolve({ ok: true, message: text.replace(/^[`'"]|[`'"]$/g, '') })
+                } else {
+                  resolve({ ok: false, error: 'Empty response from Ollama' })
+                }
+              } catch {
+                resolve({ ok: false, error: 'Failed to parse Ollama response' })
+              }
+            })
+          }
+        )
+        req.on('error', (e: Error) => resolve({ ok: false, error: 'Ollama not running: ' + e.message }))
+        req.write(body)
+        req.end()
+      })
+    } catch (e: any) {
+      return { ok: false, error: 'No AI model available or configured.' }
     }
   })
 
@@ -687,9 +808,9 @@ ${fileContext}`
       let branch = 'unknown'
       let clean = true
       let lastCommit = 'No commits yet'
-      try { branch = execSync('git rev-parse --abbrev-ref HEAD', { cwd, encoding: 'utf-8' }).trim() } catch {}
-      try { clean = execSync('git status --porcelain', { cwd, encoding: 'utf-8' }).trim() === '' } catch {}
-      try { lastCommit = execSync('git log -1 --pretty=format:"%h %s (%ar)"', { cwd, encoding: 'utf-8' }).trim() } catch {}
+      try { branch = execSync('git rev-parse --abbrev-ref HEAD', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER }).trim() } catch {}
+      try { clean = execSync('git status --porcelain', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER }).trim() === '' } catch {}
+      try { lastCommit = execSync('git log -1 --pretty=format:"%h %s (%ar)"', { cwd, encoding: 'utf-8', maxBuffer: MAX_BUFFER }).trim() } catch {}
 
       // Stack detection
       let stack = 'Unknown'
