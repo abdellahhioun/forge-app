@@ -1,15 +1,133 @@
 {
-  "branch": "main",
-  "clean": false,
-  "lastCommit": "f5ec20a refactor(ipc-handlers): enhance AI-assisted commit message generation\\n\\n- Increase token limit for AI model from 150 to 450 to allow for more detailed commit messages\\n- Update system prompt to guide AI in generating premium, highly detailed, and professional Git commit messages\\n- Modify user message formatting to provide clear context for git diff analysis\\n- Refine AI model input to ensure concise and descriptive commit message headers following Conventional Commits style\\n- Improve code readability by adjusting whitespace and comments for better maintainability (5 minutes ago)",
-  "fileCount": 30,
-  "totalLines": 5392,
-  "stack": "Electron + React + Vite + TypeScript + Tailwind",
-  "keyFiles": [
-    "README.md",
-    "electron.vite.config.ts",
-    "package.json",
-    "tsconfig.json"
+  "_meta": {
+    "version": "1.0",
+    "generatedAt": "2026-05-08T11:18:18.502Z",
+    "generatedBy": "index_project (MCP Server)",
+    "indexDuration": "63ms"
+  },
+  "project": {
+    "name": "forge-app",
+    "description": "Personal AI-powered desktop IDE — Electron + MCP + Monaco + xterm.js",
+    "version": "0.1.0",
+    "directory": ".",
+    "scripts": [
+      "dev",
+      "build",
+      "preview",
+      "package",
+      "db:generate",
+      "db:push",
+      "lint",
+      "typecheck"
+    ]
+  },
+  "git": {
+    "isRepo": true,
+    "branch": "main",
+    "remoteUrl": "https://github.com/abdellahhioun/forge-app.git",
+    "recentCommits": [
+      {
+        "hash": "beee95a",
+        "subject": "refactor(build): optimize production build output\\n\\n- Remove unnecessary files from the build output directory to reduce bundle size\\n- Delete  to reflect updated build configuration\\n- Update  to reflect changes in the build process and recent commits\\n- Modify branch and last commit information in  to ensure accuracy\\n- Increment total lines in  to account for updated codebase",
+        "time": "11 hours ago"
+      },
+      {
+        "hash": "f5ec20a",
+        "subject": "refactor(ipc-handlers): enhance AI-assisted commit message generation\\n\\n- Increase token limit for AI model from 150 to 450 to allow for more detailed commit messages\\n- Update system prompt to guide AI in generating premium, highly detailed, and professional Git commit messages\\n- Modify user message formatting to provide clear context for git diff analysis\\n- Refine AI model input to ensure concise and descriptive commit message headers following Conventional Commits style\\n- Improve code readability by adjusting whitespace and comments for better maintainability",
+        "time": "11 hours ago"
+      },
+      {
+        "hash": "ee82b01",
+        "subject": "fix(build): remove unnecessary files from the build output",
+        "time": "11 hours ago"
+      },
+      {
+        "hash": "8299286",
+        "subject": "Merge pull request #4 from abdellahhioun/testt",
+        "time": "12 hours ago"
+      },
+      {
+        "hash": "ea62bdb",
+        "subject": "fix(mcp-context): update context data and remove compiled JS files from build output",
+        "time": "12 hours ago"
+      },
+      {
+        "hash": "75d65a9",
+        "subject": "feat(splash): replace SVG ForgeIcon with logoforforge.png",
+        "time": "13 hours ago"
+      },
+      {
+        "hash": "0b69b48",
+        "subject": "feat(logo): replace generic F logo with premium flame+hammer SVG",
+        "time": "13 hours ago"
+      },
+      {
+        "hash": "0904be5",
+        "subject": "Merge pull request #3 from abdellahhioun/testt",
+        "time": "16 hours ago"
+      },
+      {
+        "hash": "8f0e764",
+        "subject": "fix README: correct typo in description",
+        "time": "16 hours ago"
+      },
+      {
+        "hash": "f662690",
+        "subject": "Merge pull request #2 from abdellahhioun/testt",
+        "time": "16 hours ago"
+      }
+    ],
+    "uncommittedFiles": [
+      "M .mcp-context.json"
+    ],
+    "isDirty": true
+  },
+  "stack": [
+    "TypeScript",
+    "Python",
+    "React",
+    "Vite",
+    "Tailwind CSS",
+    "SQLite"
   ],
-  "indexedAt": "2026-05-08T00:00:50.588Z"
+  "files": {
+    "total": 29,
+    "estimatedLines": 40640,
+    "keyFiles": [],
+    "tree": [
+      "deploy_icon.py",
+      "dist-electron/main/index.js",
+      "dist-electron/preload/index.js",
+      "electron.vite.config.ts",
+      "index.html",
+      "main/db.ts",
+      "main/index.ts",
+      "main/ipc-handlers.ts",
+      "out/renderer/assets/index-BMi0EGIy.css",
+      "out/renderer/assets/index-DR93TumH.js",
+      "out/renderer/index.html",
+      "preload/index.ts",
+      "renderer/index.html",
+      "renderer/src/App.tsx",
+      "renderer/src/components/FileTree.tsx",
+      "renderer/src/components/Sidebar.tsx",
+      "renderer/src/components/SplashScreen.tsx",
+      "renderer/src/components/Topbar.tsx",
+      "renderer/src/index.css",
+      "renderer/src/main.tsx",
+      "renderer/src/panels/Chat.tsx",
+      "renderer/src/panels/Dashboard.tsx",
+      "renderer/src/panels/Editor.tsx",
+      "renderer/src/panels/Git.tsx",
+      "renderer/src/panels/Search.tsx",
+      "renderer/src/panels/Terminal.tsx",
+      "renderer/src/store.ts",
+      "renderer/src/types/window.d.ts",
+      "shared/types.ts"
+    ]
+  },
+  "testing": {
+    "hasTests": false,
+    "framework": null
+  }
 }

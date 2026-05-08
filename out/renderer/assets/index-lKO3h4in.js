@@ -12781,45 +12781,56 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$v = [
+const __iconNode$w = [
   ["path", { d: "m3 15 4-8 4 8", key: "1vwr6u" }],
   ["path", { d: "M4 13h6", key: "1r9ots" }],
   ["circle", { cx: "18", cy: "12", r: "3", key: "1kchzo" }],
   ["path", { d: "M21 9v6", key: "anns31" }]
 ];
-const CaseSensitive = createLucideIcon("case-sensitive", __iconNode$v);
+const CaseSensitive = createLucideIcon("case-sensitive", __iconNode$w);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$u = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$u);
+const __iconNode$v = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$v);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$t = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$t);
+const __iconNode$u = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$u);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$s = [["path", { d: "m15 18-6-6 6-6", key: "1wnfg3" }]];
-const ChevronLeft = createLucideIcon("chevron-left", __iconNode$s);
+const __iconNode$t = [["path", { d: "m15 18-6-6 6-6", key: "1wnfg3" }]];
+const ChevronLeft = createLucideIcon("chevron-left", __iconNode$t);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$r = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$r);
+const __iconNode$s = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$s);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$r = [
+  ["path", { d: "m7 15 5 5 5-5", key: "1hf1tw" }],
+  ["path", { d: "m7 9 5-5 5 5", key: "sgt6xg" }]
+];
+const ChevronsUpDown = createLucideIcon("chevrons-up-down", __iconNode$r);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12827,10 +12838,11 @@ const ChevronRight = createLucideIcon("chevron-right", __iconNode$r);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$q = [
-  ["path", { d: "m7 15 5 5 5-5", key: "1hf1tw" }],
-  ["path", { d: "m7 9 5-5 5 5", key: "sgt6xg" }]
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
+  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
 ];
-const ChevronsUpDown = createLucideIcon("chevrons-up-down", __iconNode$q);
+const CircleAlert = createLucideIcon("circle-alert", __iconNode$q);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12838,11 +12850,11 @@ const ChevronsUpDown = createLucideIcon("chevrons-up-down", __iconNode$q);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$p = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
-  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
+  ["path", { d: "m18 16 4-4-4-4", key: "1inbqp" }],
+  ["path", { d: "m6 8-4 4 4 4", key: "15zrgr" }],
+  ["path", { d: "m14.5 4-5 16", key: "e7oirm" }]
 ];
-const CircleAlert = createLucideIcon("circle-alert", __iconNode$p);
+const CodeXml = createLucideIcon("code-xml", __iconNode$p);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12850,18 +12862,6 @@ const CircleAlert = createLucideIcon("circle-alert", __iconNode$p);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$o = [
-  ["path", { d: "m18 16 4-4-4-4", key: "1inbqp" }],
-  ["path", { d: "m6 8-4 4 4 4", key: "15zrgr" }],
-  ["path", { d: "m14.5 4-5 16", key: "e7oirm" }]
-];
-const CodeXml = createLucideIcon("code-xml", __iconNode$o);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$n = [
   ["path", { d: "M12 20v2", key: "1lh1kg" }],
   ["path", { d: "M12 2v2", key: "tus03m" }],
   ["path", { d: "M17 20v2", key: "1rnc9c" }],
@@ -12877,7 +12877,20 @@ const __iconNode$n = [
   ["rect", { x: "4", y: "4", width: "16", height: "16", rx: "2", key: "1vbyd7" }],
   ["rect", { x: "8", y: "8", width: "8", height: "8", rx: "1", key: "z9xiuo" }]
 ];
-const Cpu = createLucideIcon("cpu", __iconNode$n);
+const Cpu = createLucideIcon("cpu", __iconNode$o);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$n = [
+  ["path", { d: "M10 12.5 8 15l2 2.5", key: "1tg20x" }],
+  ["path", { d: "m14 12.5 2 2.5-2 2.5", key: "yinavb" }],
+  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z", key: "1mlx9k" }]
+];
+const FileCode = createLucideIcon("file-code", __iconNode$n);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12885,12 +12898,11 @@ const Cpu = createLucideIcon("cpu", __iconNode$n);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$m = [
-  ["path", { d: "M10 12.5 8 15l2 2.5", key: "1tg20x" }],
-  ["path", { d: "m14 12.5 2 2.5-2 2.5", key: "yinavb" }],
-  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z", key: "1mlx9k" }]
+  ["path", { d: "M20 7h-3a2 2 0 0 1-2-2V2", key: "x099mo" }],
+  ["path", { d: "M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z", key: "18t6ie" }],
+  ["path", { d: "M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8", key: "1nja0z" }]
 ];
-const FileCode = createLucideIcon("file-code", __iconNode$m);
+const Files = createLucideIcon("files", __iconNode$m);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12898,11 +12910,15 @@ const FileCode = createLucideIcon("file-code", __iconNode$m);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$l = [
-  ["path", { d: "M20 7h-3a2 2 0 0 1-2-2V2", key: "x099mo" }],
-  ["path", { d: "M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z", key: "18t6ie" }],
-  ["path", { d: "M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8", key: "1nja0z" }]
+  [
+    "path",
+    {
+      d: "m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2",
+      key: "usdka0"
+    }
+  ]
 ];
-const Files = createLucideIcon("files", __iconNode$l);
+const FolderOpen = createLucideIcon("folder-open", __iconNode$l);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12913,12 +12929,12 @@ const __iconNode$k = [
   [
     "path",
     {
-      d: "m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2",
-      key: "usdka0"
+      d: "M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z",
+      key: "1kt360"
     }
   ]
 ];
-const FolderOpen = createLucideIcon("folder-open", __iconNode$k);
+const Folder = createLucideIcon("folder", __iconNode$k);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12926,15 +12942,12 @@ const FolderOpen = createLucideIcon("folder-open", __iconNode$k);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$j = [
-  [
-    "path",
-    {
-      d: "M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z",
-      key: "1kt360"
-    }
-  ]
+  ["line", { x1: "6", x2: "6", y1: "3", y2: "15", key: "17qcm7" }],
+  ["circle", { cx: "18", cy: "6", r: "3", key: "1h7g24" }],
+  ["circle", { cx: "6", cy: "18", r: "3", key: "fqmcym" }],
+  ["path", { d: "M18 9a9 9 0 0 1-9 9", key: "n2h4wq" }]
 ];
-const Folder = createLucideIcon("folder", __iconNode$j);
+const GitBranch = createLucideIcon("git-branch", __iconNode$j);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12942,12 +12955,11 @@ const Folder = createLucideIcon("folder", __iconNode$j);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$i = [
-  ["line", { x1: "6", x2: "6", y1: "3", y2: "15", key: "17qcm7" }],
-  ["circle", { cx: "18", cy: "6", r: "3", key: "1h7g24" }],
-  ["circle", { cx: "6", cy: "18", r: "3", key: "fqmcym" }],
-  ["path", { d: "M18 9a9 9 0 0 1-9 9", key: "n2h4wq" }]
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }],
+  ["line", { x1: "3", x2: "9", y1: "12", y2: "12", key: "1dyftd" }],
+  ["line", { x1: "15", x2: "21", y1: "12", y2: "12", key: "oup4p8" }]
 ];
-const GitBranch = createLucideIcon("git-branch", __iconNode$i);
+const GitCommitHorizontal = createLucideIcon("git-commit-horizontal", __iconNode$i);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12955,11 +12967,12 @@ const GitBranch = createLucideIcon("git-branch", __iconNode$i);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$h = [
-  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }],
-  ["line", { x1: "3", x2: "9", y1: "12", y2: "12", key: "1dyftd" }],
-  ["line", { x1: "15", x2: "21", y1: "12", y2: "12", key: "oup4p8" }]
+  ["circle", { cx: "18", cy: "18", r: "3", key: "1xkwt0" }],
+  ["circle", { cx: "6", cy: "6", r: "3", key: "1lh9wr" }],
+  ["path", { d: "M13 6h3a2 2 0 0 1 2 2v7", key: "1yeb86" }],
+  ["line", { x1: "6", x2: "6", y1: "9", y2: "21", key: "rroup" }]
 ];
-const GitCommitHorizontal = createLucideIcon("git-commit-horizontal", __iconNode$h);
+const GitPullRequest = createLucideIcon("git-pull-request", __iconNode$h);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12967,19 +12980,6 @@ const GitCommitHorizontal = createLucideIcon("git-commit-horizontal", __iconNode
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$g = [
-  ["circle", { cx: "18", cy: "18", r: "3", key: "1xkwt0" }],
-  ["circle", { cx: "6", cy: "6", r: "3", key: "1lh9wr" }],
-  ["path", { d: "M13 6h3a2 2 0 0 1 2 2v7", key: "1yeb86" }],
-  ["line", { x1: "6", x2: "6", y1: "9", y2: "21", key: "rroup" }]
-];
-const GitPullRequest = createLucideIcon("git-pull-request", __iconNode$g);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$f = [
   [
     "path",
     {
@@ -13002,7 +13002,20 @@ const __iconNode$f = [
     }
   ]
 ];
-const Layers = createLucideIcon("layers", __iconNode$f);
+const Layers = createLucideIcon("layers", __iconNode$g);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$f = [
+  ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
+  ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
+  ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
+  ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
+];
+const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$f);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -13010,12 +13023,9 @@ const Layers = createLucideIcon("layers", __iconNode$f);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$e = [
-  ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
-  ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
-  ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
-  ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
+  ["path", { d: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", key: "1lielz" }]
 ];
-const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$e);
+const MessageSquare = createLucideIcon("message-square", __iconNode$e);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -13023,9 +13033,9 @@ const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$e);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$d = [
-  ["path", { d: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", key: "1lielz" }]
+  ["path", { d: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z", key: "a7tn18" }]
 ];
-const MessageSquare = createLucideIcon("message-square", __iconNode$d);
+const Moon = createLucideIcon("moon", __iconNode$d);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -13033,9 +13043,16 @@ const MessageSquare = createLucideIcon("message-square", __iconNode$d);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$c = [
-  ["path", { d: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z", key: "a7tn18" }]
+  ["path", { d: "M13.234 20.252 21 12.3", key: "1cbrk9" }],
+  [
+    "path",
+    {
+      d: "m16 6-8.414 8.586a2 2 0 0 0 0 2.828 2 2 0 0 0 2.828 0l8.414-8.586a4 4 0 0 0 0-5.656 4 4 0 0 0-5.656 0l-8.415 8.585a6 6 0 1 0 8.486 8.486",
+      key: "1pkts6"
+    }
+  ]
 ];
-const Moon = createLucideIcon("moon", __iconNode$c);
+const Paperclip = createLucideIcon("paperclip", __iconNode$c);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -22223,7 +22240,66 @@ function FileRow({ file, type, active, onClick }) {
     }
   );
 }
-function renderMarkdown(text) {
+function CodeBlock({ lang, code, onApply }) {
+  const [copied, setCopied] = reactExports.useState(false);
+  const [applied, setApplied] = reactExports.useState(false);
+  const copy = () => {
+    navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2e3);
+  };
+  const apply = () => {
+    onApply?.(code);
+    setApplied(true);
+    setTimeout(() => setApplied(false), 2500);
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { margin: "8px 0", borderRadius: 6, overflow: "hidden", border: "1px solid var(--brd)" }, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: "3px 8px",
+      background: "var(--offset)",
+      borderBottom: "1px solid var(--brd)"
+    }, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontSize: 10, fontFamily: "monospace", color: "var(--faint)", letterSpacing: ".06em", textTransform: "uppercase" }, children: lang || "code" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", gap: 4 }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: copy, title: "Copy code", style: {
+          fontSize: 10,
+          padding: "2px 7px",
+          borderRadius: 4,
+          cursor: "pointer",
+          background: copied ? "rgba(79,152,163,.15)" : "transparent",
+          color: copied ? "var(--pri)" : "var(--faint)",
+          border: "1px solid var(--brd)",
+          transition: "all .15s"
+        }, children: copied ? "✓ Copied" : "Copy" }),
+        onApply && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: apply, title: "Apply to active file", style: {
+          fontSize: 10,
+          padding: "2px 7px",
+          borderRadius: 4,
+          cursor: "pointer",
+          background: applied ? "rgba(79,152,163,.25)" : "var(--pri)",
+          color: "#fff",
+          border: "none",
+          transition: "all .15s",
+          fontWeight: 600
+        }, children: applied ? "✓ Applied!" : "⚡ Apply" })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("pre", { style: {
+      margin: 0,
+      padding: "10px 12px",
+      background: "var(--bg)",
+      fontSize: 12,
+      overflowX: "auto",
+      lineHeight: 1.6,
+      fontFamily: 'var(--font-mono, "Fira Code", monospace)',
+      color: "var(--txt)"
+    }, children: /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: code }) })
+  ] });
+}
+function renderMarkdown(text, onApply) {
   const nodes = [];
   const parts = text.split(/(```[\s\S]*?```|`[^`]+`)/g);
   parts.forEach((part, i) => {
@@ -22231,34 +22307,7 @@ function renderMarkdown(text) {
       const lines = part.slice(3).split("\n");
       const lang = lines[0].trim();
       const code = lines.slice(1).join("\n").replace(/```$/, "").trimEnd();
-      nodes.push(
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-          margin: "8px 0",
-          borderRadius: 6,
-          overflow: "hidden",
-          border: "1px solid var(--brd)"
-        }, children: [
-          lang && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
-            padding: "3px 10px",
-            fontSize: 10,
-            fontFamily: "monospace",
-            background: "var(--offset)",
-            color: "var(--faint)",
-            letterSpacing: ".06em",
-            textTransform: "uppercase"
-          }, children: lang }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("pre", { style: {
-            margin: 0,
-            padding: "10px 12px",
-            background: "var(--bg)",
-            fontSize: 12,
-            overflowX: "auto",
-            lineHeight: 1.6,
-            fontFamily: 'var(--font-mono, "Fira Code", monospace)',
-            color: "var(--txt)"
-          }, children: /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: code }) })
-        ] }, i)
-      );
+      nodes.push(/* @__PURE__ */ jsxRuntimeExports.jsx(CodeBlock, { lang, code, onApply }, i));
     } else if (part.startsWith("`") && part.endsWith("`")) {
       const code = part.slice(1, -1);
       nodes.push(
@@ -22304,7 +22353,7 @@ function TypingDots() {
       ` })
   ] });
 }
-function MessageBubble({ msg, isStreaming }) {
+function MessageBubble({ msg, isStreaming, onApply }) {
   const isUser = msg.role === "user";
   const isError = msg.isError;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
@@ -22340,7 +22389,7 @@ function MessageBubble({ msg, isStreaming }) {
       color: isError ? "var(--err-txt, #f87171)" : "var(--txt)",
       userSelect: "text"
     }, children: [
-      isUser ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { whiteSpace: "pre-wrap" }, children: msg.content }) : isStreaming && msg.content === "" ? /* @__PURE__ */ jsxRuntimeExports.jsx(TypingDots, {}) : renderMarkdown(msg.content),
+      isUser ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { whiteSpace: "pre-wrap" }, children: msg.content }) : isStreaming && msg.content === "" ? /* @__PURE__ */ jsxRuntimeExports.jsx(TypingDots, {}) : renderMarkdown(msg.content, onApply),
       isStreaming && msg.content !== "" && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: {
         display: "inline-block",
         width: 2,
@@ -22396,7 +22445,13 @@ function ModelToggle({ value, onChange }) {
   }) });
 }
 function ChatPanel() {
-  const { activeProject } = useForgeStore();
+  const { activeProject, activeFile, updateFileContent, markFileSaved } = useForgeStore();
+  const onApply = reactExports.useCallback(async (code) => {
+    if (!activeFile) return;
+    await window.forge.files.write(activeFile, code);
+    updateFileContent(activeFile, code);
+    markFileSaved(activeFile);
+  }, [activeFile, updateFileContent, markFileSaved]);
   const [sessions, setSessions] = reactExports.useState([]);
   const [activeSession, setActiveSession] = reactExports.useState(null);
   const [messages, setMessages] = reactExports.useState([]);
@@ -22411,6 +22466,10 @@ function ChatPanel() {
   const isResizingRef = reactExports.useRef(false);
   const resizeStartXRef = reactExports.useRef(0);
   const resizeStartWidthRef = reactExports.useRef(210);
+  const [atQuery, setAtQuery] = reactExports.useState(null);
+  const [atResults, setAtResults] = reactExports.useState([]);
+  const [attachedFiles, setAttachedFiles] = reactExports.useState([]);
+  const atIndexRef = reactExports.useRef(0);
   reactExports.useEffect(() => {
     window.forge.chat.sessions().then(setSessions);
   }, [activeProject]);
@@ -22527,17 +22586,30 @@ function ChatPanel() {
   }, [sessions, activeProject?.id]);
   const send = reactExports.useCallback(async () => {
     if (!input.trim() || !activeSession || isStreaming) return;
-    const content = input.trim();
+    const rawContent = input.trim();
     setInput("");
+    setAttachedFiles([]);
     setTimeout(() => inputRef.current?.focus(), 0);
+    const fileBlocks = attachedFiles.map((f) => {
+      const ext = f.path.split(".").pop() ?? "";
+      return `**@${f.path.split("/").pop()}** \`${f.path}\`
+\`\`\`${ext}
+${f.content}
+\`\`\``;
+    }).join("\n\n");
+    const content = fileBlocks ? `${fileBlocks}
+
+${rawContent}` : rawContent;
     const userMsg = {
       id: Math.random().toString(36),
       role: "user",
-      content,
+      content: attachedFiles.length ? `📎 ${attachedFiles.map((f) => f.path.split("/").pop()).join(", ")}
+
+${rawContent}` : rawContent,
       createdAt: (/* @__PURE__ */ new Date()).toISOString()
     };
     setMessages((prev) => [...prev, userMsg]);
-    await window.forge.chat.send(activeSession.id, "user", content);
+    await window.forge.chat.send(activeSession.id, "user", userMsg.content);
     const aiId = Math.random().toString(36);
     streamingIdRef.current = aiId;
     const aiMsg = {
@@ -22548,7 +22620,7 @@ function ChatPanel() {
     };
     setMessages((prev) => [...prev, aiMsg]);
     setIsStreaming(true);
-    const history = [...messages, userMsg].slice(-20).map((m) => ({ role: m.role === "user" ? "user" : "assistant", content: m.content }));
+    const history = [...messages, { ...userMsg, content }].slice(-20).map((m) => ({ role: m.role === "user" ? "user" : "assistant", content: m.content }));
     let projectCtx;
     if (activeProject?.path) {
       try {
@@ -22558,12 +22630,73 @@ function ChatPanel() {
       }
     }
     window.forge.chat.ai(history, projectCtx, model, activeProject?.path);
-  }, [input, activeSession, isStreaming, messages, activeProject, model]);
+  }, [input, attachedFiles, activeSession, isStreaming, messages, activeProject, model]);
   const handleInput = (e) => {
-    setInput(e.target.value);
+    const val = e.target.value;
+    setInput(val);
     e.target.style.height = "auto";
     e.target.style.height = `${Math.min(e.target.scrollHeight, 120)}px`;
+    const atMatch = val.match(/@([\.\w/\-]*)$/);
+    if (atMatch) {
+      const query = atMatch[1].toLowerCase();
+      setAtQuery(query);
+      atIndexRef.current = 0;
+      if (activeProject?.path) {
+        window.forge.files.list(activeProject.path).then(
+          (files) => setAtResults(files.filter((f) => f.toLowerCase().includes(query)).slice(0, 8))
+        ).catch(() => setAtResults([]));
+      }
+    } else {
+      setAtQuery(null);
+      setAtResults([]);
+    }
   };
+  const handleKeyDown = (e) => {
+    if (atQuery !== null && atResults.length > 0) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        atIndexRef.current = (atIndexRef.current + 1) % atResults.length;
+        setAtResults((r) => [...r]);
+        return;
+      }
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        atIndexRef.current = (atIndexRef.current - 1 + atResults.length) % atResults.length;
+        setAtResults((r) => [...r]);
+        return;
+      }
+      if (e.key === "Tab" || e.key === "Enter") {
+        e.preventDefault();
+        attachFile(atResults[atIndexRef.current]);
+        return;
+      }
+      if (e.key === "Escape") {
+        setAtQuery(null);
+        setAtResults([]);
+        return;
+      }
+    }
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      send();
+    }
+  };
+  const attachFile = reactExports.useCallback(async (filePath) => {
+    if (!attachedFiles.find((f) => f.path === filePath)) {
+      try {
+        const res = await window.forge.files.read(filePath);
+        const content = typeof res === "string" ? res : res?.content ?? "";
+        setAttachedFiles((prev) => [...prev, { path: filePath, content: String(content) }]);
+      } catch {
+        setAttachedFiles((prev) => [...prev, { path: filePath, content: "(could not read)" }]);
+      }
+    }
+    setInput((prev) => prev.replace(/@[\.\w/\-]*$/, ""));
+    setAtQuery(null);
+    setAtResults([]);
+    setTimeout(() => inputRef.current?.focus(), 0);
+  }, [attachedFiles]);
+  const removeAttached = (path) => setAttachedFiles((prev) => prev.filter((f) => f.path !== path));
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, display: "flex", overflow: "hidden" }, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
       width: sidebarWidth,
@@ -22778,77 +22911,113 @@ function ChatPanel() {
           MessageBubble,
           {
             msg,
-            isStreaming: isStreaming && idx === messages.length - 1 && msg.role === "assistant"
+            isStreaming: isStreaming && idx === messages.length - 1 && msg.role === "assistant",
+            onApply
           },
           msg.id
         )),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref: bottomRef })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-        padding: "10px 14px 12px",
-        borderTop: "1px solid var(--brd)",
-        background: "var(--surface)",
-        display: "flex",
-        gap: 8,
-        alignItems: "flex-end"
-      }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "textarea",
-          {
-            ref: inputRef,
-            value: input,
-            onChange: handleInput,
-            onKeyDown: (e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                send();
-              }
-            },
-            placeholder: isStreaming ? "Waiting for response…" : "Ask anything… (Enter ↵ send · Shift+Enter newline)",
-            rows: 1,
-            disabled: isStreaming,
-            style: {
-              flex: 1,
-              background: "var(--offset)",
-              border: "1px solid var(--brd)",
-              borderRadius: "var(--r3)",
-              color: "var(--txt)",
-              fontSize: 13,
-              padding: "9px 13px",
-              resize: "none",
-              outline: "none",
-              fontFamily: "var(--font-body)",
-              maxHeight: 120,
-              overflowY: "auto",
-              lineHeight: 1.5,
-              transition: "border-color .15s",
-              opacity: isStreaming ? 0.6 : 1
-            },
-            onFocus: (e) => e.target.style.borderColor = "var(--pri)",
-            onBlur: (e) => e.target.style.borderColor = "var(--brd)"
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            onClick: send,
-            disabled: !input.trim() || isStreaming,
-            title: "Send (Enter)",
-            style: {
-              width: 36,
-              height: 36,
-              borderRadius: "var(--r2)",
-              flexShrink: 0,
-              background: input.trim() && !isStreaming ? "var(--pri)" : "var(--dynamic)",
-              color: input.trim() && !isStreaming ? "#fff" : "var(--faint)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              transition: "background .15s, color .15s"
-            },
-            children: /* @__PURE__ */ jsxRuntimeExports.jsx(Send, { size: 14 })
-          }
-        )
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { padding: "10px 14px 12px", borderTop: "1px solid var(--brd)", background: "var(--surface)", position: "relative" }, children: [
+        attachedFiles.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 8 }, children: attachedFiles.map((f) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 5,
+          background: "var(--pri-glow)",
+          border: "1px solid rgba(79,152,163,.35)",
+          borderRadius: "var(--r3)",
+          padding: "3px 8px",
+          fontSize: 11,
+          color: "var(--pri)",
+          fontFamily: "var(--font-mono)"
+        }, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Paperclip, { size: 10 }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: f.path.split("/").pop() }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => removeAttached(f.path), style: { color: "var(--pri)", display: "flex", opacity: 0.7 }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 10 }) })
+        ] }, f.path)) }),
+        atQuery !== null && atResults.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
+          position: "absolute",
+          bottom: "100%",
+          left: 14,
+          right: 14,
+          zIndex: 50,
+          background: "var(--surface)",
+          border: "1px solid var(--brd)",
+          borderRadius: "var(--r2)",
+          overflow: "hidden",
+          boxShadow: "0 -4px 16px rgba(0,0,0,.15)",
+          marginBottom: 4
+        }, children: atResults.map((f, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { onClick: () => attachFile(f), style: {
+          width: "100%",
+          textAlign: "left",
+          padding: "7px 12px",
+          fontSize: 12,
+          fontFamily: "var(--font-mono)",
+          color: i === atIndexRef.current ? "var(--pri)" : "var(--txt)",
+          background: i === atIndexRef.current ? "var(--pri-glow)" : "transparent",
+          borderBottom: i < atResults.length - 1 ? "1px solid var(--brd)" : "none",
+          display: "flex",
+          gap: 10,
+          alignItems: "center"
+        }, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Paperclip, { size: 10, style: { flexShrink: 0, opacity: 0.5 } }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: f.split("/").pop() }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { color: "var(--faint)", fontSize: 10, flexShrink: 0 }, children: f.replace(activeProject?.path ?? "", "") })
+        ] }, f)) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", gap: 8, alignItems: "flex-end" }, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "textarea",
+            {
+              ref: inputRef,
+              value: input,
+              onChange: handleInput,
+              onKeyDown: handleKeyDown,
+              placeholder: isStreaming ? "Waiting for response…" : "Ask anything… · type @ to attach a file",
+              rows: 1,
+              disabled: isStreaming,
+              style: {
+                flex: 1,
+                background: "var(--offset)",
+                border: "1px solid var(--brd)",
+                borderRadius: "var(--r3)",
+                color: "var(--txt)",
+                fontSize: 13,
+                padding: "9px 13px",
+                resize: "none",
+                outline: "none",
+                fontFamily: "var(--font-body)",
+                maxHeight: 120,
+                overflowY: "auto",
+                lineHeight: 1.5,
+                transition: "border-color .15s",
+                opacity: isStreaming ? 0.6 : 1
+              },
+              onFocus: (e) => e.target.style.borderColor = "var(--pri)",
+              onBlur: (e) => e.target.style.borderColor = "var(--brd)"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              onClick: send,
+              disabled: !input.trim() || isStreaming,
+              title: "Send (Enter)",
+              style: {
+                width: 36,
+                height: 36,
+                borderRadius: "var(--r2)",
+                flexShrink: 0,
+                background: input.trim() && !isStreaming ? "var(--pri)" : "var(--dynamic)",
+                color: input.trim() && !isStreaming ? "#fff" : "var(--faint)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "background .15s, color .15s"
+              },
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(Send, { size: 14 })
+            }
+          )
+        ] })
       ] })
     ] }) })
   ] });
