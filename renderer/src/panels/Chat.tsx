@@ -1,51 +1,74 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { useForgeStore } from '../store'
-import { Send, Plus, MessageSquare, Zap, AlertCircle, Trash2 } from 'lucide-react'
+import { Send, Plus, MessageSquare, Zap, AlertCircle, Trash2, Paperclip, X as XIcon } from 'lucide-react'
 import type { ChatSession, ChatMessage, AiModel } from '../../../shared/types'
 
+// ─── CodeBlock with Copy + Apply buttons ──────────────────────────────────
+function CodeBlock({ lang, code, onApply }: { lang: string; code: string; onApply?: (code: string) => void }) {
+  const [copied, setCopied] = useState(false)
+  const [applied, setApplied] = useState(false)
+  const copy = () => {
+    navigator.clipboard.writeText(code)
+    setCopied(true); setTimeout(() => setCopied(false), 2000)
+  }
+  const apply = () => {
+    onApply?.(code)
+    setApplied(true); setTimeout(() => setApplied(false), 2500)
+  }
+  return (
+    <div style={{ margin: '8px 0', borderRadius: 6, overflow: 'hidden', border: '1px solid var(--brd)' }}>
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '3px 8px', background: 'var(--offset)', borderBottom: '1px solid var(--brd)',
+      }}>
+        <span style={{ fontSize: 10, fontFamily: 'monospace', color: 'var(--faint)', letterSpacing: '.06em', textTransform: 'uppercase' }}>
+          {lang || 'code'}
+        </span>
+        <div style={{ display: 'flex', gap: 4 }}>
+          <button onClick={copy} title="Copy code" style={{
+            fontSize: 10, padding: '2px 7px', borderRadius: 4, cursor: 'pointer',
+            background: copied ? 'rgba(79,152,163,.15)' : 'transparent',
+            color: copied ? 'var(--pri)' : 'var(--faint)',
+            border: '1px solid var(--brd)', transition: 'all .15s',
+          }}>{copied ? '✓ Copied' : 'Copy'}</button>
+          {onApply && (
+            <button onClick={apply} title="Apply to active file" style={{
+              fontSize: 10, padding: '2px 7px', borderRadius: 4, cursor: 'pointer',
+              background: applied ? 'rgba(79,152,163,.25)' : 'var(--pri)',
+              color: '#fff', border: 'none', transition: 'all .15s', fontWeight: 600,
+            }}>{applied ? '✓ Applied!' : '⚡ Apply'}</button>
+          )}
+        </div>
+      </div>
+      <pre style={{
+        margin: 0, padding: '10px 12px', background: 'var(--bg)', fontSize: 12,
+        overflowX: 'auto', lineHeight: 1.6,
+        fontFamily: 'var(--font-mono, "Fira Code", monospace)', color: 'var(--txt)',
+      }}><code>{code}</code></pre>
+    </div>
+  )
+}
+
 // ─── Tiny inline markdown renderer ─────────────────────────────────────────
-function renderMarkdown(text: string): React.ReactNode[] {
+function renderMarkdown(text: string, onApply?: (code: string) => void): React.ReactNode[] {
   const nodes: React.ReactNode[] = []
-  // Split on code blocks first
   const parts = text.split(/(```[\s\S]*?```|`[^`]+`)/g)
   parts.forEach((part, i) => {
     if (part.startsWith('```')) {
       const lines = part.slice(3).split('\n')
       const lang = lines[0].trim()
       const code = lines.slice(1).join('\n').replace(/```$/, '').trimEnd()
-      nodes.push(
-        <div key={i} style={{
-          margin: '8px 0', borderRadius: 6, overflow: 'hidden',
-          border: '1px solid var(--brd)',
-        }}>
-          {lang && (
-            <div style={{
-              padding: '3px 10px', fontSize: 10, fontFamily: 'monospace',
-              background: 'var(--offset)', color: 'var(--faint)',
-              letterSpacing: '.06em', textTransform: 'uppercase',
-            }}>{lang}</div>
-          )}
-          <pre style={{
-            margin: 0, padding: '10px 12px',
-            background: 'var(--bg)', fontSize: 12,
-            overflowX: 'auto', lineHeight: 1.6,
-            fontFamily: 'var(--font-mono, "Fira Code", monospace)',
-            color: 'var(--txt)',
-          }}><code>{code}</code></pre>
-        </div>
-      )
+      nodes.push(<CodeBlock key={i} lang={lang} code={code} onApply={onApply} />)
     } else if (part.startsWith('`') && part.endsWith('`')) {
       const code = part.slice(1, -1)
       nodes.push(
         <code key={i} style={{
-          fontFamily: 'var(--font-mono, monospace)',
-          fontSize: '0.85em', background: 'var(--offset)',
-          border: '1px solid var(--brd)', borderRadius: 4,
-          padding: '1px 5px', color: 'var(--txt)',
+          fontFamily: 'var(--font-mono, monospace)', fontSize: '0.85em',
+          background: 'var(--offset)', border: '1px solid var(--brd)',
+          borderRadius: 4, padding: '1px 5px', color: 'var(--txt)',
         }}>{code}</code>
       )
     } else {
-      // Handle bold, line breaks
       const inline = part.split(/(\*\*[^*]+\*\*|\n)/g)
       inline.forEach((seg, j) => {
         if (seg.startsWith('**') && seg.endsWith('**')) {
@@ -60,6 +83,7 @@ function renderMarkdown(text: string): React.ReactNode[] {
   })
   return nodes
 }
+
 
 // ─── Typing dots ────────────────────────────────────────────────────────────
 function TypingDots() {
@@ -83,7 +107,7 @@ function TypingDots() {
 }
 
 // ─── Message bubble ──────────────────────────────────────────────────────────
-function MessageBubble({ msg, isStreaming }: { msg: ChatMessage; isStreaming?: boolean }) {
+function MessageBubble({ msg, isStreaming, onApply }: { msg: ChatMessage; isStreaming?: boolean; onApply?: (code: string) => void }) {
   const isUser = msg.role === 'user'
   const isError = (msg as any).isError
   return (
@@ -124,7 +148,7 @@ function MessageBubble({ msg, isStreaming }: { msg: ChatMessage; isStreaming?: b
           ? <span style={{ whiteSpace: 'pre-wrap' }}>{msg.content}</span>
           : isStreaming && msg.content === ''
             ? <TypingDots />
-            : renderMarkdown(msg.content)
+            : renderMarkdown(msg.content, onApply)
         }
         {isStreaming && msg.content !== '' && (
           <span style={{
@@ -180,7 +204,16 @@ function ModelToggle({ value, onChange }: { value: AiModel; onChange: (m: AiMode
 
 // ─── Main panel ─────────────────────────────────────────────────────────────
 export default function ChatPanel() {
-  const { activeProject } = useForgeStore()
+  const { activeProject, activeFile, updateFileContent, markFileSaved } = useForgeStore()
+
+  // ─── Apply AI code block to active file ─────────────────────────────────────
+  const onApply = useCallback(async (code: string) => {
+    if (!activeFile) return
+    await window.forge.files.write(activeFile, code)
+    updateFileContent(activeFile, code)
+    markFileSaved(activeFile)
+  }, [activeFile, updateFileContent, markFileSaved])
+
   const [sessions, setSessions] = useState<ChatSession[]>([])
   const [activeSession, setActiveSession] = useState<ChatSession | null>(null)
   const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -195,6 +228,12 @@ export default function ChatPanel() {
   const isResizingRef = useRef(false)
   const resizeStartXRef = useRef(0)
   const resizeStartWidthRef = useRef(210)
+
+  // ─── @file context state ──────────────────────────────────────────────────
+  const [atQuery, setAtQuery] = useState<string | null>(null)       // null = picker closed
+  const [atResults, setAtResults] = useState<string[]>([])
+  const [attachedFiles, setAttachedFiles] = useState<{ path: string; content: string }[]>([])
+  const atIndexRef = useRef(0)
 
   // ─── Load sessions ────────────────────────────────────────────────────────
   useEffect(() => {
@@ -329,34 +368,44 @@ export default function ChatPanel() {
   // ─── Send ────────────────────────────────────────────────────────────────
   const send = useCallback(async () => {
     if (!input.trim() || !activeSession || isStreaming) return
-    const content = input.trim()
+    const rawContent = input.trim()
     setInput('')
+    setAttachedFiles([]) // clear pills after send
     setTimeout(() => inputRef.current?.focus(), 0)
 
-    // Add user message optimistically
+    // ── Prepend attached file contents as code blocks ────────────────────────
+    const fileBlocks = attachedFiles
+      .map(f => {
+        const ext = f.path.split('.').pop() ?? ''
+        return `**@${f.path.split('/').pop()}** \`${f.path}\`\n\`\`\`${ext}\n${f.content}\n\`\`\``
+      })
+      .join('\n\n')
+    const content = fileBlocks ? `${fileBlocks}\n\n${rawContent}` : rawContent
+
+    // Add user message optimistically (show raw input, not the file dump)
     const userMsg: ChatMessage = {
       id: Math.random().toString(36),
       role: 'user',
-      content,
+      content: attachedFiles.length
+        ? `📎 ${attachedFiles.map(f => f.path.split('/').pop()).join(', ')}\n\n${rawContent}`
+        : rawContent,
       createdAt: new Date().toISOString(),
     }
     setMessages(prev => [...prev, userMsg])
-    await window.forge.chat.send(activeSession.id, 'user', content)
+    await window.forge.chat.send(activeSession.id, 'user', userMsg.content)
 
     // Add empty assistant message as streaming target
     const aiId = Math.random().toString(36)
     streamingIdRef.current = aiId
     const aiMsg: ChatMessage = {
-      id: aiId,
-      role: 'assistant',
-      content: '',
+      id: aiId, role: 'assistant', content: '',
       createdAt: new Date().toISOString(),
     }
     setMessages(prev => [...prev, aiMsg])
     setIsStreaming(true)
 
-    // Build history for context (last 20 messages)
-    const history = [...messages, userMsg]
+    // Build history (last 20 messages)
+    const history = [...messages, { ...userMsg, content }] // full content with file blocks for AI
       .slice(-20)
       .map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content }))
 
@@ -370,14 +419,54 @@ export default function ChatPanel() {
     }
 
     window.forge.chat.ai(history, projectCtx, model, activeProject?.path)
-  }, [input, activeSession, isStreaming, messages, activeProject, model])
+  }, [input, attachedFiles, activeSession, isStreaming, messages, activeProject, model])
 
-  // ─── Textarea auto-resize ────────────────────────────────────────────────
+  // ─── Textarea auto-resize + @file detection ──────────────────────────────
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInput(e.target.value)
+    const val = e.target.value
+    setInput(val)
     e.target.style.height = 'auto'
     e.target.style.height = `${Math.min(e.target.scrollHeight, 120)}px`
+    const atMatch = val.match(/@([\.\w/\-]*)$/)
+    if (atMatch) {
+      const query = atMatch[1].toLowerCase()
+      setAtQuery(query)
+      atIndexRef.current = 0
+      if (activeProject?.path) {
+        window.forge.files.list(activeProject.path)
+          .then((files: string[]) =>
+            setAtResults(files.filter(f => f.toLowerCase().includes(query)).slice(0, 8))
+          ).catch(() => setAtResults([]))
+      }
+    } else { setAtQuery(null); setAtResults([]) }
   }
+
+  // ─── @file keyboard nav ────────────────────────────────────────────────────
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (atQuery !== null && atResults.length > 0) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); atIndexRef.current = (atIndexRef.current + 1) % atResults.length; setAtResults(r => [...r]); return }
+      if (e.key === 'ArrowUp')   { e.preventDefault(); atIndexRef.current = (atIndexRef.current - 1 + atResults.length) % atResults.length; setAtResults(r => [...r]); return }
+      if (e.key === 'Tab' || (e.key === 'Enter')) { e.preventDefault(); attachFile(atResults[atIndexRef.current]); return }
+      if (e.key === 'Escape')    { setAtQuery(null); setAtResults([]); return }
+    }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() }
+  }
+
+  // ─── Attach a file ─────────────────────────────────────────────────────────
+  const attachFile = useCallback(async (filePath: string) => {
+    if (!attachedFiles.find(f => f.path === filePath)) {
+      try {
+        const res = await window.forge.files.read(filePath)
+        const content = typeof res === 'string' ? res : (res?.content ?? '')
+        setAttachedFiles(prev => [...prev, { path: filePath, content: String(content) }])
+      } catch { setAttachedFiles(prev => [...prev, { path: filePath, content: '(could not read)' }]) }
+    }
+    setInput(prev => prev.replace(/@[\.\w/\-]*$/, ''))
+    setAtQuery(null); setAtResults([])
+    setTimeout(() => inputRef.current?.focus(), 0)
+  }, [attachedFiles])
+
+  const removeAttached = (path: string) => setAttachedFiles(prev => prev.filter(f => f.path !== path))
 
   return (
     <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
@@ -555,60 +644,101 @@ export default function ChatPanel() {
                   key={msg.id}
                   msg={msg}
                   isStreaming={isStreaming && idx === messages.length - 1 && msg.role === 'assistant'}
+                  onApply={onApply}
                 />
               ))}
               <div ref={bottomRef} />
             </div>
 
             {/* Input */}
-            <div style={{
-              padding: '10px 14px 12px',
-              borderTop: '1px solid var(--brd)',
-              background: 'var(--surface)',
-              display: 'flex', gap: 8, alignItems: 'flex-end',
-            }}>
-              <textarea
-                ref={inputRef}
-                value={input}
-                onChange={handleInput}
-                onKeyDown={e => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault()
-                    send()
-                  }
-                }}
-                placeholder={isStreaming ? 'Waiting for response…' : 'Ask anything… (Enter ↵ send · Shift+Enter newline)'}
-                rows={1}
-                disabled={isStreaming}
-                style={{
-                  flex: 1,
-                  background: 'var(--offset)', border: '1px solid var(--brd)',
-                  borderRadius: 'var(--r3)', color: 'var(--txt)',
-                  fontSize: 13, padding: '9px 13px',
-                  resize: 'none', outline: 'none',
-                  fontFamily: 'var(--font-body)',
-                  maxHeight: 120, overflowY: 'auto',
-                  lineHeight: 1.5, transition: 'border-color .15s',
-                  opacity: isStreaming ? .6 : 1,
-                }}
-                onFocus={e => (e.target.style.borderColor = 'var(--pri)')}
-                onBlur={e => (e.target.style.borderColor = 'var(--brd)')}
-              />
-              <button
-                onClick={send}
-                disabled={!input.trim() || isStreaming}
-                title="Send (Enter)"
-                style={{
-                  width: 36, height: 36, borderRadius: 'var(--r2)', flexShrink: 0,
-                  background: input.trim() && !isStreaming ? 'var(--pri)' : 'var(--dynamic)',
-                  color: input.trim() && !isStreaming ? '#fff' : 'var(--faint)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  transition: 'background .15s, color .15s',
-                }}
-              >
-                <Send size={14} />
-              </button>
+            <div style={{ padding: '10px 14px 12px', borderTop: '1px solid var(--brd)', background: 'var(--surface)', position: 'relative' }}>
+
+              {/* Attached file pills */}
+              {attachedFiles.length > 0 && (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 8 }}>
+                  {attachedFiles.map(f => (
+                    <div key={f.path} style={{
+                      display: 'flex', alignItems: 'center', gap: 5,
+                      background: 'var(--pri-glow)', border: '1px solid rgba(79,152,163,.35)',
+                      borderRadius: 'var(--r3)', padding: '3px 8px',
+                      fontSize: 11, color: 'var(--pri)', fontFamily: 'var(--font-mono)',
+                    }}>
+                      <Paperclip size={10} />
+                      <span>{f.path.split('/').pop()}</span>
+                      <button onClick={() => removeAttached(f.path)} style={{ color: 'var(--pri)', display: 'flex', opacity: .7 }}>
+                        <XIcon size={10} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* @file dropdown */}
+              {atQuery !== null && atResults.length > 0 && (
+                <div style={{
+                  position: 'absolute', bottom: '100%', left: 14, right: 14, zIndex: 50,
+                  background: 'var(--surface)', border: '1px solid var(--brd)',
+                  borderRadius: 'var(--r2)', overflow: 'hidden',
+                  boxShadow: '0 -4px 16px rgba(0,0,0,.15)', marginBottom: 4,
+                }}>
+                  {atResults.map((f, i) => (
+                    <button key={f} onClick={() => attachFile(f)} style={{
+                      width: '100%', textAlign: 'left', padding: '7px 12px',
+                      fontSize: 12, fontFamily: 'var(--font-mono)',
+                      color: i === atIndexRef.current ? 'var(--pri)' : 'var(--txt)',
+                      background: i === atIndexRef.current ? 'var(--pri-glow)' : 'transparent',
+                      borderBottom: i < atResults.length - 1 ? '1px solid var(--brd)' : 'none',
+                      display: 'flex', gap: 10, alignItems: 'center',
+                    }}>
+                      <Paperclip size={10} style={{ flexShrink: 0, opacity: .5 }} />
+                      <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{f.split('/').pop()}</span>
+                      <span style={{ color: 'var(--faint)', fontSize: 10, flexShrink: 0 }}>{f.replace(activeProject?.path ?? '', '')}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Textarea + Send */}
+              <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end' }}>
+                <textarea
+                  ref={inputRef}
+                  value={input}
+                  onChange={handleInput}
+                  onKeyDown={handleKeyDown}
+                  placeholder={isStreaming ? 'Waiting for response…' : 'Ask anything… · type @ to attach a file'}
+                  rows={1}
+                  disabled={isStreaming}
+                  style={{
+                    flex: 1,
+                    background: 'var(--offset)', border: '1px solid var(--brd)',
+                    borderRadius: 'var(--r3)', color: 'var(--txt)',
+                    fontSize: 13, padding: '9px 13px',
+                    resize: 'none', outline: 'none',
+                    fontFamily: 'var(--font-body)',
+                    maxHeight: 120, overflowY: 'auto',
+                    lineHeight: 1.5, transition: 'border-color .15s',
+                    opacity: isStreaming ? .6 : 1,
+                  }}
+                  onFocus={e => (e.target.style.borderColor = 'var(--pri)')}
+                  onBlur={e => (e.target.style.borderColor = 'var(--brd)')}
+                />
+                <button
+                  onClick={send}
+                  disabled={!input.trim() || isStreaming}
+                  title="Send (Enter)"
+                  style={{
+                    width: 36, height: 36, borderRadius: 'var(--r2)', flexShrink: 0,
+                    background: input.trim() && !isStreaming ? 'var(--pri)' : 'var(--dynamic)',
+                    color: input.trim() && !isStreaming ? '#fff' : 'var(--faint)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'background .15s, color .15s',
+                  }}
+                >
+                  <Send size={14} />
+                </button>
+              </div>
             </div>
+
           </>
         )}
       </div>
