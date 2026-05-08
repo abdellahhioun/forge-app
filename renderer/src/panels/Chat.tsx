@@ -3,49 +3,72 @@ import { useForgeStore } from '../store'
 import { Send, Plus, MessageSquare, Zap, AlertCircle, Trash2, Paperclip, X as XIcon } from 'lucide-react'
 import type { ChatSession, ChatMessage, AiModel } from '../../../shared/types'
 
+// ─── CodeBlock with Copy + Apply buttons ──────────────────────────────────
+function CodeBlock({ lang, code, onApply }: { lang: string; code: string; onApply?: (code: string) => void }) {
+  const [copied, setCopied] = useState(false)
+  const [applied, setApplied] = useState(false)
+  const copy = () => {
+    navigator.clipboard.writeText(code)
+    setCopied(true); setTimeout(() => setCopied(false), 2000)
+  }
+  const apply = () => {
+    onApply?.(code)
+    setApplied(true); setTimeout(() => setApplied(false), 2500)
+  }
+  return (
+    <div style={{ margin: '8px 0', borderRadius: 6, overflow: 'hidden', border: '1px solid var(--brd)' }}>
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '3px 8px', background: 'var(--offset)', borderBottom: '1px solid var(--brd)',
+      }}>
+        <span style={{ fontSize: 10, fontFamily: 'monospace', color: 'var(--faint)', letterSpacing: '.06em', textTransform: 'uppercase' }}>
+          {lang || 'code'}
+        </span>
+        <div style={{ display: 'flex', gap: 4 }}>
+          <button onClick={copy} title="Copy code" style={{
+            fontSize: 10, padding: '2px 7px', borderRadius: 4, cursor: 'pointer',
+            background: copied ? 'rgba(79,152,163,.15)' : 'transparent',
+            color: copied ? 'var(--pri)' : 'var(--faint)',
+            border: '1px solid var(--brd)', transition: 'all .15s',
+          }}>{copied ? '✓ Copied' : 'Copy'}</button>
+          {onApply && (
+            <button onClick={apply} title="Apply to active file" style={{
+              fontSize: 10, padding: '2px 7px', borderRadius: 4, cursor: 'pointer',
+              background: applied ? 'rgba(79,152,163,.25)' : 'var(--pri)',
+              color: '#fff', border: 'none', transition: 'all .15s', fontWeight: 600,
+            }}>{applied ? '✓ Applied!' : '⚡ Apply'}</button>
+          )}
+        </div>
+      </div>
+      <pre style={{
+        margin: 0, padding: '10px 12px', background: 'var(--bg)', fontSize: 12,
+        overflowX: 'auto', lineHeight: 1.6,
+        fontFamily: 'var(--font-mono, "Fira Code", monospace)', color: 'var(--txt)',
+      }}><code>{code}</code></pre>
+    </div>
+  )
+}
+
 // ─── Tiny inline markdown renderer ─────────────────────────────────────────
-function renderMarkdown(text: string): React.ReactNode[] {
+function renderMarkdown(text: string, onApply?: (code: string) => void): React.ReactNode[] {
   const nodes: React.ReactNode[] = []
-  // Split on code blocks first
   const parts = text.split(/(```[\s\S]*?```|`[^`]+`)/g)
   parts.forEach((part, i) => {
     if (part.startsWith('```')) {
       const lines = part.slice(3).split('\n')
       const lang = lines[0].trim()
       const code = lines.slice(1).join('\n').replace(/```$/, '').trimEnd()
-      nodes.push(
-        <div key={i} style={{
-          margin: '8px 0', borderRadius: 6, overflow: 'hidden',
-          border: '1px solid var(--brd)',
-        }}>
-          {lang && (
-            <div style={{
-              padding: '3px 10px', fontSize: 10, fontFamily: 'monospace',
-              background: 'var(--offset)', color: 'var(--faint)',
-              letterSpacing: '.06em', textTransform: 'uppercase',
-            }}>{lang}</div>
-          )}
-          <pre style={{
-            margin: 0, padding: '10px 12px',
-            background: 'var(--bg)', fontSize: 12,
-            overflowX: 'auto', lineHeight: 1.6,
-            fontFamily: 'var(--font-mono, "Fira Code", monospace)',
-            color: 'var(--txt)',
-          }}><code>{code}</code></pre>
-        </div>
-      )
+      nodes.push(<CodeBlock key={i} lang={lang} code={code} onApply={onApply} />)
     } else if (part.startsWith('`') && part.endsWith('`')) {
       const code = part.slice(1, -1)
       nodes.push(
         <code key={i} style={{
-          fontFamily: 'var(--font-mono, monospace)',
-          fontSize: '0.85em', background: 'var(--offset)',
-          border: '1px solid var(--brd)', borderRadius: 4,
-          padding: '1px 5px', color: 'var(--txt)',
+          fontFamily: 'var(--font-mono, monospace)', fontSize: '0.85em',
+          background: 'var(--offset)', border: '1px solid var(--brd)',
+          borderRadius: 4, padding: '1px 5px', color: 'var(--txt)',
         }}>{code}</code>
       )
     } else {
-      // Handle bold, line breaks
       const inline = part.split(/(\*\*[^*]+\*\*|\n)/g)
       inline.forEach((seg, j) => {
         if (seg.startsWith('**') && seg.endsWith('**')) {
@@ -60,6 +83,7 @@ function renderMarkdown(text: string): React.ReactNode[] {
   })
   return nodes
 }
+
 
 // ─── Typing dots ────────────────────────────────────────────────────────────
 function TypingDots() {
@@ -83,7 +107,7 @@ function TypingDots() {
 }
 
 // ─── Message bubble ──────────────────────────────────────────────────────────
-function MessageBubble({ msg, isStreaming }: { msg: ChatMessage; isStreaming?: boolean }) {
+function MessageBubble({ msg, isStreaming, onApply }: { msg: ChatMessage; isStreaming?: boolean; onApply?: (code: string) => void }) {
   const isUser = msg.role === 'user'
   const isError = (msg as any).isError
   return (
@@ -124,7 +148,7 @@ function MessageBubble({ msg, isStreaming }: { msg: ChatMessage; isStreaming?: b
           ? <span style={{ whiteSpace: 'pre-wrap' }}>{msg.content}</span>
           : isStreaming && msg.content === ''
             ? <TypingDots />
-            : renderMarkdown(msg.content)
+            : renderMarkdown(msg.content, onApply)
         }
         {isStreaming && msg.content !== '' && (
           <span style={{
@@ -180,7 +204,16 @@ function ModelToggle({ value, onChange }: { value: AiModel; onChange: (m: AiMode
 
 // ─── Main panel ─────────────────────────────────────────────────────────────
 export default function ChatPanel() {
-  const { activeProject } = useForgeStore()
+  const { activeProject, activeFile, updateFileContent, markFileSaved } = useForgeStore()
+
+  // ─── Apply AI code block to active file ─────────────────────────────────────
+  const onApply = useCallback(async (code: string) => {
+    if (!activeFile) return
+    await window.forge.files.write(activeFile, code)
+    updateFileContent(activeFile, code)
+    markFileSaved(activeFile)
+  }, [activeFile, updateFileContent, markFileSaved])
+
   const [sessions, setSessions] = useState<ChatSession[]>([])
   const [activeSession, setActiveSession] = useState<ChatSession | null>(null)
   const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -611,6 +644,7 @@ export default function ChatPanel() {
                   key={msg.id}
                   msg={msg}
                   isStreaming={isStreaming && idx === messages.length - 1 && msg.role === 'assistant'}
+                  onApply={onApply}
                 />
               ))}
               <div ref={bottomRef} />
