@@ -1,12 +1,17 @@
 import { useForgeStore } from '../store'
-import { RefreshCw } from 'lucide-react'
+import { RefreshCw, Sparkles } from 'lucide-react'
 
-export default function Topbar() {
+interface TopbarProps {
+  onToggleAI?: () => void
+  aiOpen?: boolean
+}
+
+export default function Topbar({ onToggleAI, aiOpen }: TopbarProps) {
   const { activePanel, activeProject } = useForgeStore()
 
   const titles: Record<string, string> = {
     editor: 'Editor', terminal: 'Terminal',
-    git: 'Git', chat: 'Chat', dashboard: 'Dashboard',
+    git: 'Git', chat: 'Chat', dashboard: 'Dashboard', search: 'Search',
   }
 
   return (
@@ -19,7 +24,7 @@ export default function Topbar() {
       padding: '0 16px',
       gap: 12,
       flexShrink: 0,
-      WebkitAppRegion: 'drag', // draggable titlebar region
+      WebkitAppRegion: 'drag',
     } as React.CSSProperties}>
 
       <span style={{ fontSize: 13, fontWeight: 600, letterSpacing: '-.01em', flex: 1 }}>
@@ -37,6 +42,7 @@ export default function Topbar() {
         fontFamily: 'var(--font-mono)',
         WebkitAppRegion: 'no-drag',
       } as React.CSSProperties}>
+
         {activeProject && (
           <span style={{
             background: 'var(--ok-bg)', color: 'var(--ok)',
@@ -50,6 +56,31 @@ export default function Topbar() {
         )}
 
         <span>{new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
+
+        {/* ── AI toggle button ── */}
+        {onToggleAI && (
+          <button
+            onClick={onToggleAI}
+            aria-label="Toggle AI (⌘J)"
+            title="Toggle AI Panel (⌘J)"
+            style={{
+              height: 28,
+              padding: '0 10px',
+              borderRadius: 'var(--r2)',
+              border: `1px solid ${aiOpen ? 'var(--pri)' : 'var(--brd)'}`,
+              background: aiOpen ? 'var(--pri-glow)' : 'var(--offset)',
+              color: aiOpen ? 'var(--pri)' : 'var(--muted)',
+              display: 'flex', alignItems: 'center', gap: 5,
+              fontSize: 11, fontWeight: 500,
+              cursor: 'pointer',
+              transition: 'all 150ms ease',
+              fontFamily: 'var(--font-body)',
+            }}
+          >
+            <Sparkles size={12} />
+            AI
+          </button>
+        )}
 
         <button
           onClick={() => window.location.reload()}

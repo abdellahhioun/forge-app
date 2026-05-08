@@ -38,6 +38,10 @@ interface ForgeState {
   // File tree refresh signal — increment to trigger a reload
   fileTreeRevision: number
   refreshFileTree: () => void
+
+  // Diff Review
+  pendingDiff: { path: string; original: string; modified: string } | null
+  setPendingDiff: (diff: { path: string; original: string; modified: string } | null) => void
 }
 
 export const useForgeStore = create<ForgeState>((set, get) => ({
@@ -86,4 +90,7 @@ export const useForgeStore = create<ForgeState>((set, get) => ({
 
   fileTreeRevision: 0,
   refreshFileTree: () => set(s => ({ fileTreeRevision: s.fileTreeRevision + 1 })),
+
+  pendingDiff: null,
+  setPendingDiff: (pendingDiff) => set({ pendingDiff }),
 }))

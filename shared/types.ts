@@ -116,6 +116,10 @@ export const IPC = {
   CHAT_AI_ERROR:     'chat:ai:error',
   CHAT_SESSION_NEW:  'chat:session:new',
   CHAT_SESSION_DELETE:'chat:session:delete',
+  CHAT_GENERATE_EDIT:'chat:generate:edit',
+  CHAT_GENERATE_TOKEN:'chat:generate:token',
+  CHAT_GENERATE_DONE:'chat:generate:done',
+  CHAT_GENERATE_ERROR:'chat:generate:error',
   // Context
   CONTEXT_GET:       'context:get',
   CONTEXT_INDEX:     'context:index',

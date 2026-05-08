@@ -38,6 +38,11 @@ declare global {
         onToken: (cb: (token: string) => void) => () => void
         onDone: (cb: () => void) => () => void
         onError: (cb: (err: string) => void) => () => void
+
+        generateEdit: (filePath: string, fileContent: string, selectedText: string, instruction: string, projectPath?: string) => Promise<{ ok: boolean; code?: string; error?: string }>
+        onGenerateToken: (cb: (token: string) => void) => () => void
+        onGenerateDone: (cb: () => void) => () => void
+        onGenerateError: (cb: (err: string) => void) => () => void
       }
       files: {
         list:    (cwd: string) => Promise<any[]>

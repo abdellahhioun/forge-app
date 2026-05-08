@@ -812,9 +812,10 @@ ${fileContext}`
     if (model === 'ollama') {
       // ── Local Ollama (default model: llama3.1:8b) ─────────────────────────
       const body = JSON.stringify({
-        model: process.env.OLLAMA_MODEL || 'llama3.1:8b',
+        model: process.env.OLLAMA_MODEL || 'qwen2.5-coder:7b',
         messages: [{ role: 'system', content: systemPrompt }, ...messages],
         stream: true,
+        options: { num_ctx: 16384, num_gpu: 99 },
       })
       const req = http.request(
         { hostname: '127.0.0.1', port: 11434, path: '/api/chat', method: 'POST',
@@ -892,6 +893,125 @@ ${fileContext}`
       req.end()
     }
   })
+
+  // ─── CHAT GENERATE EDIT (Cmd+K) ──────────────────────────────────────────
+  ipcMain.handle(
+    IPC.CHAT_GENERATE_EDIT,
+    async (
+      _e,
+      filePath: string,
+      fileContent: string,
+      selectedText: string,
+      instruction: string,
+      projectPath?: string
+    ) => {
+      const http = require('http')
+      const https = require('https')
+
+      const systemPrompt = `You are an elite coding AI.
+Your task is to modify the provided file according to the user's instructions.
+CRITICAL INSTRUCTIONS:
+- Return ONLY the raw code for the fully modified file.
+- Do NOT wrap the code in markdown blocks (e.g. \`\`\`ts).
+- Do NOT include any conversational text, explanations, or greetings.
+- The output MUST be valid code ready to be saved directly to disk.
+- You must return the ENTIRE file content, not just a snippet, so the user can perform a full-file side-by-side diff.
+- If the user selected specific text, focus your changes there.
+
+File to edit: ${filePath}
+${selectedText ? `\nUser selected the following snippet to focus on:\n${selectedText}\n` : ''}
+`
+
+      const messages = [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Original File Content:\n\n${fileContent}\n\nInstruction: ${instruction}` }
+      ]
+
+      return new Promise((resolve) => {
+        // Try Ollama first (since they have Qwen 2.5 Coder 7B), fallback to Groq
+        const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'qwen2.5-coder:7b'
+        
+        const body = JSON.stringify({
+          model: OLLAMA_MODEL,
+          messages,
+          stream: false,
+          options: { num_ctx: 16384, num_gpu: 99 },
+        })
+
+        const req = http.request(
+          { hostname: '127.0.0.1', port: 11434, path: '/api/chat', method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) } },
+          (res: any) => {
+            if ((res.statusCode ?? 500) >= 400) {
+              resolve({ ok: false, error: `Ollama Error: ${res.statusCode}` })
+              return
+            }
+            let buffer = ''
+            res.on('data', (c: Buffer) => buffer += c.toString())
+            res.on('end', () => {
+              try {
+                const parsed = JSON.parse(buffer)
+                let code = parsed?.message?.content || ''
+                // Strip markdown blocks if the AI accidentally added them
+                if (code.startsWith('```')) {
+                  code = code.replace(/^```[a-z]*\n/, '').replace(/\n```$/, '')
+                }
+                resolve({ ok: true, code })
+              } catch (err: any) {
+                resolve({ ok: false, error: err.message })
+              }
+            })
+          }
+        )
+        
+        req.on('error', () => {
+          // Fallback to Groq if Ollama fails
+          const GROQ_API_KEY = process.env.GROQ_API_KEY
+          if (!GROQ_API_KEY) {
+            resolve({ ok: false, error: 'Ollama is not running and GROQ_API_KEY is not set.' })
+            return
+          }
+          
+          const groqBody = JSON.stringify({
+            model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+            messages,
+            stream: false,
+          })
+
+          const groqReq = https.request(
+            { hostname: 'api.groq.com', path: '/openai/v1/chat/completions', method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_API_KEY}`, 'Content-Length': Buffer.byteLength(groqBody) } },
+            (res: any) => {
+              if ((res.statusCode ?? 500) >= 400) {
+                resolve({ ok: false, error: `Groq Error: ${res.statusCode}` })
+                return
+              }
+              let buffer = ''
+              res.on('data', (c: Buffer) => buffer += c.toString())
+              res.on('end', () => {
+                try {
+                  const parsed = JSON.parse(buffer)
+                  let code = parsed.choices?.[0]?.message?.content || ''
+                  if (code.startsWith('```')) {
+                    code = code.replace(/^```[a-z]*\n/, '').replace(/\n```$/, '')
+                  }
+                  resolve({ ok: true, code })
+                } catch (err: any) {
+                  resolve({ ok: false, error: err.message })
+                }
+              })
+            }
+          )
+          groqReq.on('error', (e: any) => resolve({ ok: false, error: e.message }))
+          groqReq.write(groqBody)
+          groqReq.end()
+        })
+        
+        req.write(body)
+        req.end()
+      })
+    }
+  )
 
   // ─── CHAT SESSIONS ─────────────────────────────────────────────────────────
   ipcMain.handle(IPC.CHAT_SESSION_NEW, async (_e, title: string, projectId?: number) => {

@@ -1,7 +1,7 @@
-import { useRef, useEffect, useCallback } from 'react'
-import MonacoEditor, { loader } from '@monaco-editor/react'
+import { useRef, useEffect, useCallback, useState } from 'react'
+import MonacoEditor, { DiffEditor, loader } from '@monaco-editor/react'
 import { useForgeStore } from '../store'
-import { X, FileCode } from 'lucide-react'
+import { X, FileCode, Check, X as XIcon } from 'lucide-react'
 
 // Configure Monaco language diagnostics globally once to avoid repetitive mounting errors
 loader.init().then(monaco => {
@@ -25,6 +25,7 @@ export default function EditorPanel() {
   const {
     openFiles, activeFile, closeFile, setActiveFile,
     theme, activeProject, updateFileContent, markFileSaved,
+    pendingDiff, setPendingDiff
   } = useForgeStore()
 
   const editorRef = useRef<any>(null)
@@ -46,7 +47,19 @@ export default function EditorPanel() {
     if (res.ok) markFileSaved(path)
   }, [markFileSaved])
 
-  // ⌘S / Ctrl+S global handler
+  // Cmd+K state
+  const [cmdKOpen, setCmdKOpen] = useState(false)
+  const [cmdKInput, setCmdKInput] = useState('')
+  const [cmdKLoading, setCmdKLoading] = useState(false)
+  const cmdKInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (cmdKOpen) {
+      setTimeout(() => cmdKInputRef.current?.focus(), 0)
+    }
+  }, [cmdKOpen])
+
+  // ⌘S / Ctrl+S global handler & ⌘K handler
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 's') {
@@ -56,10 +69,50 @@ export default function EditorPanel() {
         )
         if (file) saveFile(file.path, file.content)
       }
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        setCmdKOpen(prev => !prev)
+      }
+      if (e.key === 'Escape' && cmdKOpen) {
+        setCmdKOpen(false)
+      }
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [saveFile])
+  }, [saveFile, cmdKOpen])
+
+  const handleCmdKSubmit = async () => {
+    if (!cmdKInput.trim() || !currentFile || !editorRef.current) return
+    setCmdKLoading(true)
+
+    const editor = editorRef.current
+    const selection = editor.getSelection()
+    const selectedText = editor.getModel()?.getValueInRange(selection) || ''
+    
+    try {
+      const res = await (window.forge as any).chat.generateEdit(
+        currentFile.path,
+        currentFile.content,
+        selectedText,
+        cmdKInput,
+        activeProject?.path
+      )
+      
+      if (res.ok) {
+        setPendingDiff({
+          path: currentFile.path,
+          original: currentFile.content,
+          modified: res.code
+        })
+        setCmdKOpen(false)
+        setCmdKInput('')
+      } else {
+        console.error('Generation failed:', res.error)
+      }
+    } finally {
+      setCmdKLoading(false)
+    }
+  }
 
   if (openFiles.length === 0) {
     return (
@@ -76,6 +129,8 @@ export default function EditorPanel() {
       </div>
     )
   }
+
+  const isDiffing = pendingDiff && pendingDiff.path === currentFile?.path
 
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -121,6 +176,7 @@ export default function EditorPanel() {
               <button
                 onClick={(e) => {
                   e.stopPropagation()
+                  if (pendingDiff?.path === f.path) setPendingDiff(null)
                   closeFile(f.path)
                 }}
                 style={{ color: 'var(--faint)', padding: 1, borderRadius: 3, display: 'flex' }}
@@ -132,45 +188,145 @@ export default function EditorPanel() {
         })}
       </div>
 
-      {/* Monaco */}
-      <div style={{ flex: 1, overflow: 'hidden' }}>
+      {/* Monaco Area */}
+      <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
+        {/* Diff Review Header Badge */}
+        {isDiffing && (
+          <div style={{
+            position: 'absolute', top: 16, right: 24, zIndex: 10,
+            display: 'flex', gap: 8, background: 'var(--surface)',
+            padding: '6px 8px', borderRadius: 'var(--r3)',
+            border: '1px solid var(--brd)', boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+            alignItems: 'center'
+          }}>
+            <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--txt)', marginRight: 8, marginLeft: 4 }}>
+              Review AI Changes
+            </span>
+            <button
+              onClick={() => {
+                if (!pendingDiff) return
+                updateFileContent(pendingDiff.path, pendingDiff.modified)
+                saveFile(pendingDiff.path, pendingDiff.modified)
+                setPendingDiff(null)
+              }}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 4,
+                padding: '4px 12px', background: 'var(--ok)', color: '#fff',
+                borderRadius: 'var(--r2)', fontSize: 12, fontWeight: 600,
+                cursor: 'pointer', border: 'none'
+              }}
+            >
+              <Check size={14} /> Accept
+            </button>
+            <button
+              onClick={() => setPendingDiff(null)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 4,
+                padding: '4px 12px', background: 'var(--surface-hover)', color: 'var(--txt)',
+                borderRadius: 'var(--r2)', fontSize: 12, fontWeight: 500,
+                cursor: 'pointer', border: '1px solid var(--brd)'
+              }}
+            >
+              <XIcon size={14} /> Reject
+            </button>
+          </div>
+        )}
+
+        {/* Cmd+K Floating Bar */}
+        {cmdKOpen && !isDiffing && (
+          <div style={{
+            position: 'absolute', top: 16, left: '50%', transform: 'translateX(-50%)',
+            zIndex: 100, display: 'flex', width: '50%', minWidth: 400,
+            background: 'var(--surface)', border: '1px solid var(--brd)',
+            borderRadius: 'var(--r3)', boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+            overflow: 'hidden'
+          }}>
+            <input
+              ref={cmdKInputRef}
+              value={cmdKInput}
+              onChange={(e) => setCmdKInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault()
+                  handleCmdKSubmit()
+                }
+              }}
+              placeholder="Instructions for AI (e.g. refactor this function)..."
+              disabled={cmdKLoading}
+              style={{
+                flex: 1, padding: '12px 16px', background: 'transparent',
+                border: 'none', color: 'var(--txt)', fontSize: 13,
+                outline: 'none', fontFamily: 'var(--font-sans)',
+              }}
+            />
+            {cmdKLoading && (
+              <div style={{
+                display: 'flex', alignItems: 'center', padding: '0 16px',
+                color: 'var(--pri)', fontSize: 12, fontWeight: 500
+              }}>
+                Generating...
+              </div>
+            )}
+          </div>
+        )}
+
         {currentFile && (
-          <MonacoEditor
-            key={currentFile.path}
-            height="100%"
-            language={getLanguage(currentFile.path)}
-            value={currentFile.content}
-            theme={theme === 'dark' ? 'vs-dark' : 'vs'}
-            onMount={(editor) => {
-              editorRef.current = editor
-              // Wire ⌘S inside Monaco context too
-              editor.addCommand(
-                // Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KeyS
-                2048 | 49,
-                () => saveFile(currentFile.path, editor.getValue())
-              )
-            }}
-            onChange={(value) => {
-              if (value !== undefined) {
-                updateFileContent(currentFile.path, value)
-              }
-            }}
-            options={{
-              fontSize: 13,
-              fontFamily: 'var(--font-mono)',
-              fontLigatures: true,
-              minimap: { enabled: false },
-              lineNumbers: 'on',
-              scrollBeyondLastLine: false,
-              renderLineHighlight: 'line',
-              smoothScrolling: true,
-              cursorBlinking: 'smooth',
-              cursorSmoothCaretAnimation: 'on',
-              padding: { top: 12 },
-              tabSize: 2,
-              fixedOverflowWidgets: true, // Prevent hover tooltips and dropdowns from clipping or going past screen boundaries
-            }}
-          />
+          isDiffing ? (
+            <DiffEditor
+              key={`diff-${currentFile.path}`}
+              height="100%"
+              language={getLanguage(currentFile.path)}
+              original={pendingDiff!.original}
+              modified={pendingDiff!.modified}
+              theme={theme === 'dark' ? 'vs-dark' : 'vs'}
+              options={{
+                fontSize: 13,
+                fontFamily: 'var(--font-mono)',
+                renderSideBySide: true,
+                minimap: { enabled: false },
+                readOnly: true,
+                padding: { top: 12 },
+                fixedOverflowWidgets: true,
+              }}
+            />
+          ) : (
+            <MonacoEditor
+              key={currentFile.path}
+              height="100%"
+              language={getLanguage(currentFile.path)}
+              value={currentFile.content}
+              theme={theme === 'dark' ? 'vs-dark' : 'vs'}
+              onMount={(editor) => {
+                editorRef.current = editor
+                // Wire ⌘S inside Monaco context too
+                editor.addCommand(
+                  // Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KeyS
+                  2048 | 49,
+                  () => saveFile(currentFile.path, editor.getValue())
+                )
+              }}
+              onChange={(value) => {
+                if (value !== undefined) {
+                  updateFileContent(currentFile.path, value)
+                }
+              }}
+              options={{
+                fontSize: 13,
+                fontFamily: 'var(--font-mono)',
+                fontLigatures: true,
+                minimap: { enabled: false },
+                lineNumbers: 'on',
+                scrollBeyondLastLine: false,
+                renderLineHighlight: 'line',
+                smoothScrolling: true,
+                cursorBlinking: 'smooth',
+                cursorSmoothCaretAnimation: 'on',
+                padding: { top: 12 },
+                tabSize: 2,
+                fixedOverflowWidgets: true,
+              }}
+            />
+          )
         )}
       </div>
     </div>

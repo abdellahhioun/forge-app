@@ -12577,7 +12577,9 @@ const useForgeStore = create$1((set, get) => ({
     openFiles: s.openFiles.map((f) => f.path === path ? { ...f, dirty: false } : f)
   })),
   fileTreeRevision: 0,
-  refreshFileTree: () => set((s) => ({ fileTreeRevision: s.fileTreeRevision + 1 }))
+  refreshFileTree: () => set((s) => ({ fileTreeRevision: s.fileTreeRevision + 1 })),
+  pendingDiff: null,
+  setPendingDiff: (pendingDiff) => set({ pendingDiff })
 }));
 const LETTERS = ["F", "O", "R", "G", "E"];
 const LETTER_DELAY = 120;
@@ -12781,45 +12783,68 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$w = [
+const __iconNode$y = [
   ["path", { d: "m3 15 4-8 4 8", key: "1vwr6u" }],
   ["path", { d: "M4 13h6", key: "1r9ots" }],
   ["circle", { cx: "18", cy: "12", r: "3", key: "1kchzo" }],
   ["path", { d: "M21 9v6", key: "anns31" }]
 ];
-const CaseSensitive = createLucideIcon("case-sensitive", __iconNode$w);
+const CaseSensitive = createLucideIcon("case-sensitive", __iconNode$y);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$v = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$v);
+const __iconNode$x = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$x);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$u = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$u);
+const __iconNode$w = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$w);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$t = [["path", { d: "m15 18-6-6 6-6", key: "1wnfg3" }]];
-const ChevronLeft = createLucideIcon("chevron-left", __iconNode$t);
+const __iconNode$v = [["path", { d: "m15 18-6-6 6-6", key: "1wnfg3" }]];
+const ChevronLeft = createLucideIcon("chevron-left", __iconNode$v);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$s = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$s);
+const __iconNode$u = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$u);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$t = [
+  ["path", { d: "m7 15 5 5 5-5", key: "1hf1tw" }],
+  ["path", { d: "m7 9 5-5 5 5", key: "sgt6xg" }]
+];
+const ChevronsUpDown = createLucideIcon("chevrons-up-down", __iconNode$t);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$s = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
+  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
+];
+const CircleAlert = createLucideIcon("circle-alert", __iconNode$s);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12827,10 +12852,11 @@ const ChevronRight = createLucideIcon("chevron-right", __iconNode$s);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$r = [
-  ["path", { d: "m7 15 5 5 5-5", key: "1hf1tw" }],
-  ["path", { d: "m7 9 5-5 5 5", key: "sgt6xg" }]
+  ["path", { d: "m18 16 4-4-4-4", key: "1inbqp" }],
+  ["path", { d: "m6 8-4 4 4 4", key: "15zrgr" }],
+  ["path", { d: "m14.5 4-5 16", key: "e7oirm" }]
 ];
-const ChevronsUpDown = createLucideIcon("chevrons-up-down", __iconNode$r);
+const CodeXml = createLucideIcon("code-xml", __iconNode$r);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12838,30 +12864,6 @@ const ChevronsUpDown = createLucideIcon("chevrons-up-down", __iconNode$r);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$q = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
-  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
-];
-const CircleAlert = createLucideIcon("circle-alert", __iconNode$q);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$p = [
-  ["path", { d: "m18 16 4-4-4-4", key: "1inbqp" }],
-  ["path", { d: "m6 8-4 4 4 4", key: "15zrgr" }],
-  ["path", { d: "m14.5 4-5 16", key: "e7oirm" }]
-];
-const CodeXml = createLucideIcon("code-xml", __iconNode$p);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$o = [
   ["path", { d: "M12 20v2", key: "1lh1kg" }],
   ["path", { d: "M12 2v2", key: "tus03m" }],
   ["path", { d: "M17 20v2", key: "1rnc9c" }],
@@ -12877,7 +12879,32 @@ const __iconNode$o = [
   ["rect", { x: "4", y: "4", width: "16", height: "16", rx: "2", key: "1vbyd7" }],
   ["rect", { x: "8", y: "8", width: "8", height: "8", rx: "1", key: "z9xiuo" }]
 ];
-const Cpu = createLucideIcon("cpu", __iconNode$o);
+const Cpu = createLucideIcon("cpu", __iconNode$q);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$p = [
+  ["path", { d: "M10 12.5 8 15l2 2.5", key: "1tg20x" }],
+  ["path", { d: "m14 12.5 2 2.5-2 2.5", key: "yinavb" }],
+  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z", key: "1mlx9k" }]
+];
+const FileCode = createLucideIcon("file-code", __iconNode$p);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$o = [
+  ["path", { d: "M20 7h-3a2 2 0 0 1-2-2V2", key: "x099mo" }],
+  ["path", { d: "M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z", key: "18t6ie" }],
+  ["path", { d: "M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8", key: "1nja0z" }]
+];
+const Files = createLucideIcon("files", __iconNode$o);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12885,31 +12912,6 @@ const Cpu = createLucideIcon("cpu", __iconNode$o);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$n = [
-  ["path", { d: "M10 12.5 8 15l2 2.5", key: "1tg20x" }],
-  ["path", { d: "m14 12.5 2 2.5-2 2.5", key: "yinavb" }],
-  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z", key: "1mlx9k" }]
-];
-const FileCode = createLucideIcon("file-code", __iconNode$n);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$m = [
-  ["path", { d: "M20 7h-3a2 2 0 0 1-2-2V2", key: "x099mo" }],
-  ["path", { d: "M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z", key: "18t6ie" }],
-  ["path", { d: "M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8", key: "1nja0z" }]
-];
-const Files = createLucideIcon("files", __iconNode$m);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$l = [
   [
     "path",
     {
@@ -12918,14 +12920,14 @@ const __iconNode$l = [
     }
   ]
 ];
-const FolderOpen = createLucideIcon("folder-open", __iconNode$l);
+const FolderOpen = createLucideIcon("folder-open", __iconNode$n);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$k = [
+const __iconNode$m = [
   [
     "path",
     {
@@ -12934,7 +12936,32 @@ const __iconNode$k = [
     }
   ]
 ];
-const Folder = createLucideIcon("folder", __iconNode$k);
+const Folder = createLucideIcon("folder", __iconNode$m);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$l = [
+  ["line", { x1: "6", x2: "6", y1: "3", y2: "15", key: "17qcm7" }],
+  ["circle", { cx: "18", cy: "6", r: "3", key: "1h7g24" }],
+  ["circle", { cx: "6", cy: "18", r: "3", key: "fqmcym" }],
+  ["path", { d: "M18 9a9 9 0 0 1-9 9", key: "n2h4wq" }]
+];
+const GitBranch = createLucideIcon("git-branch", __iconNode$l);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$k = [
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }],
+  ["line", { x1: "3", x2: "9", y1: "12", y2: "12", key: "1dyftd" }],
+  ["line", { x1: "15", x2: "21", y1: "12", y2: "12", key: "oup4p8" }]
+];
+const GitCommitHorizontal = createLucideIcon("git-commit-horizontal", __iconNode$k);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12942,12 +12969,12 @@ const Folder = createLucideIcon("folder", __iconNode$k);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$j = [
-  ["line", { x1: "6", x2: "6", y1: "3", y2: "15", key: "17qcm7" }],
-  ["circle", { cx: "18", cy: "6", r: "3", key: "1h7g24" }],
-  ["circle", { cx: "6", cy: "18", r: "3", key: "fqmcym" }],
-  ["path", { d: "M18 9a9 9 0 0 1-9 9", key: "n2h4wq" }]
+  ["circle", { cx: "18", cy: "18", r: "3", key: "1xkwt0" }],
+  ["circle", { cx: "6", cy: "6", r: "3", key: "1lh9wr" }],
+  ["path", { d: "M13 6h3a2 2 0 0 1 2 2v7", key: "1yeb86" }],
+  ["line", { x1: "6", x2: "6", y1: "9", y2: "21", key: "rroup" }]
 ];
-const GitBranch = createLucideIcon("git-branch", __iconNode$j);
+const GitPullRequest = createLucideIcon("git-pull-request", __iconNode$j);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12955,11 +12982,14 @@ const GitBranch = createLucideIcon("git-branch", __iconNode$j);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$i = [
-  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }],
-  ["line", { x1: "3", x2: "9", y1: "12", y2: "12", key: "1dyftd" }],
-  ["line", { x1: "15", x2: "21", y1: "12", y2: "12", key: "oup4p8" }]
+  ["circle", { cx: "9", cy: "12", r: "1", key: "1vctgf" }],
+  ["circle", { cx: "9", cy: "5", r: "1", key: "hp0tcf" }],
+  ["circle", { cx: "9", cy: "19", r: "1", key: "fkjjf6" }],
+  ["circle", { cx: "15", cy: "12", r: "1", key: "1tmaij" }],
+  ["circle", { cx: "15", cy: "5", r: "1", key: "19l28e" }],
+  ["circle", { cx: "15", cy: "19", r: "1", key: "f4zoj3" }]
 ];
-const GitCommitHorizontal = createLucideIcon("git-commit-horizontal", __iconNode$i);
+const GripVertical = createLucideIcon("grip-vertical", __iconNode$i);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -12967,12 +12997,11 @@ const GitCommitHorizontal = createLucideIcon("git-commit-horizontal", __iconNode
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$h = [
-  ["circle", { cx: "18", cy: "18", r: "3", key: "1xkwt0" }],
-  ["circle", { cx: "6", cy: "6", r: "3", key: "1lh9wr" }],
-  ["path", { d: "M13 6h3a2 2 0 0 1 2 2v7", key: "1yeb86" }],
-  ["line", { x1: "6", x2: "6", y1: "9", y2: "21", key: "rroup" }]
+  ["path", { d: "M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8", key: "1357e3" }],
+  ["path", { d: "M3 3v5h5", key: "1xhq8a" }],
+  ["path", { d: "M12 7v5l4 2", key: "1fdv2h" }]
 ];
-const GitPullRequest = createLucideIcon("git-pull-request", __iconNode$h);
+const History = createLucideIcon("history", __iconNode$h);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -13880,14 +13909,15 @@ Remove it from the list anyway?`
       ` })
   ] });
 }
-function Topbar() {
+function Topbar({ onToggleAI, aiOpen }) {
   const { activePanel, activeProject } = useForgeStore();
   const titles = {
     editor: "Editor",
     terminal: "Terminal",
     git: "Git",
     chat: "Chat",
-    dashboard: "Dashboard"
+    dashboard: "Dashboard",
+    search: "Search"
   };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { style: {
     height: "var(--topbar-h)",
@@ -13899,7 +13929,6 @@ function Topbar() {
     gap: 12,
     flexShrink: 0,
     WebkitAppRegion: "drag"
-    // draggable titlebar region
   }, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { style: { fontSize: 13, fontWeight: 600, letterSpacing: "-.01em", flex: 1 }, children: [
       titles[activePanel],
@@ -13931,6 +13960,34 @@ function Topbar() {
         "active"
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: (/* @__PURE__ */ new Date()).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) }),
+      onToggleAI && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          onClick: onToggleAI,
+          "aria-label": "Toggle AI (⌘J)",
+          title: "Toggle AI Panel (⌘J)",
+          style: {
+            height: 28,
+            padding: "0 10px",
+            borderRadius: "var(--r2)",
+            border: `1px solid ${aiOpen ? "var(--pri)" : "var(--brd)"}`,
+            background: aiOpen ? "var(--pri-glow)" : "var(--offset)",
+            color: aiOpen ? "var(--pri)" : "var(--muted)",
+            display: "flex",
+            alignItems: "center",
+            gap: 5,
+            fontSize: 11,
+            fontWeight: 500,
+            cursor: "pointer",
+            transition: "all 150ms ease",
+            fontFamily: "var(--font-body)"
+          },
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Sparkles, { size: 12 }),
+            "AI"
+          ]
+        }
+      ),
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "button",
         {
@@ -14493,7 +14550,7 @@ function Oe({ original: e, modified: r, language: n, originalLanguage: t, modifi
   return React.createElement(H, { width: z, height: V, isEditorReady: M, loading: P, _ref: w, className: F, wrapperProps: j });
 }
 var ie = Oe;
-reactExports.memo(ie);
+var we = reactExports.memo(ie);
 function He(e) {
   let r = reactExports.useRef();
   return reactExports.useEffect(() => {
@@ -14586,7 +14643,9 @@ function EditorPanel() {
     theme,
     activeProject,
     updateFileContent,
-    markFileSaved
+    markFileSaved,
+    pendingDiff,
+    setPendingDiff
   } = useForgeStore();
   const editorRef = reactExports.useRef(null);
   const currentFile = openFiles.find((f) => f.path === activeFile);
@@ -14614,6 +14673,15 @@ function EditorPanel() {
     const res = await window.forge.files.write(path, content);
     if (res.ok) markFileSaved(path);
   }, [markFileSaved]);
+  const [cmdKOpen, setCmdKOpen] = reactExports.useState(false);
+  const [cmdKInput, setCmdKInput] = reactExports.useState("");
+  const [cmdKLoading, setCmdKLoading] = reactExports.useState(false);
+  const cmdKInputRef = reactExports.useRef(null);
+  reactExports.useEffect(() => {
+    if (cmdKOpen) {
+      setTimeout(() => cmdKInputRef.current?.focus(), 0);
+    }
+  }, [cmdKOpen]);
   reactExports.useEffect(() => {
     const handler = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "s") {
@@ -14623,10 +14691,46 @@ function EditorPanel() {
         );
         if (file) saveFile(file.path, file.content);
       }
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setCmdKOpen((prev) => !prev);
+      }
+      if (e.key === "Escape" && cmdKOpen) {
+        setCmdKOpen(false);
+      }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [saveFile]);
+  }, [saveFile, cmdKOpen]);
+  const handleCmdKSubmit = async () => {
+    if (!cmdKInput.trim() || !currentFile || !editorRef.current) return;
+    setCmdKLoading(true);
+    const editor = editorRef.current;
+    const selection = editor.getSelection();
+    const selectedText = editor.getModel()?.getValueInRange(selection) || "";
+    try {
+      const res = await window.forge.chat.generateEdit(
+        currentFile.path,
+        currentFile.content,
+        selectedText,
+        cmdKInput,
+        activeProject?.path
+      );
+      if (res.ok) {
+        setPendingDiff({
+          path: currentFile.path,
+          original: currentFile.content,
+          modified: res.code
+        });
+        setCmdKOpen(false);
+        setCmdKInput("");
+      } else {
+        console.error("Generation failed:", res.error);
+      }
+    } finally {
+      setCmdKLoading(false);
+    }
+  };
   if (openFiles.length === 0) {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
       flex: 1,
@@ -14642,6 +14746,7 @@ function EditorPanel() {
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 12, color: "var(--faint)" }, children: activeProject ? "Select a file from the explorer" : "Open a project first" })
     ] });
   }
+  const isDiffing = pendingDiff && pendingDiff.path === currentFile?.path;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
       display: "flex",
@@ -14686,6 +14791,7 @@ function EditorPanel() {
               {
                 onClick: (e) => {
                   e.stopPropagation();
+                  if (pendingDiff?.path === f.path) setPendingDiff(null);
                   closeFile(f.path);
                 },
                 style: { color: "var(--faint)", padding: 1, borderRadius: 3, display: "flex" },
@@ -14697,45 +14803,182 @@ function EditorPanel() {
         f.path
       );
     }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { flex: 1, overflow: "hidden" }, children: currentFile && /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Ft,
-      {
-        height: "100%",
-        language: getLanguage(currentFile.path),
-        value: currentFile.content,
-        theme: theme === "dark" ? "vs-dark" : "vs",
-        onMount: (editor) => {
-          editorRef.current = editor;
-          editor.addCommand(
-            // Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KeyS
-            2048 | 49,
-            () => saveFile(currentFile.path, editor.getValue())
-          );
-        },
-        onChange: (value) => {
-          if (value !== void 0) {
-            updateFileContent(currentFile.path, value);
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, overflow: "hidden", position: "relative" }, children: [
+      isDiffing && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+        position: "absolute",
+        top: 16,
+        right: 24,
+        zIndex: 10,
+        display: "flex",
+        gap: 8,
+        background: "var(--surface)",
+        padding: "6px 8px",
+        borderRadius: "var(--r3)",
+        border: "1px solid var(--brd)",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+        alignItems: "center"
+      }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontSize: 12, fontWeight: 500, color: "var(--txt)", marginRight: 8, marginLeft: 4 }, children: "Review AI Changes" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            onClick: () => {
+              if (!pendingDiff) return;
+              updateFileContent(pendingDiff.path, pendingDiff.modified);
+              saveFile(pendingDiff.path, pendingDiff.modified);
+              setPendingDiff(null);
+            },
+            style: {
+              display: "flex",
+              alignItems: "center",
+              gap: 4,
+              padding: "4px 12px",
+              background: "var(--ok)",
+              color: "#fff",
+              borderRadius: "var(--r2)",
+              fontSize: 12,
+              fontWeight: 600,
+              cursor: "pointer",
+              border: "none"
+            },
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { size: 14 }),
+              " Accept"
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            onClick: () => setPendingDiff(null),
+            style: {
+              display: "flex",
+              alignItems: "center",
+              gap: 4,
+              padding: "4px 12px",
+              background: "var(--surface-hover)",
+              color: "var(--txt)",
+              borderRadius: "var(--r2)",
+              fontSize: 12,
+              fontWeight: 500,
+              cursor: "pointer",
+              border: "1px solid var(--brd)"
+            },
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 14 }),
+              " Reject"
+            ]
+          }
+        )
+      ] }),
+      cmdKOpen && !isDiffing && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+        position: "absolute",
+        top: 16,
+        left: "50%",
+        transform: "translateX(-50%)",
+        zIndex: 100,
+        display: "flex",
+        width: "50%",
+        minWidth: 400,
+        background: "var(--surface)",
+        border: "1px solid var(--brd)",
+        borderRadius: "var(--r3)",
+        boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+        overflow: "hidden"
+      }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            ref: cmdKInputRef,
+            value: cmdKInput,
+            onChange: (e) => setCmdKInput(e.target.value),
+            onKeyDown: (e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleCmdKSubmit();
+              }
+            },
+            placeholder: "Instructions for AI (e.g. refactor this function)...",
+            disabled: cmdKLoading,
+            style: {
+              flex: 1,
+              padding: "12px 16px",
+              background: "transparent",
+              border: "none",
+              color: "var(--txt)",
+              fontSize: 13,
+              outline: "none",
+              fontFamily: "var(--font-sans)"
+            }
+          }
+        ),
+        cmdKLoading && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
+          display: "flex",
+          alignItems: "center",
+          padding: "0 16px",
+          color: "var(--pri)",
+          fontSize: 12,
+          fontWeight: 500
+        }, children: "Generating..." })
+      ] }),
+      currentFile && (isDiffing ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+        we,
+        {
+          height: "100%",
+          language: getLanguage(currentFile.path),
+          original: pendingDiff.original,
+          modified: pendingDiff.modified,
+          theme: theme === "dark" ? "vs-dark" : "vs",
+          options: {
+            fontSize: 13,
+            fontFamily: "var(--font-mono)",
+            renderSideBySide: true,
+            minimap: { enabled: false },
+            readOnly: true,
+            padding: { top: 12 },
+            fixedOverflowWidgets: true
           }
         },
-        options: {
-          fontSize: 13,
-          fontFamily: "var(--font-mono)",
-          fontLigatures: true,
-          minimap: { enabled: false },
-          lineNumbers: "on",
-          scrollBeyondLastLine: false,
-          renderLineHighlight: "line",
-          smoothScrolling: true,
-          cursorBlinking: "smooth",
-          cursorSmoothCaretAnimation: "on",
-          padding: { top: 12 },
-          tabSize: 2,
-          fixedOverflowWidgets: true
-          // Prevent hover tooltips and dropdowns from clipping or going past screen boundaries
-        }
-      },
-      currentFile.path
-    ) })
+        `diff-${currentFile.path}`
+      ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Ft,
+        {
+          height: "100%",
+          language: getLanguage(currentFile.path),
+          value: currentFile.content,
+          theme: theme === "dark" ? "vs-dark" : "vs",
+          onMount: (editor) => {
+            editorRef.current = editor;
+            editor.addCommand(
+              // Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KeyS
+              2048 | 49,
+              () => saveFile(currentFile.path, editor.getValue())
+            );
+          },
+          onChange: (value) => {
+            if (value !== void 0) {
+              updateFileContent(currentFile.path, value);
+            }
+          },
+          options: {
+            fontSize: 13,
+            fontFamily: "var(--font-mono)",
+            fontLigatures: true,
+            minimap: { enabled: false },
+            lineNumbers: "on",
+            scrollBeyondLastLine: false,
+            renderLineHighlight: "line",
+            smoothScrolling: true,
+            cursorBlinking: "smooth",
+            cursorSmoothCaretAnimation: "on",
+            padding: { top: 12 },
+            tabSize: 2,
+            fixedOverflowWidgets: true
+          }
+        },
+        currentFile.path
+      ))
+    ] })
   ] });
 }
 function groupByFile(results) {
@@ -22451,50 +22694,20 @@ function MessageBubble({ msg, isStreaming, onApply }) {
 const MODEL_OPTIONS = [
   { id: "groq", label: "Llama 4", sub: "Groq" },
   { id: "gemini", label: "Gemini 2", sub: "Google" },
-  { id: "ollama", label: "Llama 3.1", sub: "Local" }
+  { id: "ollama", label: "Qwen 2.5", sub: "Local" }
 ];
-function ModelToggle({ value, onChange }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
-    display: "flex",
-    gap: 4,
-    padding: "6px 10px",
-    borderTop: "1px solid var(--brd)"
-  }, children: MODEL_OPTIONS.map((opt) => {
-    const active = value === opt.id;
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "button",
-      {
-        onClick: () => onChange(opt.id),
-        style: {
-          flex: 1,
-          padding: "5px 6px",
-          borderRadius: "var(--r2)",
-          fontSize: 11,
-          lineHeight: 1.3,
-          textAlign: "center",
-          background: active ? "var(--pri-glow)" : "transparent",
-          border: `1px solid ${active ? "rgba(79,152,163,.35)" : "var(--brd)"}`,
-          color: active ? "var(--pri)" : "var(--faint)",
-          transition: "all .15s",
-          cursor: "pointer"
-        },
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontWeight: 600 }, children: opt.label }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 9, opacity: 0.7 }, children: opt.sub })
-        ]
-      },
-      opt.id
-    );
-  }) });
-}
 function ChatPanel() {
-  const { activeProject, activeFile, updateFileContent, markFileSaved } = useForgeStore();
+  const { activeProject, activeFile, openFiles, updateFileContent, markFileSaved, setPendingDiff } = useForgeStore();
   const onApply = reactExports.useCallback(async (code) => {
     if (!activeFile) return;
-    await window.forge.files.write(activeFile, code);
-    updateFileContent(activeFile, code);
-    markFileSaved(activeFile);
-  }, [activeFile, updateFileContent, markFileSaved]);
+    const currentFile = openFiles.find((f) => f.path === activeFile);
+    if (!currentFile) return;
+    setPendingDiff({
+      path: activeFile,
+      original: currentFile.content,
+      modified: code
+    });
+  }, [activeFile, openFiles, setPendingDiff]);
   const TOOL_INTENTS = [
     { pattern: /git diff|what changed|show diff/i, tool: "git_diff" },
     { pattern: /git status|what.?s staged|unstaged/i, tool: "git_status" },
@@ -22531,6 +22744,15 @@ function ChatPanel() {
   const [atResults, setAtResults] = reactExports.useState([]);
   const [attachedFiles, setAttachedFiles] = reactExports.useState([]);
   const atIndexRef = reactExports.useRef(0);
+  reactExports.useEffect(() => {
+    if (!activeFile) return;
+    const fileObj = openFiles.find((f) => f.path === activeFile);
+    if (!fileObj) return;
+    setAttachedFiles((prev) => {
+      const filtered = prev.filter((f) => f.path !== activeFile);
+      return [{ path: activeFile, content: fileObj.content }, ...filtered];
+    });
+  }, [activeFile, openFiles]);
   reactExports.useEffect(() => {
     window.forge.chat.sessions().then(setSessions);
   }, [activeProject]);
@@ -22810,193 +23032,338 @@ ${rawContent}` : rawContent,
     setTimeout(() => inputRef.current?.focus(), 0);
   }, [attachedFiles]);
   const removeAttached = (path) => setAttachedFiles((prev) => prev.filter((f) => f.path !== path));
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, display: "flex", overflow: "hidden" }, children: [
+  const [historyOpen, setHistoryOpen] = reactExports.useState(false);
+  const modelLabel = model === "gemini" ? "Gemini 2" : model === "ollama" ? "Qwen 2.5" : "Llama 4";
+  const modelSub = model === "gemini" ? "Google" : model === "ollama" ? "Local" : "Groq";
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", height: "100%", position: "relative", background: "var(--bg)" }, children: [
+    historyOpen && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "div",
+      {
+        onClick: () => setHistoryOpen(false),
+        style: { position: "absolute", inset: 0, zIndex: 20, background: "rgba(0,0,0,.3)", backdropFilter: "blur(2px)" }
+      }
+    ),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-      width: sidebarWidth,
+      position: "absolute",
+      top: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: 30,
+      width: 260,
       background: "var(--surface)",
+      borderLeft: "1px solid var(--brd)",
       display: "flex",
       flexDirection: "column",
-      flexShrink: 0
+      transform: historyOpen ? "translateX(0)" : "translateX(100%)",
+      transition: "transform 220ms cubic-bezier(0.4,0,0.2,1)",
+      boxShadow: historyOpen ? "-6px 0 32px rgba(0,0,0,.22)" : "none"
     }, children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-        padding: "10px 12px",
+        padding: "14px 14px 12px",
         borderBottom: "1px solid var(--brd)",
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        flexShrink: 0
       }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: {
-          fontSize: 10,
-          fontWeight: 700,
-          letterSpacing: ".08em",
-          textTransform: "uppercase",
-          color: "var(--faint)"
-        }, children: "Sessions" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontSize: 12, fontWeight: 600, color: "var(--txt)", letterSpacing: "-.01em" }, children: "Sessions" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", gap: 6 }, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              onClick: newSession,
+              style: {
+                display: "flex",
+                alignItems: "center",
+                gap: 5,
+                padding: "4px 10px",
+                borderRadius: "var(--r2)",
+                fontSize: 11,
+                fontWeight: 600,
+                background: "var(--pri)",
+                color: "#fff",
+                border: "none"
+              },
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 11 }),
+                " New"
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              onClick: () => setHistoryOpen(false),
+              style: { display: "flex", padding: 4, borderRadius: "var(--r1)", color: "var(--muted)", border: "none", background: "transparent" },
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 13 })
+            }
+          )
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { flex: 1, overflow: "auto", padding: "6px 8px" }, children: sessions.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { padding: "32px 16px", color: "var(--faint)", fontSize: 12, textAlign: "center", lineHeight: 1.8 }, children: "No sessions yet" }) : sessions.map((s) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 2, marginBottom: 1 }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            onClick: () => {
+              setActiveSession(s);
+              setHistoryOpen(false);
+            },
+            style: {
+              flex: 1,
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "8px 10px",
+              borderRadius: "var(--r2)",
+              fontSize: 12,
+              textAlign: "left",
+              color: activeSession?.id === s.id ? "var(--pri)" : "var(--txt)",
+              background: activeSession?.id === s.id ? "var(--pri-glow)" : "transparent",
+              border: `1px solid ${activeSession?.id === s.id ? "rgba(79,152,163,.25)" : "transparent"}`,
+              transition: "all .12s",
+              minWidth: 0,
+              cursor: "pointer"
+            },
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(MessageSquare, { size: 11, style: { flexShrink: 0, opacity: 0.7 } }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }, children: s.title })
+            ]
+          }
+        ),
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           "button",
           {
-            onClick: newSession,
-            title: "New chat session",
+            title: "Delete",
+            onClick: async (e) => {
+              e.stopPropagation();
+              await deleteSession(s.id);
+            },
             style: {
-              color: "var(--muted)",
-              display: "flex",
-              padding: 4,
+              width: 26,
+              height: 26,
               borderRadius: "var(--r1)",
-              transition: "color .15s, background .15s"
+              flexShrink: 0,
+              color: "var(--faint)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              border: "none",
+              background: "transparent",
+              cursor: "pointer",
+              transition: "all .12s"
             },
             onMouseEnter: (e) => {
-              e.currentTarget.style.color = "var(--pri)";
-              e.currentTarget.style.background = "var(--pri-glow)";
+              e.currentTarget.style.color = "#f87171";
+              e.currentTarget.style.background = "rgba(248,113,113,.1)";
             },
             onMouseLeave: (e) => {
-              e.currentTarget.style.color = "var(--muted)";
+              e.currentTarget.style.color = "var(--faint)";
               e.currentTarget.style.background = "transparent";
             },
-            children: /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 13 })
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 11 })
+          }
+        )
+      ] }, s.id)) })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      padding: "0 12px",
+      height: 42,
+      borderBottom: "1px solid var(--brd)",
+      flexShrink: 0,
+      background: "var(--surface)"
+    }, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { position: "relative", display: "flex" }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            id: "model-toggle-btn",
+            style: {
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              padding: "4px 10px 4px 8px",
+              borderRadius: "var(--r2)",
+              border: "1px solid var(--brd)",
+              background: "var(--offset)",
+              color: "var(--txt)",
+              fontSize: 11,
+              fontWeight: 500,
+              cursor: "pointer",
+              transition: "all .15s"
+            },
+            onClick: () => {
+              const menu = document.getElementById("model-menu");
+              if (menu) menu.style.display = menu.style.display === "none" ? "flex" : "none";
+            },
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { width: 6, height: 6, borderRadius: "50%", background: "var(--pri)", flexShrink: 0 } }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: modelLabel }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { style: { color: "var(--faint)", fontSize: 10 }, children: [
+                "· ",
+                modelSub
+              ] })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "div",
+          {
+            id: "model-menu",
+            style: {
+              display: "none",
+              flexDirection: "column",
+              position: "absolute",
+              top: "calc(100% + 4px)",
+              left: 0,
+              zIndex: 50,
+              background: "var(--surface)",
+              border: "1px solid var(--brd)",
+              borderRadius: "var(--r2)",
+              overflow: "hidden",
+              boxShadow: "0 8px 24px rgba(0,0,0,.2)",
+              minWidth: 160
+            },
+            children: MODEL_OPTIONS.map((opt) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "button",
+              {
+                onClick: () => {
+                  setModel(opt.id);
+                  const menu = document.getElementById("model-menu");
+                  if (menu) menu.style.display = "none";
+                },
+                style: {
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  padding: "9px 14px",
+                  textAlign: "left",
+                  fontSize: 12,
+                  fontWeight: model === opt.id ? 600 : 400,
+                  background: model === opt.id ? "var(--pri-glow)" : "transparent",
+                  color: model === opt.id ? "var(--pri)" : "var(--txt)",
+                  borderBottom: "1px solid var(--brd)",
+                  cursor: "pointer",
+                  transition: "background .1s"
+                },
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { width: 6, height: 6, borderRadius: "50%", background: model === opt.id ? "var(--pri)" : "var(--faint)", flexShrink: 0 } }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: opt.label }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { marginLeft: "auto", fontSize: 10, color: "var(--faint)", fontWeight: 400 }, children: opt.sub })
+                ]
+              },
+              opt.id
+            ))
           }
         )
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { flex: 1, overflow: "auto", padding: "6px 6px" }, children: sessions.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-        padding: "20px 10px",
-        color: "var(--faint)",
-        fontSize: 12,
-        textAlign: "center",
-        lineHeight: 1.5
-      }, children: [
-        "No sessions",
-        /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontSize: 11 }, children: "Click + to start" })
-      ] }) : sessions.map((s) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "div",
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { flex: 1 } }),
+      activeSession && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: {
+        fontSize: 11,
+        color: "var(--muted)",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+        maxWidth: 140
+      }, children: activeSession.title }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { flex: 1 } }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
         {
+          onClick: newSession,
+          title: "New chat",
           style: {
+            width: 28,
+            height: 28,
+            borderRadius: "var(--r2)",
+            border: "1px solid var(--brd)",
+            background: "var(--offset)",
+            color: "var(--muted)",
             display: "flex",
             alignItems: "center",
-            gap: 6,
-            marginBottom: 1
+            justifyContent: "center",
+            cursor: "pointer",
+            transition: "all .15s"
           },
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              "button",
-              {
-                onClick: () => setActiveSession(s),
-                style: {
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 7,
-                  width: "100%",
-                  padding: "7px 9px",
-                  borderRadius: "var(--r2)",
-                  fontSize: 12,
-                  textAlign: "left",
-                  color: activeSession?.id === s.id ? "var(--pri)" : "var(--muted)",
-                  background: activeSession?.id === s.id ? "var(--pri-glow)" : "transparent",
-                  transition: "background .12s, color .12s"
-                },
-                children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(MessageSquare, { size: 11, style: { flexShrink: 0 } }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }, children: s.title })
-                ]
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                title: "Delete chat session",
-                onClick: async (e) => {
-                  e.stopPropagation();
-                  await deleteSession(s.id);
-                },
-                style: {
-                  width: 24,
-                  height: 24,
-                  borderRadius: "var(--r1)",
-                  color: "var(--faint)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                  transition: "all .12s"
-                },
-                onMouseEnter: (e) => {
-                  e.currentTarget.style.color = "var(--err-txt, #f87171)";
-                  e.currentTarget.style.background = "rgba(255,60,60,.08)";
-                },
-                onMouseLeave: (e) => {
-                  e.currentTarget.style.color = "var(--faint)";
-                  e.currentTarget.style.background = "transparent";
-                },
-                children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 12 })
-              }
-            )
-          ]
-        },
-        s.id
-      )) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(ModelToggle, { value: model, onChange: setModel })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "div",
-      {
-        onMouseDown: (e) => {
-          isResizingRef.current = true;
-          resizeStartXRef.current = e.clientX;
-          resizeStartWidthRef.current = sidebarWidth;
-          document.body.style.cursor = "col-resize";
-          document.body.style.userSelect = "none";
-        },
-        title: "Drag to resize sessions panel",
-        style: {
-          width: 6,
-          cursor: "col-resize",
-          background: "transparent",
-          borderLeft: "1px solid var(--brd)",
-          borderRight: "1px solid transparent",
-          flexShrink: 0
+          onMouseEnter: (e) => {
+            e.currentTarget.style.background = "var(--pri)";
+            e.currentTarget.style.color = "#fff";
+            e.currentTarget.style.borderColor = "var(--pri)";
+          },
+          onMouseLeave: (e) => {
+            e.currentTarget.style.background = "var(--offset)";
+            e.currentTarget.style.color = "var(--muted)";
+            e.currentTarget.style.borderColor = "var(--brd)";
+          },
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 13 })
         }
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }, children: !activeSession ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          onClick: () => setHistoryOpen((h2) => !h2),
+          title: "Chat history",
+          style: {
+            width: 28,
+            height: 28,
+            borderRadius: "var(--r2)",
+            border: `1px solid ${historyOpen ? "var(--pri)" : "var(--brd)"}`,
+            background: historyOpen ? "var(--pri-glow)" : "var(--offset)",
+            color: historyOpen ? "var(--pri)" : "var(--muted)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            transition: "all .15s"
+          },
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx(History, { size: 13 })
+        }
+      )
+    ] }),
+    !activeSession ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
       flex: 1,
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
-      color: "var(--faint)",
-      gap: 12
+      gap: 16,
+      padding: 24
     }, children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
-        width: 48,
-        height: 48,
-        borderRadius: "50%",
+        width: 52,
+        height: 52,
+        borderRadius: 16,
         background: "var(--pri-glow)",
-        border: "1px solid var(--brd)",
+        border: "1px solid rgba(79,152,163,.25)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center"
-      }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Zap, { size: 22, style: { color: "var(--pri)" }, strokeWidth: 1.5 }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { textAlign: "center", lineHeight: 1.6 }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 14, fontWeight: 600, color: "var(--muted)", marginBottom: 4 }, children: "Forge AI" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 12, color: "var(--faint)" }, children: model === "gemini" ? "Powered by Google · Gemini 2.0 Flash" : model === "ollama" ? "Powered by Local Ollama · Llama 3.1" : "Powered by Groq · Llama 4 Scout" })
+      }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Zap, { size: 24, style: { color: "var(--pri)" }, strokeWidth: 1.5 }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { textAlign: "center", lineHeight: 1.7 }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 15, fontWeight: 600, color: "var(--txt)", marginBottom: 4, letterSpacing: "-.01em" }, children: "Forge AI" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 12, color: "var(--faint)" }, children: model === "gemini" ? "Gemini 2.0 Flash · Google" : model === "ollama" ? "Qwen 2.5 Coder · Local Ollama" : "Llama 4 Scout · Groq" })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs(
         "button",
         {
           onClick: newSession,
           style: {
-            marginTop: 4,
-            padding: "8px 18px",
+            padding: "8px 20px",
             borderRadius: "var(--r3)",
             background: "var(--pri)",
             color: "#fff",
             fontSize: 13,
             fontWeight: 500,
+            border: "none",
+            cursor: "pointer",
             display: "flex",
             alignItems: "center",
-            gap: 6
+            gap: 7
           },
           children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 13 }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 14 }),
             " New Chat"
           ]
         }
@@ -23005,20 +23372,22 @@ ${rawContent}` : rawContent,
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
         flex: 1,
         overflow: "auto",
-        padding: "16px 18px",
+        padding: "20px 16px 8px",
         display: "flex",
         flexDirection: "column",
-        gap: 14
+        gap: 12
       }, children: [
         messages.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
           margin: "auto",
           textAlign: "center",
           color: "var(--faint)",
           fontSize: 12,
-          lineHeight: 1.8
+          lineHeight: 1.9
         }, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Zap, { size: 20, strokeWidth: 1, style: { margin: "0 auto 8px", color: "var(--pri)", opacity: 0.5 } }),
-          "Ask anything about your code"
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Zap, { size: 18, strokeWidth: 1, style: { margin: "0 auto 10px", color: "var(--pri)", opacity: 0.4 } }),
+          "Ask anything about your code",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontSize: 11, opacity: 0.6 }, children: "Type @ to attach a file" })
         ] }),
         messages.map((msg, idx) => /* @__PURE__ */ jsxRuntimeExports.jsx(
           MessageBubble,
@@ -23031,13 +23400,19 @@ ${rawContent}` : rawContent,
         )),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref: bottomRef })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { padding: "10px 14px 12px", borderTop: "1px solid var(--brd)", background: "var(--surface)", position: "relative" }, children: [
-        attachedFiles.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 8 }, children: attachedFiles.map((f) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+        padding: "8px 12px 12px",
+        borderTop: "1px solid var(--brd)",
+        background: "var(--surface)",
+        position: "relative",
+        flexShrink: 0
+      }, children: [
+        attachedFiles.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 7 }, children: attachedFiles.map((f) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
           display: "flex",
           alignItems: "center",
           gap: 5,
           background: "var(--pri-glow)",
-          border: "1px solid rgba(79,152,163,.35)",
+          border: "1px solid rgba(79,152,163,.3)",
           borderRadius: "var(--r3)",
           padding: "3px 8px",
           fontSize: 11,
@@ -23046,19 +23421,19 @@ ${rawContent}` : rawContent,
         }, children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(Paperclip, { size: 10 }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: f.path.split("/").pop() }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => removeAttached(f.path), style: { color: "var(--pri)", display: "flex", opacity: 0.7 }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 10 }) })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => removeAttached(f.path), style: { color: "var(--pri)", display: "flex", opacity: 0.7, background: "none", border: "none", cursor: "pointer", padding: 0 }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 10 }) })
         ] }, f.path)) }),
         atQuery !== null && atResults.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
           position: "absolute",
           bottom: "100%",
-          left: 14,
-          right: 14,
+          left: 12,
+          right: 12,
           zIndex: 50,
           background: "var(--surface)",
           border: "1px solid var(--brd)",
           borderRadius: "var(--r2)",
           overflow: "hidden",
-          boxShadow: "0 -4px 16px rgba(0,0,0,.15)",
+          boxShadow: "0 -8px 24px rgba(0,0,0,.18)",
           marginBottom: 4
         }, children: atResults.map((f, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { onClick: () => attachFile(f), style: {
           width: "100%",
@@ -23071,80 +23446,110 @@ ${rawContent}` : rawContent,
           borderBottom: i < atResults.length - 1 ? "1px solid var(--brd)" : "none",
           display: "flex",
           gap: 10,
-          alignItems: "center"
+          alignItems: "center",
+          border: "none",
+          cursor: "pointer"
         }, children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(Paperclip, { size: 10, style: { flexShrink: 0, opacity: 0.5 } }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: f.split("/").pop() }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { color: "var(--faint)", fontSize: 10, flexShrink: 0 }, children: f.replace(activeProject?.path ?? "", "") })
         ] }, f)) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", gap: 8, alignItems: "flex-end" }, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "textarea",
-            {
-              ref: inputRef,
-              value: input,
-              onChange: handleInput,
-              onKeyDown: handleKeyDown,
-              placeholder: isStreaming ? "Waiting for response…" : "Ask anything… · type @ to attach a file",
-              rows: 1,
-              disabled: isStreaming,
-              style: {
-                flex: 1,
-                background: "var(--offset)",
-                border: "1px solid var(--brd)",
-                borderRadius: "var(--r3)",
-                color: "var(--txt)",
-                fontSize: 13,
-                padding: "9px 13px",
-                resize: "none",
-                outline: "none",
-                fontFamily: "var(--font-body)",
-                maxHeight: 120,
-                overflowY: "auto",
-                lineHeight: 1.5,
-                transition: "border-color .15s",
-                opacity: isStreaming ? 0.6 : 1
-              },
-              onFocus: (e) => e.target.style.borderColor = "var(--pri)",
-              onBlur: (e) => e.target.style.borderColor = "var(--brd)"
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              onClick: send,
-              disabled: !input.trim() || isStreaming,
-              title: "Send (Enter)",
-              style: {
-                width: 36,
-                height: 36,
-                borderRadius: "var(--r2)",
-                flexShrink: 0,
-                background: input.trim() && !isStreaming ? "var(--pri)" : "var(--dynamic)",
-                color: input.trim() && !isStreaming ? "#fff" : "var(--faint)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                transition: "background .15s, color .15s"
-              },
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx(Send, { size: 14 })
-            }
-          )
-        ] })
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "div",
+          {
+            style: {
+              display: "flex",
+              alignItems: "flex-end",
+              gap: 8,
+              background: "var(--offset)",
+              border: "1px solid var(--brd)",
+              borderRadius: "var(--r3)",
+              padding: "8px 10px 8px 12px",
+              transition: "border-color .15s"
+            },
+            onFocusCapture: (e) => e.currentTarget.style.borderColor = "var(--pri)",
+            onBlurCapture: (e) => e.currentTarget.style.borderColor = "var(--brd)",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "textarea",
+                {
+                  ref: inputRef,
+                  value: input,
+                  onChange: handleInput,
+                  onKeyDown: handleKeyDown,
+                  placeholder: isStreaming ? "Waiting…" : "Ask anything… · @ to attach",
+                  rows: 1,
+                  disabled: isStreaming,
+                  style: {
+                    flex: 1,
+                    background: "transparent",
+                    border: "none",
+                    outline: "none",
+                    color: "var(--txt)",
+                    fontSize: 13,
+                    resize: "none",
+                    fontFamily: "var(--font-body)",
+                    maxHeight: 120,
+                    overflowY: "auto",
+                    lineHeight: 1.55,
+                    opacity: isStreaming ? 0.6 : 1
+                  }
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  onClick: send,
+                  disabled: !input.trim() || isStreaming,
+                  title: "Send (Enter)",
+                  style: {
+                    width: 30,
+                    height: 30,
+                    borderRadius: "var(--r2)",
+                    flexShrink: 0,
+                    background: input.trim() && !isStreaming ? "var(--pri)" : "transparent",
+                    color: input.trim() && !isStreaming ? "#fff" : "var(--faint)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    border: `1px solid ${input.trim() && !isStreaming ? "var(--pri)" : "var(--brd)"}`,
+                    cursor: input.trim() && !isStreaming ? "pointer" : "default",
+                    transition: "all .15s"
+                  },
+                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(Send, { size: 13 })
+                }
+              )
+            ]
+          }
+        )
       ] })
-    ] }) })
+    ] })
   ] });
 }
 function DashboardPanel() {
   const { activeProject } = useForgeStore();
   const [ctx, setCtx] = reactExports.useState(null);
   const [loading, setLoading] = reactExports.useState(false);
+  const normalizeCtx = (c) => {
+    if (!c) return null;
+    return {
+      name: c.name ?? c.project?.name ?? activeProject?.name ?? "Unknown",
+      version: c.version ?? c.project?.version ?? "0.1.0",
+      branch: c.branch ?? c.git?.branch ?? "unknown",
+      clean: typeof c.clean === "boolean" ? c.clean : !(c.git?.isDirty ?? false),
+      fileCount: c.fileCount ?? c.files?.total ?? 0,
+      totalLines: c.totalLines ?? c.files?.estimatedLines ?? 0,
+      stack: Array.isArray(c.stack) ? c.stack.join(" + ") : c.stack ?? "Unknown",
+      lastCommit: c.lastCommit ?? (c.git?.recentCommits?.[0] ? `${c.git.recentCommits[0].hash} ${c.git.recentCommits[0].subject.replace(/\\n/g, " ")} (${c.git.recentCommits[0].time})` : "No commits yet"),
+      keyFiles: c.keyFiles ?? c.files?.keyFiles ?? []
+    };
+  };
   reactExports.useEffect(() => {
     if (!activeProject) return;
     setLoading(true);
     if (!window.forge) return;
     window.forge.context.get(activeProject.path).then((c) => {
-      setCtx(c);
+      setCtx(normalizeCtx(c));
       setLoading(false);
     });
   }, [activeProject]);
@@ -23153,7 +23558,7 @@ function DashboardPanel() {
     setLoading(true);
     await window.forge.context.index(activeProject.path);
     const c = await window.forge.context.get(activeProject.path);
-    setCtx(c);
+    setCtx(normalizeCtx(c));
     setLoading(false);
   };
   if (!activeProject) return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--faint)", fontSize: 13 }, children: "Open a project to see its dashboard" });
@@ -23271,6 +23676,9 @@ function Section({ title, children }) {
 function App() {
   const { activePanel, setProjects, theme } = useForgeStore();
   const [splashDone, setSplashDone] = reactExports.useState(false);
+  const [chatOpen, setChatOpen] = reactExports.useState(false);
+  const [chatWidth, setChatWidth] = reactExports.useState(380);
+  const [dragging, setDragging] = reactExports.useState(false);
   reactExports.useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
@@ -23281,6 +23689,34 @@ function App() {
     }
     window.forge.projects.list().then(setProjects).catch((err) => console.error("[Forge] projects.list failed:", err));
   }, []);
+  const onMouseDown = reactExports.useCallback((e) => {
+    e.preventDefault();
+    setDragging(true);
+    const startX = e.clientX;
+    const startW = chatWidth;
+    const onMove = (ev) => {
+      const delta = startX - ev.clientX;
+      setChatWidth(Math.max(280, Math.min(700, startW + delta)));
+    };
+    const onUp = () => {
+      setDragging(false);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+  }, [chatWidth]);
+  reactExports.useEffect(() => {
+    const handler = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "j") {
+        e.preventDefault();
+        setChatOpen((o) => !o);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+  const showSplitChat = chatOpen;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     !splashDone && /* @__PURE__ */ jsxRuntimeExports.jsx(SplashScreen, { onDone: () => setSplashDone(true) }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
@@ -23289,18 +23725,53 @@ function App() {
       width: "100vw",
       overflow: "hidden",
       background: "var(--bg)",
-      color: "var(--txt)"
+      color: "var(--txt)",
+      userSelect: dragging ? "none" : void 0
     }, children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(Sidebar, {}),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Topbar, {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", minWidth: 0 }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Topbar, { onToggleAI: () => setChatOpen((o) => !o), aiOpen: chatOpen }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { style: { flex: 1, overflow: "hidden", display: "flex" }, children: [
-          activePanel === "editor" && /* @__PURE__ */ jsxRuntimeExports.jsx(EditorPanel, {}),
-          activePanel === "search" && /* @__PURE__ */ jsxRuntimeExports.jsx(SearchPanel, {}),
-          activePanel === "terminal" && /* @__PURE__ */ jsxRuntimeExports.jsx(TerminalPanel, {}),
-          activePanel === "git" && /* @__PURE__ */ jsxRuntimeExports.jsx(GitPanel, {}),
-          activePanel === "chat" && /* @__PURE__ */ jsxRuntimeExports.jsx(ChatPanel, {}),
-          activePanel === "dashboard" && /* @__PURE__ */ jsxRuntimeExports.jsx(DashboardPanel, {})
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, overflow: "hidden", minWidth: 0, display: "flex", flexDirection: "column" }, children: [
+            activePanel === "editor" && /* @__PURE__ */ jsxRuntimeExports.jsx(EditorPanel, {}),
+            activePanel === "search" && /* @__PURE__ */ jsxRuntimeExports.jsx(SearchPanel, {}),
+            activePanel === "terminal" && /* @__PURE__ */ jsxRuntimeExports.jsx(TerminalPanel, {}),
+            activePanel === "git" && /* @__PURE__ */ jsxRuntimeExports.jsx(GitPanel, {}),
+            activePanel === "chat" && /* @__PURE__ */ jsxRuntimeExports.jsx(ChatPanel, {}),
+            activePanel === "dashboard" && /* @__PURE__ */ jsxRuntimeExports.jsx(DashboardPanel, {})
+          ] }),
+          showSplitChat && /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "div",
+            {
+              onMouseDown,
+              title: "Drag to resize",
+              style: {
+                width: 4,
+                cursor: "col-resize",
+                background: dragging ? "var(--pri)" : "transparent",
+                flexShrink: 0,
+                transition: "background 120ms ease",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                borderLeft: "1px solid var(--brd)"
+              },
+              onMouseEnter: (e) => e.currentTarget.style.background = "var(--pri)",
+              onMouseLeave: (e) => !dragging && (e.currentTarget.style.background = "transparent"),
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(GripVertical, { size: 10, style: { color: "var(--muted)", pointerEvents: "none", opacity: 0.4 } })
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
+            width: showSplitChat ? chatWidth : 0,
+            minWidth: 0,
+            flexShrink: 0,
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden",
+            transition: dragging ? "none" : "width 220ms cubic-bezier(0.4,0,0.2,1)",
+            background: "var(--surface)",
+            borderLeft: showSplitChat ? "1px solid var(--brd)" : "none"
+          }, children: showSplitChat && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { width: chatWidth, height: "100%", display: "flex", flexDirection: "column", overflow: "hidden" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChatPanel, {}) }) })
         ] })
       ] })
     ] })

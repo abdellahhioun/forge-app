@@ -8,12 +8,28 @@ export default function DashboardPanel() {
   const [ctx, setCtx] = useState<ProjectContext | null>(null)
   const [loading, setLoading] = useState(false)
 
+  const normalizeCtx = (c: any): ProjectContext | null => {
+    if (!c) return null
+    return {
+      name: c.name ?? c.project?.name ?? activeProject?.name ?? 'Unknown',
+      version: c.version ?? c.project?.version ?? '0.1.0',
+      branch: c.branch ?? c.git?.branch ?? 'unknown',
+      clean: typeof c.clean === 'boolean' ? c.clean : !(c.git?.isDirty ?? false),
+      fileCount: c.fileCount ?? c.files?.total ?? 0,
+      totalLines: c.totalLines ?? c.files?.estimatedLines ?? 0,
+      stack: Array.isArray(c.stack) ? c.stack.join(' + ') : (c.stack ?? 'Unknown'),
+      lastCommit: c.lastCommit ?? (c.git?.recentCommits?.[0] ? `${c.git.recentCommits[0].hash} ${c.git.recentCommits[0].subject.replace(/\\n/g, ' ')} (${c.git.recentCommits[0].time})` : 'No commits yet'),
+      keyFiles: c.keyFiles ?? c.files?.keyFiles ?? [],
+    } as ProjectContext
+  }
+
   useEffect(() => {
     if (!activeProject) return
     setLoading(true)
     if (!window.forge) return
     window.forge.context.get(activeProject.path).then(c => {
-      setCtx(c); setLoading(false)
+      setCtx(normalizeCtx(c))
+      setLoading(false)
     })
   }, [activeProject])
 
@@ -22,7 +38,8 @@ export default function DashboardPanel() {
     setLoading(true)
     await window.forge.context.index(activeProject.path)
     const c = await window.forge.context.get(activeProject.path)
-    setCtx(c); setLoading(false)
+    setCtx(normalizeCtx(c))
+    setLoading(false)
   }
 
   if (!activeProject) return (

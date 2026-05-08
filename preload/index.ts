@@ -57,6 +57,11 @@ contextBridge.exposeInMainWorld('forge', {
     onToken:    (cb: (token: string) => void) => { ipcRenderer.on(IPC.CHAT_AI_TOKEN, (_e, t) => cb(t)); return () => ipcRenderer.removeAllListeners(IPC.CHAT_AI_TOKEN) },
     onDone:     (cb: () => void)              => { ipcRenderer.on(IPC.CHAT_AI_DONE,  () => cb());     return () => ipcRenderer.removeAllListeners(IPC.CHAT_AI_DONE) },
     onError:    (cb: (err: string) => void)   => { ipcRenderer.on(IPC.CHAT_AI_ERROR, (_e, e) => cb(e)); return () => ipcRenderer.removeAllListeners(IPC.CHAT_AI_ERROR) },
+
+    generateEdit: (filePath: string, fileContent: string, selectedText: string, instruction: string, projectPath?: string) => ipcRenderer.invoke(IPC.CHAT_GENERATE_EDIT, filePath, fileContent, selectedText, instruction, projectPath),
+    onGenerateToken: (cb: (token: string) => void) => { ipcRenderer.on(IPC.CHAT_GENERATE_TOKEN, (_e, t) => cb(t)); return () => ipcRenderer.removeAllListeners(IPC.CHAT_GENERATE_TOKEN) },
+    onGenerateDone:  (cb: () => void)              => { ipcRenderer.on(IPC.CHAT_GENERATE_DONE,  () => cb());     return () => ipcRenderer.removeAllListeners(IPC.CHAT_GENERATE_DONE) },
+    onGenerateError: (cb: (err: string) => void)   => { ipcRenderer.on(IPC.CHAT_GENERATE_ERROR, (_e, e) => cb(e)); return () => ipcRenderer.removeAllListeners(IPC.CHAT_GENERATE_ERROR) },
   },
 
   // Context

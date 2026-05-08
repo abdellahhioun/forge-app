@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { useForgeStore } from '../store'
-import { Send, Plus, MessageSquare, Zap, AlertCircle, Trash2, Paperclip, X as XIcon } from 'lucide-react'
+import { Send, Plus, MessageSquare, Zap, AlertCircle, Trash2, Paperclip, X as XIcon, History } from 'lucide-react'
 import type { ChatSession, ChatMessage, AiModel } from '../../../shared/types'
 
 // ─── CodeBlock with Copy + Apply buttons ──────────────────────────────────
@@ -209,7 +209,7 @@ function MessageBubble({ msg, isStreaming, onApply }: { msg: ChatMessage; isStre
 const MODEL_OPTIONS: { id: AiModel; label: string; sub: string }[] = [
   { id: 'groq',   label: 'Llama 4',  sub: 'Groq'   },
   { id: 'gemini', label: 'Gemini 2', sub: 'Google' },
-  { id: 'ollama', label: 'Llama 3.1', sub: 'Local' },
+  { id: 'ollama', label: 'Qwen 2.5', sub: 'Local' },
 ]
 
 function ModelToggle({ value, onChange }: { value: AiModel; onChange: (m: AiModel) => void }) {
@@ -244,15 +244,20 @@ function ModelToggle({ value, onChange }: { value: AiModel; onChange: (m: AiMode
 
 // ─── Main panel ─────────────────────────────────────────────────────────────
 export default function ChatPanel() {
-  const { activeProject, activeFile, updateFileContent, markFileSaved } = useForgeStore()
+  const { activeProject, activeFile, openFiles, updateFileContent, markFileSaved, setPendingDiff } = useForgeStore()
 
   // ─── Apply AI code block to active file ─────────────────────────────────────
   const onApply = useCallback(async (code: string) => {
     if (!activeFile) return
-    await window.forge.files.write(activeFile, code)
-    updateFileContent(activeFile, code)
-    markFileSaved(activeFile)
-  }, [activeFile, updateFileContent, markFileSaved])
+    const currentFile = openFiles.find(f => f.path === activeFile)
+    if (!currentFile) return
+    
+    setPendingDiff({
+      path: activeFile,
+      original: currentFile.content,
+      modified: code
+    })
+  }, [activeFile, openFiles, setPendingDiff])
 
   // ─── MCP tool intent detection ───────────────────────────────────────────────
   const TOOL_INTENTS = [
@@ -295,6 +300,17 @@ export default function ChatPanel() {
   const [atResults, setAtResults] = useState<string[]>([])
   const [attachedFiles, setAttachedFiles] = useState<{ path: string; content: string }[]>([])
   const atIndexRef = useRef(0)
+
+  // ─── Auto-inject active file when it changes (split mode) ────────────────
+  useEffect(() => {
+    if (!activeFile) return
+    const fileObj = openFiles.find(f => f.path === activeFile)
+    if (!fileObj) return
+    setAttachedFiles(prev => {
+      const filtered = prev.filter(f => f.path !== activeFile)
+      return [{ path: activeFile, content: fileObj.content }, ...filtered]
+    })
+  }, [activeFile, openFiles])
 
   // ─── Load sessions ────────────────────────────────────────────────────────
   useEffect(() => {
@@ -588,280 +604,387 @@ export default function ChatPanel() {
 
   const removeAttached = (path: string) => setAttachedFiles(prev => prev.filter(f => f.path !== path))
 
+  const [historyOpen, setHistoryOpen] = useState(false)
+
+  // Model label helper
+  const modelLabel = model === 'gemini' ? 'Gemini 2' : model === 'ollama' ? 'Qwen 2.5' : 'Llama 4'
+  const modelSub   = model === 'gemini' ? 'Google'   : model === 'ollama' ? 'Local'    : 'Groq'
+
   return (
-    <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', height: '100%', position: 'relative', background: 'var(--bg)' }}>
 
-      {/* ── Sessions sidebar ─────────────────────────────────────────────── */}
+      {/* ── History slide-over ──────────────────────────────────────────── */}
+      {historyOpen && (
+        <div
+          onClick={() => setHistoryOpen(false)}
+          style={{ position: 'absolute', inset: 0, zIndex: 20, background: 'rgba(0,0,0,.3)', backdropFilter: 'blur(2px)' }}
+        />
+      )}
       <div style={{
-        width: sidebarWidth,
+        position: 'absolute', top: 0, right: 0, bottom: 0, zIndex: 30,
+        width: 260,
         background: 'var(--surface)',
-        display: 'flex', flexDirection: 'column', flexShrink: 0,
+        borderLeft: '1px solid var(--brd)',
+        display: 'flex', flexDirection: 'column',
+        transform: historyOpen ? 'translateX(0)' : 'translateX(100%)',
+        transition: 'transform 220ms cubic-bezier(0.4,0,0.2,1)',
+        boxShadow: historyOpen ? '-6px 0 32px rgba(0,0,0,.22)' : 'none',
       }}>
+        {/* Drawer header */}
         <div style={{
-          padding: '10px 12px', borderBottom: '1px solid var(--brd)',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '14px 14px 12px', borderBottom: '1px solid var(--brd)',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0,
         }}>
-          <span style={{
-            fontSize: 10, fontWeight: 700, letterSpacing: '.08em',
-            textTransform: 'uppercase', color: 'var(--faint)',
-          }}>Sessions</span>
-          <button
-            onClick={newSession}
-            title="New chat session"
-            style={{
-              color: 'var(--muted)', display: 'flex', padding: 4,
-              borderRadius: 'var(--r1)',
-              transition: 'color .15s, background .15s',
-            }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'var(--pri)'; (e.currentTarget as HTMLElement).style.background = 'var(--pri-glow)' }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'var(--muted)'; (e.currentTarget as HTMLElement).style.background = 'transparent' }}
-          >
-            <Plus size={13} />
-          </button>
-        </div>
-
-        <div style={{ flex: 1, overflow: 'auto', padding: '6px 6px' }}>
-          {sessions.length === 0 ? (
-            <div style={{
-              padding: '20px 10px', color: 'var(--faint)',
-              fontSize: 12, textAlign: 'center', lineHeight: 1.5,
-            }}>
-              No sessions<br />
-              <span style={{ fontSize: 11 }}>Click + to start</span>
-            </div>
-          ) : sessions.map(s => (
-            <div
-              key={s.id}
+          <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--txt)', letterSpacing: '-.01em' }}>Sessions</span>
+          <div style={{ display: 'flex', gap: 6 }}>
+            <button
+              onClick={newSession}
               style={{
-                display: 'flex', alignItems: 'center', gap: 6,
-                marginBottom: 1,
+                display: 'flex', alignItems: 'center', gap: 5,
+                padding: '4px 10px', borderRadius: 'var(--r2)',
+                fontSize: 11, fontWeight: 600,
+                background: 'var(--pri)', color: '#fff', border: 'none',
               }}
             >
+              <Plus size={11} /> New
+            </button>
+            <button
+              onClick={() => setHistoryOpen(false)}
+              style={{ display: 'flex', padding: 4, borderRadius: 'var(--r1)', color: 'var(--muted)', border: 'none', background: 'transparent' }}
+            >
+              <XIcon size={13} />
+            </button>
+          </div>
+        </div>
+
+        {/* Session list */}
+        <div style={{ flex: 1, overflow: 'auto', padding: '6px 8px' }}>
+          {sessions.length === 0 ? (
+            <div style={{ padding: '32px 16px', color: 'var(--faint)', fontSize: 12, textAlign: 'center', lineHeight: 1.8 }}>
+              No sessions yet
+            </div>
+          ) : sessions.map(s => (
+            <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 2, marginBottom: 1 }}>
               <button
-                onClick={() => setActiveSession(s)}
+                onClick={() => { setActiveSession(s); setHistoryOpen(false) }}
                 style={{
-                  display: 'flex', alignItems: 'center', gap: 7,
-                  width: '100%', padding: '7px 9px', borderRadius: 'var(--r2)',
+                  flex: 1, display: 'flex', alignItems: 'center', gap: 8,
+                  padding: '8px 10px', borderRadius: 'var(--r2)',
                   fontSize: 12, textAlign: 'left',
-                  color: activeSession?.id === s.id ? 'var(--pri)' : 'var(--muted)',
+                  color: activeSession?.id === s.id ? 'var(--pri)' : 'var(--txt)',
                   background: activeSession?.id === s.id ? 'var(--pri-glow)' : 'transparent',
-                  transition: 'background .12s, color .12s',
+                  border: `1px solid ${activeSession?.id === s.id ? 'rgba(79,152,163,.25)' : 'transparent'}`,
+                  transition: 'all .12s', minWidth: 0, cursor: 'pointer',
                 }}
               >
-                <MessageSquare size={11} style={{ flexShrink: 0 }} />
-                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>
-                  {s.title}
-                </span>
+                <MessageSquare size={11} style={{ flexShrink: 0, opacity: .7 }} />
+                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{s.title}</span>
               </button>
               <button
-                title="Delete chat session"
-                onClick={async (e) => {
-                  e.stopPropagation()
-                  await deleteSession(s.id)
-                }}
+                title="Delete"
+                onClick={async (e) => { e.stopPropagation(); await deleteSession(s.id) }}
                 style={{
-                  width: 24, height: 24, borderRadius: 'var(--r1)',
+                  width: 26, height: 26, borderRadius: 'var(--r1)', flexShrink: 0,
                   color: 'var(--faint)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  flexShrink: 0, transition: 'all .12s',
+                  border: 'none', background: 'transparent', cursor: 'pointer', transition: 'all .12s',
                 }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.color = 'var(--err-txt, #f87171)'
-                  ;(e.currentTarget as HTMLElement).style.background = 'rgba(255,60,60,.08)'
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.color = 'var(--faint)'
-                  ;(e.currentTarget as HTMLElement).style.background = 'transparent'
-                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#f87171'; (e.currentTarget as HTMLElement).style.background = 'rgba(248,113,113,.1)' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'var(--faint)'; (e.currentTarget as HTMLElement).style.background = 'transparent' }}
               >
-                <Trash2 size={12} />
+                <Trash2 size={11} />
               </button>
             </div>
           ))}
         </div>
-
-        {/* Model selector */}
-        <ModelToggle value={model} onChange={setModel} />
       </div>
 
-      {/* ── Drag separator ───────────────────────────────────────────────── */}
-      <div
-        onMouseDown={(e) => {
-          isResizingRef.current = true
-          resizeStartXRef.current = e.clientX
-          resizeStartWidthRef.current = sidebarWidth
-          document.body.style.cursor = 'col-resize'
-          document.body.style.userSelect = 'none'
-        }}
-        title="Drag to resize sessions panel"
-        style={{
-          width: 6,
-          cursor: 'col-resize',
-          background: 'transparent',
-          borderLeft: '1px solid var(--brd)',
-          borderRight: '1px solid transparent',
-          flexShrink: 0,
-        }}
-      />
-
-      {/* ── Chat area ────────────────────────────────────────────────────── */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-        {!activeSession ? (
-          <div style={{
-            flex: 1, display: 'flex', flexDirection: 'column',
-            alignItems: 'center', justifyContent: 'center',
-            color: 'var(--faint)', gap: 12,
-          }}>
-            <div style={{
-              width: 48, height: 48, borderRadius: '50%',
-              background: 'var(--pri-glow)', border: '1px solid var(--brd)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <Zap size={22} style={{ color: 'var(--pri)' }} strokeWidth={1.5} />
-            </div>
-            <div style={{ textAlign: 'center', lineHeight: 1.6 }}>
-              <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--muted)', marginBottom: 4 }}>
-                Forge AI
-              </div>
-              <div style={{ fontSize: 12, color: 'var(--faint)' }}>
-                {model === 'gemini'
-                  ? 'Powered by Google · Gemini 2.0 Flash'
-                  : model === 'ollama'
-                    ? 'Powered by Local Ollama · Llama 3.1'
-                    : 'Powered by Groq · Llama 4 Scout'}
-              </div>
-            </div>
-            <button
-              onClick={newSession}
-              style={{
-                marginTop: 4, padding: '8px 18px', borderRadius: 'var(--r3)',
-                background: 'var(--pri)', color: '#fff',
-                fontSize: 13, fontWeight: 500,
-                display: 'flex', alignItems: 'center', gap: 6,
-              }}
-            >
-              <Plus size={13} /> New Chat
-            </button>
+      {/* ── Top bar ──────────────────────────────────────────────────────── */}
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: 8,
+        padding: '0 12px',
+        height: 42,
+        borderBottom: '1px solid var(--brd)',
+        flexShrink: 0,
+        background: 'var(--surface)',
+      }}>
+        {/* Left: Model pill */}
+        <div style={{ position: 'relative', display: 'flex' }}>
+          <button
+            id="model-toggle-btn"
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              padding: '4px 10px 4px 8px', borderRadius: 'var(--r2)',
+              border: '1px solid var(--brd)',
+              background: 'var(--offset)',
+              color: 'var(--txt)', fontSize: 11, fontWeight: 500,
+              cursor: 'pointer', transition: 'all .15s',
+            }}
+            onClick={() => {
+              const menu = document.getElementById('model-menu')
+              if (menu) menu.style.display = menu.style.display === 'none' ? 'flex' : 'none'
+            }}
+          >
+            <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--pri)', flexShrink: 0 }} />
+            <span>{modelLabel}</span>
+            <span style={{ color: 'var(--faint)', fontSize: 10 }}>· {modelSub}</span>
+          </button>
+          <div
+            id="model-menu"
+            style={{
+              display: 'none', flexDirection: 'column',
+              position: 'absolute', top: 'calc(100% + 4px)', left: 0, zIndex: 50,
+              background: 'var(--surface)', border: '1px solid var(--brd)',
+              borderRadius: 'var(--r2)', overflow: 'hidden',
+              boxShadow: '0 8px 24px rgba(0,0,0,.2)',
+              minWidth: 160,
+            }}
+          >
+            {MODEL_OPTIONS.map(opt => (
+              <button
+                key={opt.id}
+                onClick={() => {
+                  setModel(opt.id)
+                  const menu = document.getElementById('model-menu')
+                  if (menu) menu.style.display = 'none'
+                }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 10,
+                  padding: '9px 14px', textAlign: 'left',
+                  fontSize: 12, fontWeight: model === opt.id ? 600 : 400,
+                  background: model === opt.id ? 'var(--pri-glow)' : 'transparent',
+                  color: model === opt.id ? 'var(--pri)' : 'var(--txt)',
+                  borderBottom: '1px solid var(--brd)', cursor: 'pointer',
+                  transition: 'background .1s',
+                }}
+              >
+                <div style={{ width: 6, height: 6, borderRadius: '50%', background: model === opt.id ? 'var(--pri)' : 'var(--faint)', flexShrink: 0 }} />
+                <span>{opt.label}</span>
+                <span style={{ marginLeft: 'auto', fontSize: 10, color: 'var(--faint)', fontWeight: 400 }}>{opt.sub}</span>
+              </button>
+            ))}
           </div>
-        ) : (
-          <>
-            {/* Messages */}
-            <div style={{
-              flex: 1, overflow: 'auto',
-              padding: '16px 18px',
-              display: 'flex', flexDirection: 'column', gap: 14,
-            }}>
-              {messages.length === 0 && (
-                <div style={{
-                  margin: 'auto', textAlign: 'center',
-                  color: 'var(--faint)', fontSize: 12, lineHeight: 1.8,
-                }}>
-                  <Zap size={20} strokeWidth={1} style={{ margin: '0 auto 8px', color: 'var(--pri)', opacity: .5 }} />
-                  Ask anything about your code
-                </div>
-              )}
-              {messages.map((msg, idx) => (
-                <MessageBubble
-                  key={msg.id}
-                  msg={msg}
-                  isStreaming={isStreaming && idx === messages.length - 1 && msg.role === 'assistant'}
-                  onApply={onApply}
-                />
-              ))}
-              <div ref={bottomRef} />
-            </div>
+        </div>
 
-            {/* Input */}
-            <div style={{ padding: '10px 14px 12px', borderTop: '1px solid var(--brd)', background: 'var(--surface)', position: 'relative' }}>
+        <div style={{ flex: 1 }} />
 
-              {/* Attached file pills */}
-              {attachedFiles.length > 0 && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 8 }}>
-                  {attachedFiles.map(f => (
-                    <div key={f.path} style={{
-                      display: 'flex', alignItems: 'center', gap: 5,
-                      background: 'var(--pri-glow)', border: '1px solid rgba(79,152,163,.35)',
-                      borderRadius: 'var(--r3)', padding: '3px 8px',
-                      fontSize: 11, color: 'var(--pri)', fontFamily: 'var(--font-mono)',
-                    }}>
-                      <Paperclip size={10} />
-                      <span>{f.path.split('/').pop()}</span>
-                      <button onClick={() => removeAttached(f.path)} style={{ color: 'var(--pri)', display: 'flex', opacity: .7 }}>
-                        <XIcon size={10} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* @file dropdown */}
-              {atQuery !== null && atResults.length > 0 && (
-                <div style={{
-                  position: 'absolute', bottom: '100%', left: 14, right: 14, zIndex: 50,
-                  background: 'var(--surface)', border: '1px solid var(--brd)',
-                  borderRadius: 'var(--r2)', overflow: 'hidden',
-                  boxShadow: '0 -4px 16px rgba(0,0,0,.15)', marginBottom: 4,
-                }}>
-                  {atResults.map((f, i) => (
-                    <button key={f} onClick={() => attachFile(f)} style={{
-                      width: '100%', textAlign: 'left', padding: '7px 12px',
-                      fontSize: 12, fontFamily: 'var(--font-mono)',
-                      color: i === atIndexRef.current ? 'var(--pri)' : 'var(--txt)',
-                      background: i === atIndexRef.current ? 'var(--pri-glow)' : 'transparent',
-                      borderBottom: i < atResults.length - 1 ? '1px solid var(--brd)' : 'none',
-                      display: 'flex', gap: 10, alignItems: 'center',
-                    }}>
-                      <Paperclip size={10} style={{ flexShrink: 0, opacity: .5 }} />
-                      <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{f.split('/').pop()}</span>
-                      <span style={{ color: 'var(--faint)', fontSize: 10, flexShrink: 0 }}>{f.replace(activeProject?.path ?? '', '')}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {/* Textarea + Send */}
-              <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end' }}>
-                <textarea
-                  ref={inputRef}
-                  value={input}
-                  onChange={handleInput}
-                  onKeyDown={handleKeyDown}
-                  placeholder={isStreaming ? 'Waiting for response…' : 'Ask anything… · type @ to attach a file'}
-                  rows={1}
-                  disabled={isStreaming}
-                  style={{
-                    flex: 1,
-                    background: 'var(--offset)', border: '1px solid var(--brd)',
-                    borderRadius: 'var(--r3)', color: 'var(--txt)',
-                    fontSize: 13, padding: '9px 13px',
-                    resize: 'none', outline: 'none',
-                    fontFamily: 'var(--font-body)',
-                    maxHeight: 120, overflowY: 'auto',
-                    lineHeight: 1.5, transition: 'border-color .15s',
-                    opacity: isStreaming ? .6 : 1,
-                  }}
-                  onFocus={e => (e.target.style.borderColor = 'var(--pri)')}
-                  onBlur={e => (e.target.style.borderColor = 'var(--brd)')}
-                />
-                <button
-                  onClick={send}
-                  disabled={!input.trim() || isStreaming}
-                  title="Send (Enter)"
-                  style={{
-                    width: 36, height: 36, borderRadius: 'var(--r2)', flexShrink: 0,
-                    background: input.trim() && !isStreaming ? 'var(--pri)' : 'var(--dynamic)',
-                    color: input.trim() && !isStreaming ? '#fff' : 'var(--faint)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    transition: 'background .15s, color .15s',
-                  }}
-                >
-                  <Send size={14} />
-                </button>
-              </div>
-            </div>
-
-          </>
+        {/* Session title (center) */}
+        {activeSession && (
+          <span style={{
+            fontSize: 11, color: 'var(--muted)',
+            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+            maxWidth: 140,
+          }}>
+            {activeSession.title}
+          </span>
         )}
+
+        <div style={{ flex: 1 }} />
+
+        {/* Right: New + History */}
+        <button
+          onClick={newSession}
+          title="New chat"
+          style={{
+            width: 28, height: 28, borderRadius: 'var(--r2)',
+            border: '1px solid var(--brd)',
+            background: 'var(--offset)',
+            color: 'var(--muted)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            cursor: 'pointer', transition: 'all .15s',
+          }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--pri)'; (e.currentTarget as HTMLElement).style.color = '#fff'; (e.currentTarget as HTMLElement).style.borderColor = 'var(--pri)' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'var(--offset)'; (e.currentTarget as HTMLElement).style.color = 'var(--muted)'; (e.currentTarget as HTMLElement).style.borderColor = 'var(--brd)' }}
+        >
+          <Plus size={13} />
+        </button>
+        <button
+          onClick={() => setHistoryOpen(h => !h)}
+          title="Chat history"
+          style={{
+            width: 28, height: 28, borderRadius: 'var(--r2)',
+            border: `1px solid ${historyOpen ? 'var(--pri)' : 'var(--brd)'}`,
+            background: historyOpen ? 'var(--pri-glow)' : 'var(--offset)',
+            color: historyOpen ? 'var(--pri)' : 'var(--muted)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            cursor: 'pointer', transition: 'all .15s',
+          }}
+        >
+          <History size={13} />
+        </button>
       </div>
+
+      {/* ── Empty / No session state ────────────────────────────────────── */}
+      {!activeSession ? (
+        <div style={{
+          flex: 1, display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'center',
+          gap: 16, padding: 24,
+        }}>
+          <div style={{
+            width: 52, height: 52, borderRadius: 16,
+            background: 'var(--pri-glow)', border: '1px solid rgba(79,152,163,.25)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <Zap size={24} style={{ color: 'var(--pri)' }} strokeWidth={1.5} />
+          </div>
+          <div style={{ textAlign: 'center', lineHeight: 1.7 }}>
+            <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--txt)', marginBottom: 4, letterSpacing: '-.01em' }}>Forge AI</div>
+            <div style={{ fontSize: 12, color: 'var(--faint)' }}>
+              {model === 'gemini' ? 'Gemini 2.0 Flash · Google'
+                : model === 'ollama' ? 'Qwen 2.5 Coder · Local Ollama'
+                : 'Llama 4 Scout · Groq'}
+            </div>
+          </div>
+          <button
+            onClick={newSession}
+            style={{
+              padding: '8px 20px', borderRadius: 'var(--r3)',
+              background: 'var(--pri)', color: '#fff',
+              fontSize: 13, fontWeight: 500, border: 'none', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: 7,
+            }}
+          >
+            <Plus size={14} /> New Chat
+          </button>
+        </div>
+      ) : (
+        <>
+          {/* ── Messages ─────────────────────────────────────────────────── */}
+          <div style={{
+            flex: 1, overflow: 'auto',
+            padding: '20px 16px 8px',
+            display: 'flex', flexDirection: 'column', gap: 12,
+          }}>
+            {messages.length === 0 && (
+              <div style={{
+                margin: 'auto', textAlign: 'center',
+                color: 'var(--faint)', fontSize: 12, lineHeight: 1.9,
+              }}>
+                <Zap size={18} strokeWidth={1} style={{ margin: '0 auto 10px', color: 'var(--pri)', opacity: .4 }} />
+                Ask anything about your code<br />
+                <span style={{ fontSize: 11, opacity: .6 }}>Type @ to attach a file</span>
+              </div>
+            )}
+            {messages.map((msg, idx) => (
+              <MessageBubble
+                key={msg.id}
+                msg={msg}
+                isStreaming={isStreaming && idx === messages.length - 1 && msg.role === 'assistant'}
+                onApply={onApply}
+              />
+            ))}
+            <div ref={bottomRef} />
+          </div>
+
+          {/* ── Input area ───────────────────────────────────────────────── */}
+          <div style={{
+            padding: '8px 12px 12px',
+            borderTop: '1px solid var(--brd)',
+            background: 'var(--surface)',
+            position: 'relative',
+            flexShrink: 0,
+          }}>
+            {/* Attached file pills */}
+            {attachedFiles.length > 0 && (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginBottom: 7 }}>
+                {attachedFiles.map(f => (
+                  <div key={f.path} style={{
+                    display: 'flex', alignItems: 'center', gap: 5,
+                    background: 'var(--pri-glow)', border: '1px solid rgba(79,152,163,.3)',
+                    borderRadius: 'var(--r3)', padding: '3px 8px',
+                    fontSize: 11, color: 'var(--pri)', fontFamily: 'var(--font-mono)',
+                  }}>
+                    <Paperclip size={10} />
+                    <span>{f.path.split('/').pop()}</span>
+                    <button onClick={() => removeAttached(f.path)} style={{ color: 'var(--pri)', display: 'flex', opacity: .7, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                      <XIcon size={10} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* @file dropdown */}
+            {atQuery !== null && atResults.length > 0 && (
+              <div style={{
+                position: 'absolute', bottom: '100%', left: 12, right: 12, zIndex: 50,
+                background: 'var(--surface)', border: '1px solid var(--brd)',
+                borderRadius: 'var(--r2)', overflow: 'hidden',
+                boxShadow: '0 -8px 24px rgba(0,0,0,.18)', marginBottom: 4,
+              }}>
+                {atResults.map((f, i) => (
+                  <button key={f} onClick={() => attachFile(f)} style={{
+                    width: '100%', textAlign: 'left', padding: '7px 12px',
+                    fontSize: 12, fontFamily: 'var(--font-mono)',
+                    color: i === atIndexRef.current ? 'var(--pri)' : 'var(--txt)',
+                    background: i === atIndexRef.current ? 'var(--pri-glow)' : 'transparent',
+                    borderBottom: i < atResults.length - 1 ? '1px solid var(--brd)' : 'none',
+                    display: 'flex', gap: 10, alignItems: 'center',
+                    border: 'none', cursor: 'pointer',
+                  }}>
+                    <Paperclip size={10} style={{ flexShrink: 0, opacity: .5 }} />
+                    <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{f.split('/').pop()}</span>
+                    <span style={{ color: 'var(--faint)', fontSize: 10, flexShrink: 0 }}>{f.replace(activeProject?.path ?? '', '')}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Input box */}
+            <div style={{
+              display: 'flex', alignItems: 'flex-end', gap: 8,
+              background: 'var(--offset)',
+              border: '1px solid var(--brd)',
+              borderRadius: 'var(--r3)',
+              padding: '8px 10px 8px 12px',
+              transition: 'border-color .15s',
+            }}
+              onFocusCapture={e => (e.currentTarget.style.borderColor = 'var(--pri)')}
+              onBlurCapture={e => (e.currentTarget.style.borderColor = 'var(--brd)')}
+            >
+              <textarea
+                ref={inputRef}
+                value={input}
+                onChange={handleInput}
+                onKeyDown={handleKeyDown}
+                placeholder={isStreaming ? 'Waiting…' : 'Ask anything… · @ to attach'}
+                rows={1}
+                disabled={isStreaming}
+                style={{
+                  flex: 1,
+                  background: 'transparent',
+                  border: 'none',
+                  outline: 'none',
+                  color: 'var(--txt)',
+                  fontSize: 13,
+                  resize: 'none',
+                  fontFamily: 'var(--font-body)',
+                  maxHeight: 120,
+                  overflowY: 'auto',
+                  lineHeight: 1.55,
+                  opacity: isStreaming ? .6 : 1,
+                }}
+              />
+              <button
+                onClick={send}
+                disabled={!input.trim() || isStreaming}
+                title="Send (Enter)"
+                style={{
+                  width: 30, height: 30, borderRadius: 'var(--r2)', flexShrink: 0,
+                  background: input.trim() && !isStreaming ? 'var(--pri)' : 'transparent',
+                  color: input.trim() && !isStreaming ? '#fff' : 'var(--faint)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  border: `1px solid ${input.trim() && !isStreaming ? 'var(--pri)' : 'var(--brd)'}`,
+                  cursor: input.trim() && !isStreaming ? 'pointer' : 'default',
+                  transition: 'all .15s',
+                }}
+              >
+                <Send size={13} />
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }
