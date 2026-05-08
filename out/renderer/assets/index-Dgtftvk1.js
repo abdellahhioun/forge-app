@@ -22336,6 +22336,50 @@ function renderMarkdown(text, onApply) {
   });
   return nodes;
 }
+const TOOL_ICONS = {
+  git_diff: "📄",
+  git_status: "📊",
+  git_log: "📜",
+  git_commit: "✅",
+  run_tests: "🧪",
+  lint_file: "🔍",
+  read_file: "📖",
+  list_files: "📁",
+  explain_code: "🧠",
+  get_dependency_graph: "🕸"
+};
+function ToolCallCard({ tool, status, result }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { border: "1px solid var(--brd)", borderRadius: 8, overflow: "hidden", margin: "4px 0", fontSize: 12 }, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      padding: "6px 12px",
+      background: "var(--offset)",
+      borderBottom: result ? "1px solid var(--brd)" : "none"
+    }, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: TOOL_ICONS[tool] ?? "⚙️" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontFamily: "var(--font-mono)", color: "var(--pri)", fontWeight: 600 }, children: tool }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: {
+        marginLeft: "auto",
+        fontSize: 11,
+        color: status === "done" ? "var(--pri)" : status === "error" ? "#f87171" : "var(--faint)"
+      }, children: status === "running" ? "⏳ running…" : status === "done" ? "✓ done" : "✗ error" })
+    ] }),
+    result && /* @__PURE__ */ jsxRuntimeExports.jsx("pre", { style: {
+      margin: 0,
+      padding: "10px 12px",
+      background: "var(--bg)",
+      fontSize: 11,
+      overflowX: "auto",
+      lineHeight: 1.6,
+      fontFamily: "var(--font-mono)",
+      color: "var(--txt)",
+      maxHeight: 300,
+      overflowY: "auto"
+    }, children: result })
+  ] });
+}
 function TypingDots() {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 4, padding: "4px 0" }, children: [
     [0, 1, 2].map((i) => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
@@ -22389,16 +22433,15 @@ function MessageBubble({ msg, isStreaming, onApply }) {
       color: isError ? "var(--err-txt, #f87171)" : "var(--txt)",
       userSelect: "text"
     }, children: [
-      isUser ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { whiteSpace: "pre-wrap" }, children: msg.content }) : isStreaming && msg.content === "" ? /* @__PURE__ */ jsxRuntimeExports.jsx(TypingDots, {}) : renderMarkdown(msg.content, onApply),
-      isStreaming && msg.content !== "" && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: {
-        display: "inline-block",
-        width: 2,
-        height: "1em",
-        background: "var(--pri)",
-        marginLeft: 2,
-        verticalAlign: "middle",
-        animation: "cursorblink .8s step-end infinite"
-      } }),
+      isUser ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { whiteSpace: "pre-wrap" }, children: msg.content }) : msg.content.startsWith("__TOOL__:") ? (() => {
+        const parts = msg.content.slice("__TOOL__:".length).split(":");
+        const tool = parts[0];
+        const rest = parts.slice(1).join(":");
+        const nlIdx = rest.indexOf("\n");
+        const status = nlIdx === -1 ? rest : rest.slice(0, nlIdx);
+        const result = nlIdx === -1 ? void 0 : rest.slice(nlIdx + 1);
+        return /* @__PURE__ */ jsxRuntimeExports.jsx(ToolCallCard, { tool, status, result });
+      })() : isStreaming && msg.content === "" ? /* @__PURE__ */ jsxRuntimeExports.jsx(TypingDots, {}) : renderMarkdown(msg.content, onApply),
       /* @__PURE__ */ jsxRuntimeExports.jsx("style", { children: `
           @keyframes cursorblink { 0%,100%{opacity:1} 50%{opacity:0} }
         ` })
@@ -22452,6 +22495,24 @@ function ChatPanel() {
     updateFileContent(activeFile, code);
     markFileSaved(activeFile);
   }, [activeFile, updateFileContent, markFileSaved]);
+  const TOOL_INTENTS = [
+    { pattern: /git diff|what changed|show diff/i, tool: "git_diff" },
+    { pattern: /git status|what.?s staged|unstaged/i, tool: "git_status" },
+    { pattern: /git log|recent commits|commit history/i, tool: "git_log" },
+    { pattern: /run tests?|test suite|npm test/i, tool: "run_tests" },
+    { pattern: /lint|eslint|code issues|code quality/i, tool: "lint_file" },
+    { pattern: /list files|file tree|show files|what files/i, tool: "list_files" },
+    { pattern: /explain.*(this |the )?code|analyse.*file|what does.*do/i, tool: "explain_code" },
+    { pattern: /dependency graph|import graph|who imports/i, tool: "get_dependency_graph" }
+  ];
+  const runTool = reactExports.useCallback(async (tool) => {
+    const args = { cwd: activeProject?.path ?? "" };
+    if (tool === "lint_file" || tool === "explain_code" || tool === "read_file") {
+      args.filePath = activeFile ?? "";
+    }
+    const result = await window.forge.tools.run(tool, args);
+    return typeof result === "string" ? result : JSON.stringify(result, null, 2);
+  }, [activeProject, activeFile]);
   const [sessions, setSessions] = reactExports.useState([]);
   const [activeSession, setActiveSession] = reactExports.useState(null);
   const [messages, setMessages] = reactExports.useState([]);
@@ -22587,6 +22648,58 @@ function ChatPanel() {
   const send = reactExports.useCallback(async () => {
     if (!input.trim() || !activeSession || isStreaming) return;
     const rawContent = input.trim();
+    const matched = TOOL_INTENTS.find((t) => t.pattern.test(rawContent));
+    if (matched && activeProject?.path) {
+      setInput("");
+      setAttachedFiles([]);
+      setTimeout(() => inputRef.current?.focus(), 0);
+      const userMsg2 = {
+        id: Math.random().toString(36),
+        role: "user",
+        content: rawContent,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString()
+      };
+      setMessages((prev) => [...prev, userMsg2]);
+      await window.forge.chat.send(activeSession.id, "user", rawContent);
+      const toolMsgId = Math.random().toString(36);
+      setMessages((prev) => [...prev, {
+        id: toolMsgId,
+        role: "assistant",
+        content: `__TOOL__:${matched.tool}:running`,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString()
+      }]);
+      setIsStreaming(true);
+      try {
+        const result = await runTool(matched.tool);
+        setMessages((prev) => prev.map(
+          (m) => m.id === toolMsgId ? { ...m, content: `__TOOL__:${matched.tool}:done
+${result}` } : m
+        ));
+        const aiId2 = Math.random().toString(36);
+        streamingIdRef.current = aiId2;
+        setMessages((prev) => [...prev, {
+          id: aiId2,
+          role: "assistant",
+          content: "",
+          createdAt: (/* @__PURE__ */ new Date()).toISOString()
+        }]);
+        const history2 = [
+          ...messages,
+          userMsg2,
+          { role: "assistant", content: `Tool \`${matched.tool}\` output:
+${result}` },
+          { role: "user", content: "Give a brief, useful summary of this output." }
+        ].slice(-20).map((m) => ({ role: m.role === "user" ? "user" : "assistant", content: m.content }));
+        window.forge.chat.ai(history2, void 0, model, activeProject.path);
+      } catch (err) {
+        setMessages((prev) => prev.map(
+          (m) => m.id === toolMsgId ? { ...m, content: `__TOOL__:${matched.tool}:error
+${err.message}` } : m
+        ));
+        setIsStreaming(false);
+      }
+      return;
+    }
     setInput("");
     setAttachedFiles([]);
     setTimeout(() => inputRef.current?.focus(), 0);
@@ -22630,7 +22743,7 @@ ${rawContent}` : rawContent,
       }
     }
     window.forge.chat.ai(history, projectCtx, model, activeProject?.path);
-  }, [input, attachedFiles, activeSession, isStreaming, messages, activeProject, model]);
+  }, [input, attachedFiles, activeSession, isStreaming, messages, activeProject, model, runTool]);
   const handleInput = (e) => {
     const val = e.target.value;
     setInput(val);

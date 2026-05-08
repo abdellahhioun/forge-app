@@ -64,4 +64,10 @@ contextBridge.exposeInMainWorld('forge', {
     get:   (cwd: string) => ipcRenderer.invoke(IPC.CONTEXT_GET, cwd),
     index: (cwd: string) => ipcRenderer.invoke(IPC.CONTEXT_INDEX, cwd),
   },
+
+  // MCP Tool execution from chat
+  tools: {
+    run: (tool: string, args: Record<string, unknown>) =>
+      ipcRenderer.invoke('tools:run', tool, args),
+  },
 })

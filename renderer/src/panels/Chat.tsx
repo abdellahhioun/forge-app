@@ -85,7 +85,43 @@ function renderMarkdown(text: string, onApply?: (code: string) => void): React.R
 }
 
 
-// ─── Typing dots ────────────────────────────────────────────────────────────
+// ─── Tool call card ─────────────────────────────────────────────────────
+const TOOL_ICONS: Record<string, string> = {
+  git_diff: '📄', git_status: '📊', git_log: '📜', git_commit: '✅',
+  run_tests: '🧪', lint_file: '🔍', read_file: '📖',
+  list_files: '📁', explain_code: '🧠', get_dependency_graph: '🕸',
+}
+function ToolCallCard({ tool, status, result }: {
+  tool: string; status: 'running' | 'done' | 'error'; result?: string
+}) {
+  return (
+    <div style={{ border: '1px solid var(--brd)', borderRadius: 8, overflow: 'hidden', margin: '4px 0', fontSize: 12 }}>
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: 8,
+        padding: '6px 12px', background: 'var(--offset)',
+        borderBottom: result ? '1px solid var(--brd)' : 'none',
+      }}>
+        <span>{TOOL_ICONS[tool] ?? '⚙️'}</span>
+        <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--pri)', fontWeight: 600 }}>{tool}</span>
+        <span style={{
+          marginLeft: 'auto', fontSize: 11,
+          color: status === 'done' ? 'var(--pri)' : status === 'error' ? '#f87171' : 'var(--faint)',
+        }}>
+          {status === 'running' ? '⏳ running…' : status === 'done' ? '✓ done' : '✗ error'}
+        </span>
+      </div>
+      {result && (
+        <pre style={{
+          margin: 0, padding: '10px 12px', background: 'var(--bg)', fontSize: 11,
+          overflowX: 'auto', lineHeight: 1.6, fontFamily: 'var(--font-mono)',
+          color: 'var(--txt)', maxHeight: 300, overflowY: 'auto',
+        }}>{result}</pre>
+      )}
+    </div>
+  )
+}
+
+// ─── Typing dots ─────────────────────────────────────────────────────
 function TypingDots() {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '4px 0' }}>
@@ -144,18 +180,22 @@ function MessageBubble({ msg, isStreaming, onApply }: { msg: ChatMessage; isStre
         color: isError ? 'var(--err-txt, #f87171)' : 'var(--txt)',
         userSelect: 'text',
       }}>
-        {isUser
-          ? <span style={{ whiteSpace: 'pre-wrap' }}>{msg.content}</span>
-          : isStreaming && msg.content === ''
-            ? <TypingDots />
-            : renderMarkdown(msg.content, onApply)
-        }
-        {isStreaming && msg.content !== '' && (
-          <span style={{
-            display: 'inline-block', width: 2, height: '1em',
-            background: 'var(--pri)', marginLeft: 2, verticalAlign: 'middle',
-            animation: 'cursorblink .8s step-end infinite',
-          }} />
+        {isUser ? (
+          <span style={{ whiteSpace: 'pre-wrap' }}>{msg.content}</span>
+        ) : msg.content.startsWith('__TOOL__:') ? (
+          (() => {
+            const parts = msg.content.slice('__TOOL__:'.length).split(':')
+            const tool = parts[0]
+            const rest = parts.slice(1).join(':')
+            const nlIdx = rest.indexOf('\n')
+            const status = (nlIdx === -1 ? rest : rest.slice(0, nlIdx)) as 'running' | 'done' | 'error'
+            const result = nlIdx === -1 ? undefined : rest.slice(nlIdx + 1)
+            return <ToolCallCard tool={tool} status={status} result={result} />
+          })()
+        ) : isStreaming && msg.content === '' ? (
+          <TypingDots />
+        ) : (
+          renderMarkdown(msg.content, onApply)
         )}
         <style>{`
           @keyframes cursorblink { 0%,100%{opacity:1} 50%{opacity:0} }
@@ -213,6 +253,27 @@ export default function ChatPanel() {
     updateFileContent(activeFile, code)
     markFileSaved(activeFile)
   }, [activeFile, updateFileContent, markFileSaved])
+
+  // ─── MCP tool intent detection ───────────────────────────────────────────────
+  const TOOL_INTENTS = [
+    { pattern: /git diff|what changed|show diff/i,            tool: 'git_diff' },
+    { pattern: /git status|what.?s staged|unstaged/i,         tool: 'git_status' },
+    { pattern: /git log|recent commits|commit history/i,      tool: 'git_log' },
+    { pattern: /run tests?|test suite|npm test/i,             tool: 'run_tests' },
+    { pattern: /lint|eslint|code issues|code quality/i,       tool: 'lint_file' },
+    { pattern: /list files|file tree|show files|what files/i, tool: 'list_files' },
+    { pattern: /explain.*(this |the )?code|analyse.*file|what does.*do/i, tool: 'explain_code' },
+    { pattern: /dependency graph|import graph|who imports/i,  tool: 'get_dependency_graph' },
+  ]
+
+  const runTool = useCallback(async (tool: string): Promise<string> => {
+    const args: Record<string, unknown> = { cwd: activeProject?.path ?? '' }
+    if (tool === 'lint_file' || tool === 'explain_code' || tool === 'read_file') {
+      args.filePath = activeFile ?? ''
+    }
+    const result = await (window.forge as any).tools.run(tool, args)
+    return typeof result === 'string' ? result : JSON.stringify(result, null, 2)
+  }, [activeProject, activeFile])
 
   const [sessions, setSessions] = useState<ChatSession[]>([])
   const [activeSession, setActiveSession] = useState<ChatSession | null>(null)
@@ -369,11 +430,71 @@ export default function ChatPanel() {
   const send = useCallback(async () => {
     if (!input.trim() || !activeSession || isStreaming) return
     const rawContent = input.trim()
+
+    // ── MCP tool intent detection ───────────────────────────────────────
+    const matched = TOOL_INTENTS.find(t => t.pattern.test(rawContent))
+    if (matched && activeProject?.path) {
+      setInput('')
+      setAttachedFiles([])
+      setTimeout(() => inputRef.current?.focus(), 0)
+
+      // User message
+      const userMsg: ChatMessage = {
+        id: Math.random().toString(36), role: 'user',
+        content: rawContent, createdAt: new Date().toISOString(),
+      }
+      setMessages(prev => [...prev, userMsg])
+      await window.forge.chat.send(activeSession.id, 'user', rawContent)
+
+      // Tool card — running state
+      const toolMsgId = Math.random().toString(36)
+      setMessages(prev => [...prev, {
+        id: toolMsgId, role: 'assistant',
+        content: `__TOOL__:${matched.tool}:running`,
+        createdAt: new Date().toISOString(),
+      }])
+      setIsStreaming(true)
+
+      try {
+        const result = await runTool(matched.tool)
+
+        // Update card to done
+        setMessages(prev => prev.map(m =>
+          m.id === toolMsgId
+            ? { ...m, content: `__TOOL__:${matched.tool}:done\n${result}` }
+            : m
+        ))
+
+        // Stream AI summary of the tool result
+        const aiId = Math.random().toString(36)
+        streamingIdRef.current = aiId
+        setMessages(prev => [...prev, {
+          id: aiId, role: 'assistant', content: '',
+          createdAt: new Date().toISOString(),
+        }])
+        const history = [
+          ...messages, userMsg,
+          { role: 'assistant', content: `Tool \`${matched.tool}\` output:\n${result}` },
+          { role: 'user', content: 'Give a brief, useful summary of this output.' },
+        ].slice(-20).map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content }))
+        window.forge.chat.ai(history, undefined, model, activeProject.path)
+      } catch (err: any) {
+        setMessages(prev => prev.map(m =>
+          m.id === toolMsgId
+            ? { ...m, content: `__TOOL__:${matched.tool}:error\n${err.message}` }
+            : m
+        ))
+        setIsStreaming(false)
+      }
+      return
+    }
+
+    // ── Normal AI send ──────────────────────────────────────────────
     setInput('')
     setAttachedFiles([]) // clear pills after send
     setTimeout(() => inputRef.current?.focus(), 0)
 
-    // ── Prepend attached file contents as code blocks ────────────────────────
+    // Prepend attached file contents as code blocks
     const fileBlocks = attachedFiles
       .map(f => {
         const ext = f.path.split('.').pop() ?? ''
@@ -382,7 +503,7 @@ export default function ChatPanel() {
       .join('\n\n')
     const content = fileBlocks ? `${fileBlocks}\n\n${rawContent}` : rawContent
 
-    // Add user message optimistically (show raw input, not the file dump)
+    // Add user message optimistically
     const userMsg: ChatMessage = {
       id: Math.random().toString(36),
       role: 'user',
@@ -405,7 +526,7 @@ export default function ChatPanel() {
     setIsStreaming(true)
 
     // Build history (last 20 messages)
-    const history = [...messages, { ...userMsg, content }] // full content with file blocks for AI
+    const history = [...messages, { ...userMsg, content }]
       .slice(-20)
       .map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content }))
 
@@ -419,8 +540,7 @@ export default function ChatPanel() {
     }
 
     window.forge.chat.ai(history, projectCtx, model, activeProject?.path)
-  }, [input, attachedFiles, activeSession, isStreaming, messages, activeProject, model])
-
+  }, [input, attachedFiles, activeSession, isStreaming, messages, activeProject, model, runTool])
   // ─── Textarea auto-resize + @file detection ──────────────────────────────
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value
