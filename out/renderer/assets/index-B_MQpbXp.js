@@ -14947,12 +14947,15 @@ function EditorPanel() {
           language: getLanguage(currentFile.path),
           value: currentFile.content,
           theme: theme === "dark" ? "vs-dark" : "vs",
-          onMount: (editor) => {
+          onMount: (editor, monaco) => {
             editorRef.current = editor;
             editor.addCommand(
-              // Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KeyS
-              2048 | 49,
+              monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS,
               () => saveFile(currentFile.path, editor.getValue())
+            );
+            editor.addCommand(
+              monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyK,
+              () => setCmdKOpen((prev) => !prev)
             );
           },
           onChange: (value) => {

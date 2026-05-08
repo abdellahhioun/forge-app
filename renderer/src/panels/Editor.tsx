@@ -1,7 +1,7 @@
 import { useRef, useEffect, useCallback, useState } from 'react'
 import MonacoEditor, { DiffEditor, loader } from '@monaco-editor/react'
 import { useForgeStore } from '../store'
-import { X, FileCode, Check, X as XIcon } from 'lucide-react'
+import { X, FileCode, Check } from 'lucide-react'
 
 // Configure Monaco language diagnostics globally once to avoid repetitive mounting errors
 loader.init().then(monaco => {
@@ -227,7 +227,7 @@ export default function EditorPanel() {
                 cursor: 'pointer', border: '1px solid var(--brd)'
               }}
             >
-              <XIcon size={14} /> Reject
+              <X size={14} /> Reject
             </button>
           </div>
         )}
@@ -296,13 +296,17 @@ export default function EditorPanel() {
               language={getLanguage(currentFile.path)}
               value={currentFile.content}
               theme={theme === 'dark' ? 'vs-dark' : 'vs'}
-              onMount={(editor) => {
+              onMount={(editor, monaco) => {
                 editorRef.current = editor
-                // Wire ⌘S inside Monaco context too
+                // Wire ⌘S inside Monaco context
                 editor.addCommand(
-                  // Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KeyS
-                  2048 | 49,
+                  monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS,
                   () => saveFile(currentFile.path, editor.getValue())
+                )
+                // Wire ⌘K inside Monaco context
+                editor.addCommand(
+                  monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyK,
+                  () => setCmdKOpen(prev => !prev)
                 )
               }}
               onChange={(value) => {

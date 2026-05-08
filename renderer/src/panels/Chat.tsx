@@ -312,9 +312,12 @@ export default function ChatPanel() {
     })
   }, [activeFile, openFiles])
 
-  // ─── Load sessions ────────────────────────────────────────────────────────
+  // ─── Load sessions & reset active session when project changes ──────────
   useEffect(() => {
-    window.forge.chat.sessions().then(setSessions)
+    window.forge.chat.sessions(activeProject?.id).then(setSessions)
+    setActiveSession(null)
+    setMessages([])
+    setAttachedFiles([])
   }, [activeProject])
 
   // ─── Sync activeSession to ref (for use in effect closures) ─────────────
