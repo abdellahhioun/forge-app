@@ -12783,87 +12783,75 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$y = [
+const __iconNode$r = [
   ["path", { d: "m3 15 4-8 4 8", key: "1vwr6u" }],
   ["path", { d: "M4 13h6", key: "1r9ots" }],
   ["circle", { cx: "18", cy: "12", r: "3", key: "1kchzo" }],
   ["path", { d: "M21 9v6", key: "anns31" }]
 ];
-const CaseSensitive = createLucideIcon("case-sensitive", __iconNode$y);
+const CaseSensitive = createLucideIcon("case-sensitive", __iconNode$r);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$x = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$x);
+const __iconNode$q = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$q);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$w = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$w);
+const __iconNode$p = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$p);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$v = [["path", { d: "m15 18-6-6 6-6", key: "1wnfg3" }]];
-const ChevronLeft = createLucideIcon("chevron-left", __iconNode$v);
+const __iconNode$o = [["path", { d: "m15 18-6-6 6-6", key: "1wnfg3" }]];
+const ChevronLeft = createLucideIcon("chevron-left", __iconNode$o);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$u = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$u);
+const __iconNode$n = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$n);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$t = [
+const __iconNode$m = [
   ["path", { d: "m7 15 5 5 5-5", key: "1hf1tw" }],
   ["path", { d: "m7 9 5-5 5 5", key: "sgt6xg" }]
 ];
-const ChevronsUpDown = createLucideIcon("chevrons-up-down", __iconNode$t);
+const ChevronsUpDown = createLucideIcon("chevrons-up-down", __iconNode$m);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$s = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
-  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
-];
-const CircleAlert = createLucideIcon("circle-alert", __iconNode$s);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$r = [
+const __iconNode$l = [
   ["path", { d: "m18 16 4-4-4-4", key: "1inbqp" }],
   ["path", { d: "m6 8-4 4 4 4", key: "15zrgr" }],
   ["path", { d: "m14.5 4-5 16", key: "e7oirm" }]
 ];
-const CodeXml = createLucideIcon("code-xml", __iconNode$r);
+const CodeXml = createLucideIcon("code-xml", __iconNode$l);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$q = [
+const __iconNode$k = [
   ["path", { d: "M12 20v2", key: "1lh1kg" }],
   ["path", { d: "M12 2v2", key: "tus03m" }],
   ["path", { d: "M17 20v2", key: "1rnc9c" }],
@@ -12879,39 +12867,39 @@ const __iconNode$q = [
   ["rect", { x: "4", y: "4", width: "16", height: "16", rx: "2", key: "1vbyd7" }],
   ["rect", { x: "8", y: "8", width: "8", height: "8", rx: "1", key: "z9xiuo" }]
 ];
-const Cpu = createLucideIcon("cpu", __iconNode$q);
+const Cpu = createLucideIcon("cpu", __iconNode$k);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$p = [
+const __iconNode$j = [
   ["path", { d: "M10 12.5 8 15l2 2.5", key: "1tg20x" }],
   ["path", { d: "m14 12.5 2 2.5-2 2.5", key: "yinavb" }],
   ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
   ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z", key: "1mlx9k" }]
 ];
-const FileCode = createLucideIcon("file-code", __iconNode$p);
+const FileCode = createLucideIcon("file-code", __iconNode$j);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$o = [
+const __iconNode$i = [
   ["path", { d: "M20 7h-3a2 2 0 0 1-2-2V2", key: "x099mo" }],
   ["path", { d: "M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z", key: "18t6ie" }],
   ["path", { d: "M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8", key: "1nja0z" }]
 ];
-const Files = createLucideIcon("files", __iconNode$o);
+const Files = createLucideIcon("files", __iconNode$i);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$n = [
+const __iconNode$h = [
   [
     "path",
     {
@@ -12920,14 +12908,14 @@ const __iconNode$n = [
     }
   ]
 ];
-const FolderOpen = createLucideIcon("folder-open", __iconNode$n);
+const FolderOpen = createLucideIcon("folder-open", __iconNode$h);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$m = [
+const __iconNode$g = [
   [
     "path",
     {
@@ -12936,79 +12924,52 @@ const __iconNode$m = [
     }
   ]
 ];
-const Folder = createLucideIcon("folder", __iconNode$m);
+const Folder = createLucideIcon("folder", __iconNode$g);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$l = [
+const __iconNode$f = [
   ["line", { x1: "6", x2: "6", y1: "3", y2: "15", key: "17qcm7" }],
   ["circle", { cx: "18", cy: "6", r: "3", key: "1h7g24" }],
   ["circle", { cx: "6", cy: "18", r: "3", key: "fqmcym" }],
   ["path", { d: "M18 9a9 9 0 0 1-9 9", key: "n2h4wq" }]
 ];
-const GitBranch = createLucideIcon("git-branch", __iconNode$l);
+const GitBranch = createLucideIcon("git-branch", __iconNode$f);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$k = [
+const __iconNode$e = [
   ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }],
   ["line", { x1: "3", x2: "9", y1: "12", y2: "12", key: "1dyftd" }],
   ["line", { x1: "15", x2: "21", y1: "12", y2: "12", key: "oup4p8" }]
 ];
-const GitCommitHorizontal = createLucideIcon("git-commit-horizontal", __iconNode$k);
+const GitCommitHorizontal = createLucideIcon("git-commit-horizontal", __iconNode$e);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$j = [
+const __iconNode$d = [
   ["circle", { cx: "18", cy: "18", r: "3", key: "1xkwt0" }],
   ["circle", { cx: "6", cy: "6", r: "3", key: "1lh9wr" }],
   ["path", { d: "M13 6h3a2 2 0 0 1 2 2v7", key: "1yeb86" }],
   ["line", { x1: "6", x2: "6", y1: "9", y2: "21", key: "rroup" }]
 ];
-const GitPullRequest = createLucideIcon("git-pull-request", __iconNode$j);
+const GitPullRequest = createLucideIcon("git-pull-request", __iconNode$d);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$i = [
-  ["circle", { cx: "9", cy: "12", r: "1", key: "1vctgf" }],
-  ["circle", { cx: "9", cy: "5", r: "1", key: "hp0tcf" }],
-  ["circle", { cx: "9", cy: "19", r: "1", key: "fkjjf6" }],
-  ["circle", { cx: "15", cy: "12", r: "1", key: "1tmaij" }],
-  ["circle", { cx: "15", cy: "5", r: "1", key: "19l28e" }],
-  ["circle", { cx: "15", cy: "19", r: "1", key: "f4zoj3" }]
-];
-const GripVertical = createLucideIcon("grip-vertical", __iconNode$i);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$h = [
-  ["path", { d: "M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8", key: "1357e3" }],
-  ["path", { d: "M3 3v5h5", key: "1xhq8a" }],
-  ["path", { d: "M12 7v5l4 2", key: "1fdv2h" }]
-];
-const History = createLucideIcon("history", __iconNode$h);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$g = [
+const __iconNode$c = [
   [
     "path",
     {
@@ -13031,57 +12992,7 @@ const __iconNode$g = [
     }
   ]
 ];
-const Layers = createLucideIcon("layers", __iconNode$g);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$f = [
-  ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
-  ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
-  ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
-  ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
-];
-const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$f);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$e = [
-  ["path", { d: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", key: "1lielz" }]
-];
-const MessageSquare = createLucideIcon("message-square", __iconNode$e);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$d = [
-  ["path", { d: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z", key: "a7tn18" }]
-];
-const Moon = createLucideIcon("moon", __iconNode$d);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$c = [
-  ["path", { d: "M13.234 20.252 21 12.3", key: "1cbrk9" }],
-  [
-    "path",
-    {
-      d: "m16 6-8.414 8.586a2 2 0 0 0 0 2.828 2 2 0 0 0 2.828 0l8.414-8.586a4 4 0 0 0 0-5.656 4 4 0 0 0-5.656 0l-8.415 8.585a6 6 0 1 0 8.486 8.486",
-      key: "1pkts6"
-    }
-  ]
-];
-const Paperclip = createLucideIcon("paperclip", __iconNode$c);
+const Layers = createLucideIcon("layers", __iconNode$c);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -13089,10 +13000,12 @@ const Paperclip = createLucideIcon("paperclip", __iconNode$c);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$b = [
-  ["path", { d: "M5 12h14", key: "1ays0h" }],
-  ["path", { d: "M12 5v14", key: "s699le" }]
+  ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
+  ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
+  ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
+  ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
 ];
-const Plus = createLucideIcon("plus", __iconNode$b);
+const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$b);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -13100,12 +13013,9 @@ const Plus = createLucideIcon("plus", __iconNode$b);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$a = [
-  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
-  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
-  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
-  ["path", { d: "M8 16H3v5", key: "1cv678" }]
+  ["path", { d: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z", key: "a7tn18" }]
 ];
-const RefreshCw = createLucideIcon("refresh-cw", __iconNode$a);
+const Moon = createLucideIcon("moon", __iconNode$a);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -13113,6 +13023,30 @@ const RefreshCw = createLucideIcon("refresh-cw", __iconNode$a);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$9 = [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "M12 5v14", key: "s699le" }]
+];
+const Plus = createLucideIcon("plus", __iconNode$9);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$8 = [
+  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
+  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
+  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
+  ["path", { d: "M8 16H3v5", key: "1cv678" }]
+];
+const RefreshCw = createLucideIcon("refresh-cw", __iconNode$8);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$7 = [
   ["path", { d: "M17 3v10", key: "15fgeh" }],
   ["path", { d: "m12.67 5.5 8.66 5", key: "1gpheq" }],
   ["path", { d: "m12.67 10.5 8.66-5", key: "1dkfa6" }],
@@ -13121,35 +13055,7 @@ const __iconNode$9 = [
     { d: "M9 17a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2z", key: "swwfx4" }
   ]
 ];
-const Regex = createLucideIcon("regex", __iconNode$9);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$8 = [
-  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
-  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
-];
-const Search = createLucideIcon("search", __iconNode$8);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$7 = [
-  [
-    "path",
-    {
-      d: "M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z",
-      key: "1ffxy3"
-    }
-  ],
-  ["path", { d: "m21.854 2.147-10.94 10.939", key: "12cjpa" }]
-];
-const Send = createLucideIcon("send", __iconNode$7);
+const Regex = createLucideIcon("regex", __iconNode$7);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -13157,6 +13063,17 @@ const Send = createLucideIcon("send", __iconNode$7);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$6 = [
+  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
+  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+];
+const Search = createLucideIcon("search", __iconNode$6);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$5 = [
   [
     "path",
     {
@@ -13169,14 +13086,14 @@ const __iconNode$6 = [
   ["path", { d: "M4 17v2", key: "vumght" }],
   ["path", { d: "M5 18H3", key: "zchphs" }]
 ];
-const Sparkles = createLucideIcon("sparkles", __iconNode$6);
+const Sparkles = createLucideIcon("sparkles", __iconNode$5);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$5 = [
+const __iconNode$4 = [
   ["circle", { cx: "12", cy: "12", r: "4", key: "4exip2" }],
   ["path", { d: "M12 2v2", key: "tus03m" }],
   ["path", { d: "M12 20v2", key: "1lh1kg" }],
@@ -13187,18 +13104,7 @@ const __iconNode$5 = [
   ["path", { d: "m6.34 17.66-1.41 1.41", key: "1m8zz5" }],
   ["path", { d: "m19.07 4.93-1.41 1.41", key: "1shlcs" }]
 ];
-const Sun = createLucideIcon("sun", __iconNode$5);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$4 = [
-  ["path", { d: "M12 19h8", key: "baeox8" }],
-  ["path", { d: "m4 17 6-6-6-6", key: "1yngyt" }]
-];
-const Terminal = createLucideIcon("terminal", __iconNode$4);
+const Sun = createLucideIcon("sun", __iconNode$4);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -13206,13 +13112,10 @@ const Terminal = createLucideIcon("terminal", __iconNode$4);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$3 = [
-  ["path", { d: "M3 6h18", key: "d0wm0j" }],
-  ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
-  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }],
-  ["line", { x1: "10", x2: "10", y1: "11", y2: "17", key: "1uufr5" }],
-  ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }]
+  ["path", { d: "M12 19h8", key: "baeox8" }],
+  ["path", { d: "m4 17 6-6-6-6", key: "1yngyt" }]
 ];
-const Trash2 = createLucideIcon("trash-2", __iconNode$3);
+const Terminal = createLucideIcon("terminal", __iconNode$3);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -13220,11 +13123,13 @@ const Trash2 = createLucideIcon("trash-2", __iconNode$3);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$2 = [
-  ["path", { d: "M12 3v12", key: "1x0j5s" }],
-  ["path", { d: "m17 8-5-5-5 5", key: "7q97r8" }],
-  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }]
+  ["path", { d: "M3 6h18", key: "d0wm0j" }],
+  ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
+  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }],
+  ["line", { x1: "10", x2: "10", y1: "11", y2: "17", key: "1uufr5" }],
+  ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }]
 ];
-const Upload = createLucideIcon("upload", __iconNode$2);
+const Trash2 = createLucideIcon("trash-2", __iconNode$2);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -13232,10 +13137,11 @@ const Upload = createLucideIcon("upload", __iconNode$2);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$1 = [
-  ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
-  ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
+  ["path", { d: "M12 3v12", key: "1x0j5s" }],
+  ["path", { d: "m17 8-5-5-5 5", key: "7q97r8" }],
+  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }]
 ];
-const X = createLucideIcon("x", __iconNode$1);
+const Upload = createLucideIcon("upload", __iconNode$1);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -13243,15 +13149,10 @@ const X = createLucideIcon("x", __iconNode$1);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode = [
-  [
-    "path",
-    {
-      d: "M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z",
-      key: "1xq2db"
-    }
-  ]
+  ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
+  ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
 ];
-const Zap = createLucideIcon("zap", __iconNode);
+const X = createLucideIcon("x", __iconNode);
 const EXT_COLOR$1 = {
   ts: "#4f98a3",
   tsx: "#4f98a3",
@@ -13544,7 +13445,7 @@ const NAV = [
   { id: "search", icon: Search, label: "Search" },
   { id: "terminal", icon: Terminal, label: "Terminal" },
   { id: "git", icon: GitBranch, label: "Git" },
-  { id: "chat", icon: MessageSquare, label: "Chat" },
+  // { id: 'chat',      icon: MessageSquare,  label: 'Chat' },
   { id: "dashboard", icon: LayoutDashboard, label: "Dashboard" }
 ];
 function Sidebar() {
@@ -14691,10 +14592,6 @@ function EditorPanel() {
         );
         if (file) saveFile(file.path, file.content);
       }
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        setCmdKOpen((prev) => !prev);
-      }
       if (e.key === "Escape" && cmdKOpen) {
         setCmdKOpen(false);
       }
@@ -14952,10 +14849,6 @@ function EditorPanel() {
             editor.addCommand(
               monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS,
               () => saveFile(currentFile.path, editor.getValue())
-            );
-            editor.addCommand(
-              monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyK,
-              () => setCmdKOpen((prev) => !prev)
             );
           },
           onChange: (value) => {
@@ -22486,1049 +22379,6 @@ function FileRow({ file, type, active, onClick }) {
     }
   );
 }
-function CodeBlock({ lang, code, onApply }) {
-  const [copied, setCopied] = reactExports.useState(false);
-  const [applied, setApplied] = reactExports.useState(false);
-  const copy = () => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2e3);
-  };
-  const apply = () => {
-    onApply?.(code);
-    setApplied(true);
-    setTimeout(() => setApplied(false), 2500);
-  };
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { margin: "8px 0", borderRadius: 6, overflow: "hidden", border: "1px solid var(--brd)" }, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      padding: "3px 8px",
-      background: "var(--offset)",
-      borderBottom: "1px solid var(--brd)"
-    }, children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontSize: 10, fontFamily: "monospace", color: "var(--faint)", letterSpacing: ".06em", textTransform: "uppercase" }, children: lang || "code" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", gap: 4 }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: copy, title: "Copy code", style: {
-          fontSize: 10,
-          padding: "2px 7px",
-          borderRadius: 4,
-          cursor: "pointer",
-          background: copied ? "rgba(79,152,163,.15)" : "transparent",
-          color: copied ? "var(--pri)" : "var(--faint)",
-          border: "1px solid var(--brd)",
-          transition: "all .15s"
-        }, children: copied ? "✓ Copied" : "Copy" }),
-        onApply && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: apply, title: "Apply to active file", style: {
-          fontSize: 10,
-          padding: "2px 7px",
-          borderRadius: 4,
-          cursor: "pointer",
-          background: applied ? "rgba(79,152,163,.25)" : "var(--pri)",
-          color: "#fff",
-          border: "none",
-          transition: "all .15s",
-          fontWeight: 600
-        }, children: applied ? "✓ Applied!" : "⚡ Apply" })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("pre", { style: {
-      margin: 0,
-      padding: "10px 12px",
-      background: "var(--bg)",
-      fontSize: 12,
-      overflowX: "auto",
-      lineHeight: 1.6,
-      fontFamily: 'var(--font-mono, "Fira Code", monospace)',
-      color: "var(--txt)"
-    }, children: /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: code }) })
-  ] });
-}
-function renderMarkdown(text, onApply) {
-  const nodes = [];
-  const parts = text.split(/(```[\s\S]*?```|`[^`]+`)/g);
-  parts.forEach((part, i) => {
-    if (part.startsWith("```")) {
-      const lines = part.slice(3).split("\n");
-      const lang = lines[0].trim();
-      const code = lines.slice(1).join("\n").replace(/```$/, "").trimEnd();
-      nodes.push(/* @__PURE__ */ jsxRuntimeExports.jsx(CodeBlock, { lang, code, onApply }, i));
-    } else if (part.startsWith("`") && part.endsWith("`")) {
-      const code = part.slice(1, -1);
-      nodes.push(
-        /* @__PURE__ */ jsxRuntimeExports.jsx("code", { style: {
-          fontFamily: "var(--font-mono, monospace)",
-          fontSize: "0.85em",
-          background: "var(--offset)",
-          border: "1px solid var(--brd)",
-          borderRadius: 4,
-          padding: "1px 5px",
-          color: "var(--txt)"
-        }, children: code }, i)
-      );
-    } else {
-      const inline = part.split(/(\*\*[^*]+\*\*|\n)/g);
-      inline.forEach((seg, j) => {
-        if (seg.startsWith("**") && seg.endsWith("**")) {
-          nodes.push(/* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: seg.slice(2, -2) }, `${i}-${j}`));
-        } else if (seg === "\n") {
-          nodes.push(/* @__PURE__ */ jsxRuntimeExports.jsx("br", {}, `${i}-${j}`));
-        } else {
-          nodes.push(/* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: seg }, `${i}-${j}`));
-        }
-      });
-    }
-  });
-  return nodes;
-}
-const TOOL_ICONS = {
-  git_diff: "📄",
-  git_status: "📊",
-  git_log: "📜",
-  git_commit: "✅",
-  run_tests: "🧪",
-  lint_file: "🔍",
-  read_file: "📖",
-  list_files: "📁",
-  explain_code: "🧠",
-  get_dependency_graph: "🕸"
-};
-function ToolCallCard({ tool, status, result }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { border: "1px solid var(--brd)", borderRadius: 8, overflow: "hidden", margin: "4px 0", fontSize: 12 }, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 8,
-      padding: "6px 12px",
-      background: "var(--offset)",
-      borderBottom: result ? "1px solid var(--brd)" : "none"
-    }, children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: TOOL_ICONS[tool] ?? "⚙️" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontFamily: "var(--font-mono)", color: "var(--pri)", fontWeight: 600 }, children: tool }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: {
-        marginLeft: "auto",
-        fontSize: 11,
-        color: status === "done" ? "var(--pri)" : status === "error" ? "#f87171" : "var(--faint)"
-      }, children: status === "running" ? "⏳ running…" : status === "done" ? "✓ done" : "✗ error" })
-    ] }),
-    result && /* @__PURE__ */ jsxRuntimeExports.jsx("pre", { style: {
-      margin: 0,
-      padding: "10px 12px",
-      background: "var(--bg)",
-      fontSize: 11,
-      overflowX: "auto",
-      lineHeight: 1.6,
-      fontFamily: "var(--font-mono)",
-      color: "var(--txt)",
-      maxHeight: 300,
-      overflowY: "auto"
-    }, children: result })
-  ] });
-}
-function TypingDots() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 4, padding: "4px 0" }, children: [
-    [0, 1, 2].map((i) => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
-      width: 6,
-      height: 6,
-      borderRadius: "50%",
-      background: "var(--pri)",
-      animation: `typingBounce 1.2s ease-in-out ${i * 0.2}s infinite`
-    } }, i)),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("style", { children: `
-        @keyframes typingBounce {
-          0%, 80%, 100% { transform: translateY(0); opacity: .4; }
-          40% { transform: translateY(-5px); opacity: 1; }
-        }
-      ` })
-  ] });
-}
-function MessageBubble({ msg, isStreaming, onApply }) {
-  const isUser = msg.role === "user";
-  const isError = msg.isError;
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-    display: "flex",
-    flexDirection: isUser ? "row-reverse" : "row",
-    gap: 8,
-    alignItems: "flex-start"
-  }, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
-      width: 26,
-      height: 26,
-      borderRadius: "50%",
-      flexShrink: 0,
-      background: isUser ? "var(--pri)" : isError ? "var(--err, #7a2020)" : "var(--offset)",
-      border: "1px solid var(--brd)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontSize: 10,
-      fontWeight: 700,
-      color: isUser ? "#fff" : "var(--muted)",
-      marginTop: 2
-    }, children: isUser ? "A" : isError ? /* @__PURE__ */ jsxRuntimeExports.jsx(CircleAlert, { size: 12 }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Zap, { size: 11 }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-      maxWidth: "76%",
-      minWidth: 40,
-      background: isUser ? "var(--pri-glow)" : isError ? "rgba(255,60,60,.06)" : "var(--surface)",
-      border: `1px solid ${isUser ? "rgba(79,152,163,.3)" : isError ? "rgba(255,60,60,.3)" : "var(--brd)"}`,
-      borderRadius: isUser ? "var(--r3) var(--r1) var(--r3) var(--r3)" : "var(--r1) var(--r3) var(--r3) var(--r3)",
-      padding: "9px 13px",
-      fontSize: 13,
-      lineHeight: 1.65,
-      color: isError ? "var(--err-txt, #f87171)" : "var(--txt)",
-      userSelect: "text"
-    }, children: [
-      isUser ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { whiteSpace: "pre-wrap" }, children: msg.content }) : msg.content.startsWith("__TOOL__:") ? (() => {
-        const parts = msg.content.slice("__TOOL__:".length).split(":");
-        const tool = parts[0];
-        const rest = parts.slice(1).join(":");
-        const nlIdx = rest.indexOf("\n");
-        const status = nlIdx === -1 ? rest : rest.slice(0, nlIdx);
-        const result = nlIdx === -1 ? void 0 : rest.slice(nlIdx + 1);
-        return /* @__PURE__ */ jsxRuntimeExports.jsx(ToolCallCard, { tool, status, result });
-      })() : isStreaming && msg.content === "" ? /* @__PURE__ */ jsxRuntimeExports.jsx(TypingDots, {}) : renderMarkdown(msg.content, onApply),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("style", { children: `
-          @keyframes cursorblink { 0%,100%{opacity:1} 50%{opacity:0} }
-        ` })
-    ] })
-  ] });
-}
-const MODEL_OPTIONS = [
-  { id: "groq", label: "Llama 4", sub: "Groq" },
-  { id: "gemini", label: "Gemini 2", sub: "Google" },
-  { id: "ollama", label: "Qwen 2.5", sub: "Local" }
-];
-function ChatPanel() {
-  const { activeProject, activeFile, openFiles, updateFileContent, markFileSaved, setPendingDiff } = useForgeStore();
-  const onApply = reactExports.useCallback(async (code) => {
-    if (!activeFile) return;
-    const currentFile = openFiles.find((f) => f.path === activeFile);
-    if (!currentFile) return;
-    setPendingDiff({
-      path: activeFile,
-      original: currentFile.content,
-      modified: code
-    });
-  }, [activeFile, openFiles, setPendingDiff]);
-  const TOOL_INTENTS = [
-    { pattern: /git diff|what changed|show diff/i, tool: "git_diff" },
-    { pattern: /git status|what.?s staged|unstaged/i, tool: "git_status" },
-    { pattern: /git log|recent commits|commit history/i, tool: "git_log" },
-    { pattern: /run tests?|test suite|npm test/i, tool: "run_tests" },
-    { pattern: /lint|eslint|code issues|code quality/i, tool: "lint_file" },
-    { pattern: /list files|file tree|show files|what files/i, tool: "list_files" },
-    { pattern: /explain.*(this |the )?code|analyse.*file|what does.*do/i, tool: "explain_code" },
-    { pattern: /dependency graph|import graph|who imports/i, tool: "get_dependency_graph" }
-  ];
-  const runTool = reactExports.useCallback(async (tool) => {
-    const args = { cwd: activeProject?.path ?? "" };
-    if (tool === "lint_file" || tool === "explain_code" || tool === "read_file") {
-      args.filePath = activeFile ?? "";
-    }
-    const result = await window.forge.tools.run(tool, args);
-    return typeof result === "string" ? result : JSON.stringify(result, null, 2);
-  }, [activeProject, activeFile]);
-  const [sessions, setSessions] = reactExports.useState([]);
-  const [activeSession, setActiveSession] = reactExports.useState(null);
-  const [messages, setMessages] = reactExports.useState([]);
-  const [input, setInput] = reactExports.useState("");
-  const [isStreaming, setIsStreaming] = reactExports.useState(false);
-  const [model, setModel] = reactExports.useState("groq");
-  const [sidebarWidth, setSidebarWidth] = reactExports.useState(210);
-  const bottomRef = reactExports.useRef(null);
-  const inputRef = reactExports.useRef(null);
-  const streamingIdRef = reactExports.useRef(null);
-  const activeSessionRef = reactExports.useRef(null);
-  const isResizingRef = reactExports.useRef(false);
-  const resizeStartXRef = reactExports.useRef(0);
-  const resizeStartWidthRef = reactExports.useRef(210);
-  const [atQuery, setAtQuery] = reactExports.useState(null);
-  const [atResults, setAtResults] = reactExports.useState([]);
-  const [attachedFiles, setAttachedFiles] = reactExports.useState([]);
-  const atIndexRef = reactExports.useRef(0);
-  reactExports.useEffect(() => {
-    if (!activeFile) return;
-    const fileObj = openFiles.find((f) => f.path === activeFile);
-    if (!fileObj) return;
-    setAttachedFiles((prev) => {
-      const filtered = prev.filter((f) => f.path !== activeFile);
-      return [{ path: activeFile, content: fileObj.content }, ...filtered];
-    });
-  }, [activeFile, openFiles]);
-  reactExports.useEffect(() => {
-    window.forge.chat.sessions().then(setSessions);
-  }, [activeProject]);
-  reactExports.useEffect(() => {
-    activeSessionRef.current = activeSession;
-  }, [activeSession]);
-  reactExports.useEffect(() => {
-    if (activeSession) {
-      window.forge.chat.messages(activeSession.id).then(setMessages);
-    }
-  }, [activeSession]);
-  reactExports.useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-  reactExports.useEffect(() => {
-    const onMouseMove = (e) => {
-      if (!isResizingRef.current) return;
-      const delta = e.clientX - resizeStartXRef.current;
-      const next = resizeStartWidthRef.current + delta;
-      const clamped = Math.max(180, Math.min(420, next));
-      setSidebarWidth(clamped);
-    };
-    const onMouseUp = () => {
-      if (!isResizingRef.current) return;
-      isResizingRef.current = false;
-      document.body.style.cursor = "";
-      document.body.style.userSelect = "";
-    };
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseup", onMouseUp);
-    return () => {
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseup", onMouseUp);
-    };
-  }, []);
-  reactExports.useEffect(() => {
-    const offToken = window.forge.chat.onToken((token) => {
-      setMessages((prev) => prev.map(
-        (m) => m.id === streamingIdRef.current ? { ...m, content: m.content + token } : m
-      ));
-    });
-    const offDone = window.forge.chat.onDone(() => {
-      setIsStreaming(false);
-      setMessages((prev) => {
-        const aiMsg = prev.find((m) => m.id === streamingIdRef.current);
-        if (aiMsg && activeSessionRef.current) {
-          window.forge.chat.send(activeSessionRef.current.id, "assistant", aiMsg.content);
-        }
-        streamingIdRef.current = null;
-        return prev;
-      });
-    });
-    const offError = window.forge.chat.onError((err) => {
-      setIsStreaming(false);
-      const sid = streamingIdRef.current;
-      streamingIdRef.current = null;
-      const errMsg = {
-        id: Math.random().toString(36),
-        role: "assistant",
-        content: `Error: ${err}`,
-        createdAt: (/* @__PURE__ */ new Date()).toISOString(),
-        isError: true
-      };
-      setMessages((prev) => [
-        ...prev.filter((m) => m.id !== sid),
-        errMsg
-      ]);
-    });
-    return () => {
-      offToken?.();
-      offDone?.();
-      offError?.();
-    };
-  }, []);
-  const newSession = reactExports.useCallback(async () => {
-    const title = `Chat ${(/* @__PURE__ */ new Date()).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}`;
-    const updated = await window.forge.chat.newSession(title, activeProject?.id);
-    setSessions(updated);
-    const newest = [...updated].sort((a, b) => b.id - a.id)[0];
-    if (newest) {
-      setActiveSession(newest);
-      setMessages([]);
-    }
-  }, [activeProject]);
-  const deleteSession = reactExports.useCallback(async (sessionId) => {
-    const previousSessions = sessions;
-    const wasActive = activeSessionRef.current?.id === sessionId;
-    setSessions((prev) => prev.filter((s) => s.id !== sessionId));
-    if (wasActive) {
-      setActiveSession(null);
-      setMessages([]);
-      activeSessionRef.current = null;
-    }
-    try {
-      if (!window.forge.chat.deleteSession) {
-        throw new Error("deleteSession API is unavailable. Please restart the app.");
-      }
-      await window.forge.chat.deleteSession(sessionId);
-      const updated = await window.forge.chat.sessions(activeProject?.id);
-      setSessions(updated);
-    } catch (e) {
-      setSessions(previousSessions);
-      if (wasActive) {
-        const prevActive = previousSessions.find((s) => s.id === sessionId) ?? null;
-        setActiveSession(prevActive);
-        activeSessionRef.current = prevActive;
-        if (prevActive) {
-          const msgs = await window.forge.chat.messages(prevActive.id);
-          setMessages(msgs);
-        }
-      }
-      alert(e?.message || "Failed to delete chat session");
-    }
-  }, [sessions, activeProject?.id]);
-  const send = reactExports.useCallback(async () => {
-    if (!input.trim() || !activeSession || isStreaming) return;
-    const rawContent = input.trim();
-    const matched = TOOL_INTENTS.find((t) => t.pattern.test(rawContent));
-    if (matched && activeProject?.path) {
-      setInput("");
-      setAttachedFiles([]);
-      setTimeout(() => inputRef.current?.focus(), 0);
-      const userMsg2 = {
-        id: Math.random().toString(36),
-        role: "user",
-        content: rawContent,
-        createdAt: (/* @__PURE__ */ new Date()).toISOString()
-      };
-      setMessages((prev) => [...prev, userMsg2]);
-      await window.forge.chat.send(activeSession.id, "user", rawContent);
-      const toolMsgId = Math.random().toString(36);
-      setMessages((prev) => [...prev, {
-        id: toolMsgId,
-        role: "assistant",
-        content: `__TOOL__:${matched.tool}:running`,
-        createdAt: (/* @__PURE__ */ new Date()).toISOString()
-      }]);
-      setIsStreaming(true);
-      try {
-        const result = await runTool(matched.tool);
-        setMessages((prev) => prev.map(
-          (m) => m.id === toolMsgId ? { ...m, content: `__TOOL__:${matched.tool}:done
-${result}` } : m
-        ));
-        const aiId2 = Math.random().toString(36);
-        streamingIdRef.current = aiId2;
-        setMessages((prev) => [...prev, {
-          id: aiId2,
-          role: "assistant",
-          content: "",
-          createdAt: (/* @__PURE__ */ new Date()).toISOString()
-        }]);
-        const history2 = [
-          ...messages,
-          userMsg2,
-          { role: "assistant", content: `Tool \`${matched.tool}\` output:
-${result}` },
-          { role: "user", content: "Give a brief, useful summary of this output." }
-        ].slice(-20).map((m) => ({ role: m.role === "user" ? "user" : "assistant", content: m.content }));
-        window.forge.chat.ai(history2, void 0, model, activeProject.path);
-      } catch (err) {
-        setMessages((prev) => prev.map(
-          (m) => m.id === toolMsgId ? { ...m, content: `__TOOL__:${matched.tool}:error
-${err.message}` } : m
-        ));
-        setIsStreaming(false);
-      }
-      return;
-    }
-    setInput("");
-    setAttachedFiles([]);
-    setTimeout(() => inputRef.current?.focus(), 0);
-    const fileBlocks = attachedFiles.map((f) => {
-      const ext = f.path.split(".").pop() ?? "";
-      return `**@${f.path.split("/").pop()}** \`${f.path}\`
-\`\`\`${ext}
-${f.content}
-\`\`\``;
-    }).join("\n\n");
-    const content = fileBlocks ? `${fileBlocks}
-
-${rawContent}` : rawContent;
-    const userMsg = {
-      id: Math.random().toString(36),
-      role: "user",
-      content: attachedFiles.length ? `📎 ${attachedFiles.map((f) => f.path.split("/").pop()).join(", ")}
-
-${rawContent}` : rawContent,
-      createdAt: (/* @__PURE__ */ new Date()).toISOString()
-    };
-    setMessages((prev) => [...prev, userMsg]);
-    await window.forge.chat.send(activeSession.id, "user", userMsg.content);
-    const aiId = Math.random().toString(36);
-    streamingIdRef.current = aiId;
-    const aiMsg = {
-      id: aiId,
-      role: "assistant",
-      content: "",
-      createdAt: (/* @__PURE__ */ new Date()).toISOString()
-    };
-    setMessages((prev) => [...prev, aiMsg]);
-    setIsStreaming(true);
-    const history = [...messages, { ...userMsg, content }].slice(-20).map((m) => ({ role: m.role === "user" ? "user" : "assistant", content: m.content }));
-    let projectCtx;
-    if (activeProject?.path) {
-      try {
-        const ctx = await window.forge.context.get(activeProject.path);
-        if (ctx) projectCtx = JSON.stringify(ctx, null, 2);
-      } catch {
-      }
-    }
-    window.forge.chat.ai(history, projectCtx, model, activeProject?.path);
-  }, [input, attachedFiles, activeSession, isStreaming, messages, activeProject, model, runTool]);
-  const handleInput = (e) => {
-    const val = e.target.value;
-    setInput(val);
-    e.target.style.height = "auto";
-    e.target.style.height = `${Math.min(e.target.scrollHeight, 120)}px`;
-    const atMatch = val.match(/@([\.\w/\-]*)$/);
-    if (atMatch) {
-      const query = atMatch[1].toLowerCase();
-      setAtQuery(query);
-      atIndexRef.current = 0;
-      if (activeProject?.path) {
-        window.forge.files.list(activeProject.path).then(
-          (files) => setAtResults(files.filter((f) => f.toLowerCase().includes(query)).slice(0, 8))
-        ).catch(() => setAtResults([]));
-      }
-    } else {
-      setAtQuery(null);
-      setAtResults([]);
-    }
-  };
-  const handleKeyDown = (e) => {
-    if (atQuery !== null && atResults.length > 0) {
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        atIndexRef.current = (atIndexRef.current + 1) % atResults.length;
-        setAtResults((r) => [...r]);
-        return;
-      }
-      if (e.key === "ArrowUp") {
-        e.preventDefault();
-        atIndexRef.current = (atIndexRef.current - 1 + atResults.length) % atResults.length;
-        setAtResults((r) => [...r]);
-        return;
-      }
-      if (e.key === "Tab" || e.key === "Enter") {
-        e.preventDefault();
-        attachFile(atResults[atIndexRef.current]);
-        return;
-      }
-      if (e.key === "Escape") {
-        setAtQuery(null);
-        setAtResults([]);
-        return;
-      }
-    }
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      send();
-    }
-  };
-  const attachFile = reactExports.useCallback(async (filePath) => {
-    if (!attachedFiles.find((f) => f.path === filePath)) {
-      try {
-        const res = await window.forge.files.read(filePath);
-        const content = typeof res === "string" ? res : res?.content ?? "";
-        setAttachedFiles((prev) => [...prev, { path: filePath, content: String(content) }]);
-      } catch {
-        setAttachedFiles((prev) => [...prev, { path: filePath, content: "(could not read)" }]);
-      }
-    }
-    setInput((prev) => prev.replace(/@[\.\w/\-]*$/, ""));
-    setAtQuery(null);
-    setAtResults([]);
-    setTimeout(() => inputRef.current?.focus(), 0);
-  }, [attachedFiles]);
-  const removeAttached = (path) => setAttachedFiles((prev) => prev.filter((f) => f.path !== path));
-  const [historyOpen, setHistoryOpen] = reactExports.useState(false);
-  const modelLabel = model === "gemini" ? "Gemini 2" : model === "ollama" ? "Qwen 2.5" : "Llama 4";
-  const modelSub = model === "gemini" ? "Google" : model === "ollama" ? "Local" : "Groq";
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", height: "100%", position: "relative", background: "var(--bg)" }, children: [
-    historyOpen && /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "div",
-      {
-        onClick: () => setHistoryOpen(false),
-        style: { position: "absolute", inset: 0, zIndex: 20, background: "rgba(0,0,0,.3)", backdropFilter: "blur(2px)" }
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-      position: "absolute",
-      top: 0,
-      right: 0,
-      bottom: 0,
-      zIndex: 30,
-      width: 260,
-      background: "var(--surface)",
-      borderLeft: "1px solid var(--brd)",
-      display: "flex",
-      flexDirection: "column",
-      transform: historyOpen ? "translateX(0)" : "translateX(100%)",
-      transition: "transform 220ms cubic-bezier(0.4,0,0.2,1)",
-      boxShadow: historyOpen ? "-6px 0 32px rgba(0,0,0,.22)" : "none"
-    }, children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-        padding: "14px 14px 12px",
-        borderBottom: "1px solid var(--brd)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        flexShrink: 0
-      }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontSize: 12, fontWeight: 600, color: "var(--txt)", letterSpacing: "-.01em" }, children: "Sessions" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", gap: 6 }, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            "button",
-            {
-              onClick: newSession,
-              style: {
-                display: "flex",
-                alignItems: "center",
-                gap: 5,
-                padding: "4px 10px",
-                borderRadius: "var(--r2)",
-                fontSize: 11,
-                fontWeight: 600,
-                background: "var(--pri)",
-                color: "#fff",
-                border: "none"
-              },
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 11 }),
-                " New"
-              ]
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              onClick: () => setHistoryOpen(false),
-              style: { display: "flex", padding: 4, borderRadius: "var(--r1)", color: "var(--muted)", border: "none", background: "transparent" },
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 13 })
-            }
-          )
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { flex: 1, overflow: "auto", padding: "6px 8px" }, children: sessions.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { padding: "32px 16px", color: "var(--faint)", fontSize: 12, textAlign: "center", lineHeight: 1.8 }, children: "No sessions yet" }) : sessions.map((s) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 2, marginBottom: 1 }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "button",
-          {
-            onClick: () => {
-              setActiveSession(s);
-              setHistoryOpen(false);
-            },
-            style: {
-              flex: 1,
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "8px 10px",
-              borderRadius: "var(--r2)",
-              fontSize: 12,
-              textAlign: "left",
-              color: activeSession?.id === s.id ? "var(--pri)" : "var(--txt)",
-              background: activeSession?.id === s.id ? "var(--pri-glow)" : "transparent",
-              border: `1px solid ${activeSession?.id === s.id ? "rgba(79,152,163,.25)" : "transparent"}`,
-              transition: "all .12s",
-              minWidth: 0,
-              cursor: "pointer"
-            },
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(MessageSquare, { size: 11, style: { flexShrink: 0, opacity: 0.7 } }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }, children: s.title })
-            ]
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            title: "Delete",
-            onClick: async (e) => {
-              e.stopPropagation();
-              await deleteSession(s.id);
-            },
-            style: {
-              width: 26,
-              height: 26,
-              borderRadius: "var(--r1)",
-              flexShrink: 0,
-              color: "var(--faint)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              border: "none",
-              background: "transparent",
-              cursor: "pointer",
-              transition: "all .12s"
-            },
-            onMouseEnter: (e) => {
-              e.currentTarget.style.color = "#f87171";
-              e.currentTarget.style.background = "rgba(248,113,113,.1)";
-            },
-            onMouseLeave: (e) => {
-              e.currentTarget.style.color = "var(--faint)";
-              e.currentTarget.style.background = "transparent";
-            },
-            children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 11 })
-          }
-        )
-      ] }, s.id)) })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 8,
-      padding: "0 12px",
-      height: 42,
-      borderBottom: "1px solid var(--brd)",
-      flexShrink: 0,
-      background: "var(--surface)"
-    }, children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { position: "relative", display: "flex" }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "button",
-          {
-            id: "model-toggle-btn",
-            style: {
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              padding: "4px 10px 4px 8px",
-              borderRadius: "var(--r2)",
-              border: "1px solid var(--brd)",
-              background: "var(--offset)",
-              color: "var(--txt)",
-              fontSize: 11,
-              fontWeight: 500,
-              cursor: "pointer",
-              transition: "all .15s"
-            },
-            onClick: () => {
-              const menu = document.getElementById("model-menu");
-              if (menu) menu.style.display = menu.style.display === "none" ? "flex" : "none";
-            },
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { width: 6, height: 6, borderRadius: "50%", background: "var(--pri)", flexShrink: 0 } }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: modelLabel }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { style: { color: "var(--faint)", fontSize: 10 }, children: [
-                "· ",
-                modelSub
-              ] })
-            ]
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "div",
-          {
-            id: "model-menu",
-            style: {
-              display: "none",
-              flexDirection: "column",
-              position: "absolute",
-              top: "calc(100% + 4px)",
-              left: 0,
-              zIndex: 50,
-              background: "var(--surface)",
-              border: "1px solid var(--brd)",
-              borderRadius: "var(--r2)",
-              overflow: "hidden",
-              boxShadow: "0 8px 24px rgba(0,0,0,.2)",
-              minWidth: 160
-            },
-            children: MODEL_OPTIONS.map((opt) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              "button",
-              {
-                onClick: () => {
-                  setModel(opt.id);
-                  const menu = document.getElementById("model-menu");
-                  if (menu) menu.style.display = "none";
-                },
-                style: {
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                  padding: "9px 14px",
-                  textAlign: "left",
-                  fontSize: 12,
-                  fontWeight: model === opt.id ? 600 : 400,
-                  background: model === opt.id ? "var(--pri-glow)" : "transparent",
-                  color: model === opt.id ? "var(--pri)" : "var(--txt)",
-                  borderBottom: "1px solid var(--brd)",
-                  cursor: "pointer",
-                  transition: "background .1s"
-                },
-                children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { width: 6, height: 6, borderRadius: "50%", background: model === opt.id ? "var(--pri)" : "var(--faint)", flexShrink: 0 } }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: opt.label }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { marginLeft: "auto", fontSize: 10, color: "var(--faint)", fontWeight: 400 }, children: opt.sub })
-                ]
-              },
-              opt.id
-            ))
-          }
-        )
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { flex: 1 } }),
-      activeSession && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: {
-        fontSize: 11,
-        color: "var(--muted)",
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-        whiteSpace: "nowrap",
-        maxWidth: 140
-      }, children: activeSession.title }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { flex: 1 } }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "button",
-        {
-          onClick: newSession,
-          title: "New chat",
-          style: {
-            width: 28,
-            height: 28,
-            borderRadius: "var(--r2)",
-            border: "1px solid var(--brd)",
-            background: "var(--offset)",
-            color: "var(--muted)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            transition: "all .15s"
-          },
-          onMouseEnter: (e) => {
-            e.currentTarget.style.background = "var(--pri)";
-            e.currentTarget.style.color = "#fff";
-            e.currentTarget.style.borderColor = "var(--pri)";
-          },
-          onMouseLeave: (e) => {
-            e.currentTarget.style.background = "var(--offset)";
-            e.currentTarget.style.color = "var(--muted)";
-            e.currentTarget.style.borderColor = "var(--brd)";
-          },
-          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 13 })
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "button",
-        {
-          onClick: () => setHistoryOpen((h2) => !h2),
-          title: "Chat history",
-          style: {
-            width: 28,
-            height: 28,
-            borderRadius: "var(--r2)",
-            border: `1px solid ${historyOpen ? "var(--pri)" : "var(--brd)"}`,
-            background: historyOpen ? "var(--pri-glow)" : "var(--offset)",
-            color: historyOpen ? "var(--pri)" : "var(--muted)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            transition: "all .15s"
-          },
-          children: /* @__PURE__ */ jsxRuntimeExports.jsx(History, { size: 13 })
-        }
-      )
-    ] }),
-    !activeSession ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-      flex: 1,
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: 16,
-      padding: 24
-    }, children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
-        width: 52,
-        height: 52,
-        borderRadius: 16,
-        background: "var(--pri-glow)",
-        border: "1px solid rgba(79,152,163,.25)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center"
-      }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Zap, { size: 24, style: { color: "var(--pri)" }, strokeWidth: 1.5 }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { textAlign: "center", lineHeight: 1.7 }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 15, fontWeight: 600, color: "var(--txt)", marginBottom: 4, letterSpacing: "-.01em" }, children: "Forge AI" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 12, color: "var(--faint)" }, children: model === "gemini" ? "Gemini 2.0 Flash · Google" : model === "ollama" ? "Qwen 2.5 Coder · Local Ollama" : "Llama 4 Scout · Groq" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "button",
-        {
-          onClick: newSession,
-          style: {
-            padding: "8px 20px",
-            borderRadius: "var(--r3)",
-            background: "var(--pri)",
-            color: "#fff",
-            fontSize: 13,
-            fontWeight: 500,
-            border: "none",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            gap: 7
-          },
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 14 }),
-            " New Chat"
-          ]
-        }
-      )
-    ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-        flex: 1,
-        overflow: "auto",
-        padding: "20px 16px 8px",
-        display: "flex",
-        flexDirection: "column",
-        gap: 12
-      }, children: [
-        messages.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-          margin: "auto",
-          textAlign: "center",
-          color: "var(--faint)",
-          fontSize: 12,
-          lineHeight: 1.9
-        }, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Zap, { size: 18, strokeWidth: 1, style: { margin: "0 auto 10px", color: "var(--pri)", opacity: 0.4 } }),
-          "Ask anything about your code",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontSize: 11, opacity: 0.6 }, children: "Type @ to attach a file" })
-        ] }),
-        messages.map((msg, idx) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-          MessageBubble,
-          {
-            msg,
-            isStreaming: isStreaming && idx === messages.length - 1 && msg.role === "assistant",
-            onApply
-          },
-          msg.id
-        )),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref: bottomRef })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-        padding: "8px 12px 12px",
-        borderTop: "1px solid var(--brd)",
-        background: "var(--surface)",
-        position: "relative",
-        flexShrink: 0
-      }, children: [
-        attachedFiles.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 7 }, children: attachedFiles.map((f) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-          display: "flex",
-          alignItems: "center",
-          gap: 5,
-          background: "var(--pri-glow)",
-          border: "1px solid rgba(79,152,163,.3)",
-          borderRadius: "var(--r3)",
-          padding: "3px 8px",
-          fontSize: 11,
-          color: "var(--pri)",
-          fontFamily: "var(--font-mono)"
-        }, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Paperclip, { size: 10 }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: f.path.split("/").pop() }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => removeAttached(f.path), style: { color: "var(--pri)", display: "flex", opacity: 0.7, background: "none", border: "none", cursor: "pointer", padding: 0 }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 10 }) })
-        ] }, f.path)) }),
-        atQuery !== null && atResults.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
-          position: "absolute",
-          bottom: "100%",
-          left: 12,
-          right: 12,
-          zIndex: 50,
-          background: "var(--surface)",
-          border: "1px solid var(--brd)",
-          borderRadius: "var(--r2)",
-          overflow: "hidden",
-          boxShadow: "0 -8px 24px rgba(0,0,0,.18)",
-          marginBottom: 4
-        }, children: atResults.map((f, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { onClick: () => attachFile(f), style: {
-          width: "100%",
-          textAlign: "left",
-          padding: "7px 12px",
-          fontSize: 12,
-          fontFamily: "var(--font-mono)",
-          color: i === atIndexRef.current ? "var(--pri)" : "var(--txt)",
-          background: i === atIndexRef.current ? "var(--pri-glow)" : "transparent",
-          borderBottom: i < atResults.length - 1 ? "1px solid var(--brd)" : "none",
-          display: "flex",
-          gap: 10,
-          alignItems: "center",
-          border: "none",
-          cursor: "pointer"
-        }, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Paperclip, { size: 10, style: { flexShrink: 0, opacity: 0.5 } }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: f.split("/").pop() }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { color: "var(--faint)", fontSize: 10, flexShrink: 0 }, children: f.replace(activeProject?.path ?? "", "") })
-        ] }, f)) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "div",
-          {
-            style: {
-              display: "flex",
-              alignItems: "flex-end",
-              gap: 8,
-              background: "var(--offset)",
-              border: "1px solid var(--brd)",
-              borderRadius: "var(--r3)",
-              padding: "8px 10px 8px 12px",
-              transition: "border-color .15s"
-            },
-            onFocusCapture: (e) => e.currentTarget.style.borderColor = "var(--pri)",
-            onBlurCapture: (e) => e.currentTarget.style.borderColor = "var(--brd)",
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "textarea",
-                {
-                  ref: inputRef,
-                  value: input,
-                  onChange: handleInput,
-                  onKeyDown: handleKeyDown,
-                  placeholder: isStreaming ? "Waiting…" : "Ask anything… · @ to attach",
-                  rows: 1,
-                  disabled: isStreaming,
-                  style: {
-                    flex: 1,
-                    background: "transparent",
-                    border: "none",
-                    outline: "none",
-                    color: "var(--txt)",
-                    fontSize: 13,
-                    resize: "none",
-                    fontFamily: "var(--font-body)",
-                    maxHeight: 120,
-                    overflowY: "auto",
-                    lineHeight: 1.55,
-                    opacity: isStreaming ? 0.6 : 1
-                  }
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "button",
-                {
-                  onClick: send,
-                  disabled: !input.trim() || isStreaming,
-                  title: "Send (Enter)",
-                  style: {
-                    width: 30,
-                    height: 30,
-                    borderRadius: "var(--r2)",
-                    flexShrink: 0,
-                    background: input.trim() && !isStreaming ? "var(--pri)" : "transparent",
-                    color: input.trim() && !isStreaming ? "#fff" : "var(--faint)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    border: `1px solid ${input.trim() && !isStreaming ? "var(--pri)" : "var(--brd)"}`,
-                    cursor: input.trim() && !isStreaming ? "pointer" : "default",
-                    transition: "all .15s"
-                  },
-                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(Send, { size: 13 })
-                }
-              )
-            ]
-          }
-        )
-      ] })
-    ] })
-  ] });
-}
 function DashboardPanel() {
   const { activeProject } = useForgeStore();
   const [ctx, setCtx] = reactExports.useState(null);
@@ -23692,7 +22542,7 @@ function App() {
     }
     window.forge.projects.list().then(setProjects).catch((err) => console.error("[Forge] projects.list failed:", err));
   }, []);
-  const onMouseDown = reactExports.useCallback((e) => {
+  reactExports.useCallback((e) => {
     e.preventDefault();
     setDragging(true);
     const startX = e.clientX;
@@ -23709,17 +22559,6 @@ function App() {
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseup", onUp);
   }, [chatWidth]);
-  reactExports.useEffect(() => {
-    const handler = (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "j") {
-        e.preventDefault();
-        setChatOpen((o) => !o);
-      }
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, []);
-  const showSplitChat = chatOpen;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     !splashDone && /* @__PURE__ */ jsxRuntimeExports.jsx(SplashScreen, { onDone: () => setSplashDone(true) }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
@@ -23733,49 +22572,14 @@ function App() {
     }, children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(Sidebar, {}),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", minWidth: 0 }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Topbar, { onToggleAI: () => setChatOpen((o) => !o), aiOpen: chatOpen }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { style: { flex: 1, overflow: "hidden", display: "flex" }, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, overflow: "hidden", minWidth: 0, display: "flex", flexDirection: "column" }, children: [
-            activePanel === "editor" && /* @__PURE__ */ jsxRuntimeExports.jsx(EditorPanel, {}),
-            activePanel === "search" && /* @__PURE__ */ jsxRuntimeExports.jsx(SearchPanel, {}),
-            activePanel === "terminal" && /* @__PURE__ */ jsxRuntimeExports.jsx(TerminalPanel, {}),
-            activePanel === "git" && /* @__PURE__ */ jsxRuntimeExports.jsx(GitPanel, {}),
-            activePanel === "chat" && /* @__PURE__ */ jsxRuntimeExports.jsx(ChatPanel, {}),
-            activePanel === "dashboard" && /* @__PURE__ */ jsxRuntimeExports.jsx(DashboardPanel, {})
-          ] }),
-          showSplitChat && /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "div",
-            {
-              onMouseDown,
-              title: "Drag to resize",
-              style: {
-                width: 4,
-                cursor: "col-resize",
-                background: dragging ? "var(--pri)" : "transparent",
-                flexShrink: 0,
-                transition: "background 120ms ease",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                borderLeft: "1px solid var(--brd)"
-              },
-              onMouseEnter: (e) => e.currentTarget.style.background = "var(--pri)",
-              onMouseLeave: (e) => !dragging && (e.currentTarget.style.background = "transparent"),
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx(GripVertical, { size: 10, style: { color: "var(--muted)", pointerEvents: "none", opacity: 0.4 } })
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
-            width: showSplitChat ? chatWidth : 0,
-            minWidth: 0,
-            flexShrink: 0,
-            display: "flex",
-            flexDirection: "column",
-            overflow: "hidden",
-            transition: dragging ? "none" : "width 220ms cubic-bezier(0.4,0,0.2,1)",
-            background: "var(--surface)",
-            borderLeft: showSplitChat ? "1px solid var(--brd)" : "none"
-          }, children: showSplitChat && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { width: chatWidth, height: "100%", display: "flex", flexDirection: "column", overflow: "hidden" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChatPanel, {}) }) })
-        ] })
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Topbar, {}),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("main", { style: { flex: 1, overflow: "hidden", display: "flex" }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, overflow: "hidden", minWidth: 0, display: "flex", flexDirection: "column" }, children: [
+          activePanel === "editor" && /* @__PURE__ */ jsxRuntimeExports.jsx(EditorPanel, {}),
+          activePanel === "search" && /* @__PURE__ */ jsxRuntimeExports.jsx(SearchPanel, {}),
+          activePanel === "terminal" && /* @__PURE__ */ jsxRuntimeExports.jsx(TerminalPanel, {}),
+          activePanel === "git" && /* @__PURE__ */ jsxRuntimeExports.jsx(GitPanel, {}),
+          activePanel === "dashboard" && /* @__PURE__ */ jsxRuntimeExports.jsx(DashboardPanel, {})
+        ] }) })
       ] })
     ] })
   ] });

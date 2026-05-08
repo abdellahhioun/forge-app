@@ -1,12 +1,7 @@
 import { useForgeStore } from '../store'
-import { RefreshCw, Sparkles } from 'lucide-react'
+import { RefreshCw } from 'lucide-react'
 
-interface TopbarProps {
-  onToggleAI?: () => void
-  aiOpen?: boolean
-}
-
-export default function Topbar({ onToggleAI, aiOpen }: TopbarProps) {
+export default function Topbar() {
   const { activePanel, activeProject } = useForgeStore()
 
   const titles: Record<string, string> = {
@@ -56,31 +51,6 @@ export default function Topbar({ onToggleAI, aiOpen }: TopbarProps) {
         )}
 
         <span>{new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
-
-        {/* ── AI toggle button ── */}
-        {onToggleAI && (
-          <button
-            onClick={onToggleAI}
-            aria-label="Toggle AI (⌘J)"
-            title="Toggle AI Panel (⌘J)"
-            style={{
-              height: 28,
-              padding: '0 10px',
-              borderRadius: 'var(--r2)',
-              border: `1px solid ${aiOpen ? 'var(--pri)' : 'var(--brd)'}`,
-              background: aiOpen ? 'var(--pri-glow)' : 'var(--offset)',
-              color: aiOpen ? 'var(--pri)' : 'var(--muted)',
-              display: 'flex', alignItems: 'center', gap: 5,
-              fontSize: 11, fontWeight: 500,
-              cursor: 'pointer',
-              transition: 'all 150ms ease',
-              fontFamily: 'var(--font-body)',
-            }}
-          >
-            <Sparkles size={12} />
-            AI
-          </button>
-        )}
 
         <button
           onClick={() => window.location.reload()}

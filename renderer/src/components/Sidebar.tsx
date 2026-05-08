@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useForgeStore } from '../store'
 import {
-  Code2, Terminal, GitBranch, MessageSquare,
+  Code2, Terminal, GitBranch,
   LayoutDashboard, FolderOpen, Plus, Sun, Moon, Trash2, Search,
   ChevronLeft, ChevronRight
 } from 'lucide-react'
@@ -13,7 +13,6 @@ const NAV = [
   { id: 'search',    icon: Search,         label: 'Search' },
   { id: 'terminal',  icon: Terminal,       label: 'Terminal' },
   { id: 'git',       icon: GitBranch,      label: 'Git' },
-  { id: 'chat',      icon: MessageSquare,  label: 'Chat' },
   { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
 ] as const
 

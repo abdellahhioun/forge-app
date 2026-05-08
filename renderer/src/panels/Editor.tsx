@@ -69,10 +69,10 @@ export default function EditorPanel() {
         )
         if (file) saveFile(file.path, file.content)
       }
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault()
-        setCmdKOpen(prev => !prev)
-      }
+      // if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      //   e.preventDefault()
+      //   setCmdKOpen(prev => !prev)
+      // }
       if (e.key === 'Escape' && cmdKOpen) {
         setCmdKOpen(false)
       }
@@ -303,11 +303,11 @@ export default function EditorPanel() {
                   monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS,
                   () => saveFile(currentFile.path, editor.getValue())
                 )
-                // Wire ⌘K inside Monaco context
-                editor.addCommand(
-                  monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyK,
-                  () => setCmdKOpen(prev => !prev)
-                )
+                // Wire ⌘K inside Monaco context (Commented out)
+                // editor.addCommand(
+                //   monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyK,
+                //   () => setCmdKOpen(prev => !prev)
+                // )
               }}
               onChange={(value) => {
                 if (value !== undefined) {
