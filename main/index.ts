@@ -1,7 +1,7 @@
 import { app, BrowserWindow, shell, ipcMain, protocol, net } from 'electron'
 import { join } from 'path'
 import { spawn } from 'child_process'
-import { registerMcpHandlers, registerFileHandlers } from './ipc-handlers'
+import { registerMcpHandlers, registerFileHandlers, registerToolHandlers } from './ipc-handlers'
 import { initDb } from './db'
 
 const isDev = !app.isPackaged
@@ -130,6 +130,7 @@ app.whenReady().then(async () => {
 
   // Register all IPC handlers
   registerMcpHandlers(ipcMain)
+  registerToolHandlers(ipcMain)
   registerFileHandlers()
 
   // In production, serve renderer via custom protocol to support ES modules

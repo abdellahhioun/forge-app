@@ -1113,3 +1113,99 @@ export function registerFileHandlers() {
     }
   })
 }
+
+
+export function registerToolHandlers(ipcMain: IpcMain) {
+  // ─── MCP Tool execution from chat ──────────────────────────────────────────
+  ipcMain.handle('tools:run', async (_e, tool: string, args: Record<string, any>) => {
+    const cwd: string = args.cwd ?? args.projectPath ?? process.cwd()
+
+    const shell = (cmd: string, dir = cwd): string => {
+      try {
+        return execSync(cmd, { cwd: dir, encoding: 'utf-8', maxBuffer: MAX_BUFFER }).trim()
+      } catch (e: any) {
+        return e.stdout?.trim() || e.message
+      }
+    }
+
+    switch (tool) {
+
+      case 'git_diff': {
+        const out = shell(`git diff${args.filePath ? ` -- ${args.filePath}` : ''}`)
+        return out || '(no changes)'
+      }
+
+      case 'git_status': {
+        return shell('git status --short') || '(clean)'
+      }
+
+      case 'git_log': {
+        const limit = args.limit ?? 10
+        return shell(`git log --oneline -${limit}`)
+      }
+
+      case 'git_commit': {
+        if (!args.message) throw new Error('git_commit requires a message')
+        shell('git add -A')
+        return shell(`git commit -m ${JSON.stringify(args.message)}`)
+      }
+
+      case 'run_tests': {
+        return shell('npm test -- --passWithNoTests 2>&1 || true')
+      }
+
+      case 'lint_file': {
+        if (!args.filePath) throw new Error('lint_file requires filePath')
+        return shell(`npx eslint "${args.filePath}" --format compact 2>&1 || true`)
+      }
+
+      case 'read_file': {
+        if (!args.filePath) throw new Error('read_file requires filePath')
+        return readFileSync(args.filePath as string, 'utf-8')
+      }
+
+      case 'list_files': {
+        const walk = (dir: string, depth = 0): string[] => {
+          if (depth > 3) return []
+          const ignore = new Set(['node_modules', '.git', 'dist', 'out', 'dist-electron'])
+          return readdirSync(dir).flatMap(f => {
+            if (ignore.has(f)) return []
+            const full = `${dir}/${f}`
+            return statSync(full).isDirectory()
+              ? [`${full}/`, ...walk(full, depth + 1)]
+              : [full]
+          })
+        }
+        return walk(cwd).join('\n')
+      }
+
+      case 'explain_code': {
+        if (!args.filePath) throw new Error('explain_code requires filePath')
+        const src = readFileSync(args.filePath as string, 'utf-8')
+        const lines = src.split('\n').length
+        // Extract function/class signatures via regex (lightweight AST-free)
+        const sigs = src.match(/^\s*(export\s+)?(default\s+)?(async\s+)?function\s+\w+|^\s*(export\s+)?const\s+\w+\s*=\s*(async\s+)?\(/mg) ?? []
+        return [
+          `File: ${args.filePath}`,
+          `Lines: ${lines}`,
+          `Signatures found: ${sigs.length}`,
+          '',
+          sigs.slice(0, 20).map(s => `  ${s.trim()}`).join('\n'),
+        ].join('\n')
+      }
+
+      case 'get_dependency_graph': {
+        return shell(`node -e "
+const fs=require('fs'),path=require('path');
+const walk=(d,acc=[])=>{try{fs.readdirSync(d).forEach(f=>{const p=path.join(d,f);if(f==='node_modules'||f==='.git')return;if(fs.statSync(p).isDirectory())walk(p,acc);else if(/\\.(ts|tsx|js|jsx)$/.test(f))acc.push(p)});return acc}catch{return acc}};
+const files=walk('${cwd}');
+const graph={};
+files.forEach(f=>{const src=fs.readFileSync(f,'utf8');const imports=[...src.matchAll(/from ['\"](\\.[^'\"]+)['\"]|require\(['\"](\\.[^'\"]+)['\"]\)/g)].map(m=>m[1]||m[2]);if(imports.length)graph[f.replace('${cwd}/','')]=imports});
+console.log(JSON.stringify(graph,null,2))"`)
+      }
+
+      default:
+        throw new Error(`Unknown tool: "${tool}". Available: git_diff, git_status, git_log, git_commit, run_tests, lint_file, read_file, list_files, explain_code, get_dependency_graph`)
+    }
+  })
+}
