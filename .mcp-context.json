@@ -1,9 +1,9 @@
 {
-  "branch": "testt",
+  "branch": "main",
   "clean": false,
-  "lastCommit": "75d65a9 feat(splash): replace SVG ForgeIcon with logoforforge.png (41 minutes ago)",
+  "lastCommit": "f5ec20a refactor(ipc-handlers): enhance AI-assisted commit message generation\\n\\n- Increase token limit for AI model from 150 to 450 to allow for more detailed commit messages\\n- Update system prompt to guide AI in generating premium, highly detailed, and professional Git commit messages\\n- Modify user message formatting to provide clear context for git diff analysis\\n- Refine AI model input to ensure concise and descriptive commit message headers following Conventional Commits style\\n- Improve code readability by adjusting whitespace and comments for better maintainability (5 minutes ago)",
   "fileCount": 30,
-  "totalLines": 5290,
+  "totalLines": 5392,
   "stack": "Electron + React + Vite + TypeScript + Tailwind",
   "keyFiles": [
     "README.md",
@@ -11,5 +11,5 @@
     "package.json",
     "tsconfig.json"
   ],
-  "indexedAt": "2026-05-07T23:28:41.550Z"
+  "indexedAt": "2026-05-08T00:00:50.588Z"
 }

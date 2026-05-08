@@ -12781,29 +12781,37 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$u = [
+const __iconNode$v = [
   ["path", { d: "m3 15 4-8 4 8", key: "1vwr6u" }],
   ["path", { d: "M4 13h6", key: "1r9ots" }],
   ["circle", { cx: "18", cy: "12", r: "3", key: "1kchzo" }],
   ["path", { d: "M21 9v6", key: "anns31" }]
 ];
-const CaseSensitive = createLucideIcon("case-sensitive", __iconNode$u);
+const CaseSensitive = createLucideIcon("case-sensitive", __iconNode$v);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$t = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$t);
+const __iconNode$u = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$u);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$s = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$s);
+const __iconNode$t = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$t);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$s = [["path", { d: "m15 18-6-6 6-6", key: "1wnfg3" }]];
+const ChevronLeft = createLucideIcon("chevron-left", __iconNode$s);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -13504,6 +13512,7 @@ function Sidebar() {
     toggleTheme,
     setProjects
   } = useForgeStore();
+  const [collapsed, setCollapsed] = reactExports.useState(false);
   const handleAddProject = async () => {
     const project = await window.forge.projects.add();
     if (project) {
@@ -13540,68 +13549,103 @@ Remove it from the list anyway?`
     }
   };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("aside", { style: {
-    width: "var(--sidebar-w)",
+    width: collapsed ? "64px" : "var(--sidebar-w)",
     minHeight: "100vh",
     background: "var(--surface)",
     borderRight: "1px solid var(--brd)",
     display: "flex",
     flexDirection: "column",
     flexShrink: 0,
-    userSelect: "none"
+    userSelect: "none",
+    transition: "width 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+    overflow: "hidden"
   }, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-      padding: "12px 16px",
+      padding: collapsed ? "14px 0" : "12px 16px",
       borderBottom: "1px solid var(--brd)",
       display: "flex",
+      flexDirection: collapsed ? "column" : "row",
       alignItems: "center",
-      gap: 8
+      justifyContent: collapsed ? "center" : "space-between",
+      gap: collapsed ? 12 : 8,
+      height: collapsed ? "auto" : 56,
+      boxSizing: "border-box"
     }, children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
-        width: 32,
-        height: 32,
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
-        flexShrink: 0,
-        overflow: "visible"
-        // Ensure the scaled image can render outside the 32px box
-      }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "img",
-        {
-          src: "./logoforforge.png",
-          alt: "Forge",
+        gap: 10,
+        justifyContent: collapsed ? "center" : "flex-start"
+      }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
           width: 32,
           height: 32,
-          style: {
-            objectFit: "contain",
-            transform: "scale(1.85)",
-            transformOrigin: "center"
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0,
+          overflow: "visible"
+          // Ensure the scaled image can render outside the 32px box
+        }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "img",
+          {
+            src: "./logoforforge.png",
+            alt: "Forge",
+            width: 32,
+            height: 32,
+            style: {
+              objectFit: "contain",
+              transform: "scale(1.85)",
+              transformOrigin: "center"
+            }
           }
+        ) }),
+        !collapsed && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
+            fontFamily: "var(--font-body)",
+            fontSize: "16px",
+            fontWeight: 800,
+            letterSpacing: "-0.03em",
+            background: "linear-gradient(135deg, var(--txt) 30%, var(--pri) 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text"
+          }, children: "Forge" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
+            fontSize: "9px",
+            color: "var(--pri)",
+            fontFamily: "var(--font-mono)",
+            fontWeight: 700,
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+            marginTop: "1px"
+          }, children: "beta" })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          onClick: () => setCollapsed(!collapsed),
+          title: collapsed ? "Expand sidebar" : "Collapse sidebar",
+          style: {
+            width: 24,
+            height: 24,
+            borderRadius: "var(--r1)",
+            border: "1px solid var(--brd)",
+            background: "var(--offset)",
+            color: "var(--muted)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            transition: "all 0.2s ease",
+            flexShrink: 0
+          },
+          children: collapsed ? /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { size: 13 }) : /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronLeft, { size: 13 })
         }
-      ) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
-          fontFamily: "var(--font-body)",
-          fontSize: "16px",
-          fontWeight: 800,
-          letterSpacing: "-0.03em",
-          background: "linear-gradient(135deg, var(--txt) 30%, var(--pri) 100%)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          backgroundClip: "text"
-        }, children: "Forge" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
-          fontSize: "9px",
-          color: "var(--pri)",
-          fontFamily: "var(--font-mono)",
-          fontWeight: 700,
-          letterSpacing: "0.08em",
-          textTransform: "uppercase",
-          marginTop: "1px"
-        }, children: "beta" })
-      ] })
+      )
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { padding: "12px 8px 4px" }, children: [
+    !collapsed && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { padding: "12px 8px 4px" }, children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
         fontSize: 10,
         fontWeight: 600,
@@ -13699,9 +13743,17 @@ Remove it from the list anyway?`
         }
       )
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(FileTree, {}),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { padding: "8px 8px 4px", borderTop: "1px solid var(--div)", marginTop: 8 }, children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
+    !collapsed && /* @__PURE__ */ jsxRuntimeExports.jsx(FileTree, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+      padding: collapsed ? "8px 0" : "8px 8px 4px",
+      borderTop: "1px solid var(--div)",
+      marginTop: 8,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: collapsed ? "center" : "stretch",
+      gap: collapsed ? 6 : 0
+    }, children: [
+      !collapsed && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
         fontSize: 10,
         fontWeight: 600,
         letterSpacing: ".08em",
@@ -13713,22 +13765,26 @@ Remove it from the list anyway?`
         "button",
         {
           onClick: () => setActivePanel(id),
+          title: collapsed ? label : void 0,
           style: {
             display: "flex",
             alignItems: "center",
-            gap: 9,
-            width: "100%",
-            padding: "8px 10px",
+            justifyContent: collapsed ? "center" : "flex-start",
+            gap: collapsed ? 0 : 9,
+            width: collapsed ? 40 : "100%",
+            height: collapsed ? 40 : "auto",
+            padding: collapsed ? 0 : "8px 10px",
             borderRadius: "var(--r2)",
             fontSize: 13,
             color: activePanel === id ? "var(--pri)" : "var(--muted)",
             background: activePanel === id ? "var(--pri-glow)" : "transparent",
             fontWeight: activePanel === id ? 500 : 400,
-            marginBottom: 1
+            marginBottom: collapsed ? 0 : 1,
+            transition: "all 0.15s ease"
           },
           children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 15, style: { flexShrink: 0, opacity: activePanel === id ? 1 : 0.7 } }),
-            label
+            !collapsed && label
           ]
         },
         id
@@ -13736,40 +13792,53 @@ Remove it from the list anyway?`
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
       marginTop: "auto",
-      padding: 12,
+      padding: collapsed ? "12px 0" : "12px",
       borderTop: "1px solid var(--div)",
       display: "flex",
+      flexDirection: collapsed ? "column" : "row",
       alignItems: "center",
-      justifyContent: "space-between"
+      justifyContent: collapsed ? "center" : "space-between",
+      gap: collapsed ? 12 : 6
     }, children: [
-      activeProject ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-        display: "flex",
-        alignItems: "center",
-        gap: 6,
-        fontSize: 11,
-        color: "var(--muted)",
-        fontFamily: "var(--font-mono)",
-        background: "var(--offset)",
-        padding: "5px 8px",
-        borderRadius: "var(--r2)",
-        flex: 1,
-        overflow: "hidden"
-      }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: {
-          width: 6,
-          height: 6,
-          borderRadius: "50%",
-          background: "var(--ok)",
-          flexShrink: 0,
-          animation: "pulse 2s ease-in-out infinite"
-        } }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: activeProject.name })
-      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontSize: 11, color: "var(--faint)" }, children: "No project" }),
+      activeProject ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "div",
+        {
+          title: activeProject.name,
+          style: {
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: collapsed ? 0 : 6,
+            fontSize: 11,
+            color: "var(--muted)",
+            fontFamily: "var(--font-mono)",
+            background: "var(--offset)",
+            padding: collapsed ? "8px" : "5px 8px",
+            borderRadius: "var(--r2)",
+            flex: collapsed ? "none" : 1,
+            width: collapsed ? 36 : "auto",
+            height: collapsed ? 36 : "auto",
+            overflow: "hidden"
+          },
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: {
+              width: 6,
+              height: 6,
+              borderRadius: "50%",
+              background: "var(--ok)",
+              flexShrink: 0,
+              animation: "pulse 2s ease-in-out infinite"
+            } }),
+            !collapsed && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: activeProject.name })
+          ]
+        }
+      ) : !collapsed && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontSize: 11, color: "var(--faint)" }, children: "No project" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "button",
         {
           onClick: toggleTheme,
           "aria-label": "Toggle theme",
+          title: collapsed ? "Toggle theme" : void 0,
           style: {
             width: 28,
             height: 28,
@@ -13781,7 +13850,7 @@ Remove it from the list anyway?`
             alignItems: "center",
             justifyContent: "center",
             flexShrink: 0,
-            marginLeft: 6
+            marginLeft: collapsed ? 0 : 6
           },
           children: theme === "dark" ? /* @__PURE__ */ jsxRuntimeExports.jsx(Sun, { size: 13 }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Moon, { size: 13 })
         }
